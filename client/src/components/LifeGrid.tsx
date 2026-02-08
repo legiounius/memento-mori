@@ -146,13 +146,15 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                   );
                 }
 
-                let dotColor: string;
-                if (eventData) {
-                  dotColor = eventData.color;
+                const isEvent = !!eventData;
+
+                let dotClasses: string;
+                if (isEvent) {
+                  dotClasses = `border-2 ${eventData.color} bg-transparent`;
                 } else if (isLived) {
-                  dotColor = 'bg-red-600';
+                  dotClasses = 'bg-red-600';
                 } else {
-                  dotColor = 'bg-zinc-300 dark:bg-zinc-700';
+                  dotClasses = 'bg-zinc-300 dark:bg-zinc-700';
                 }
 
                 const dot = (
@@ -160,8 +162,9 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                     className={`
                       aspect-square rounded-full w-full
                       transition-colors duration-300
-                      ${dotColor}
+                      ${dotClasses}
                     `}
+                    style={isEvent ? { boxSizing: 'border-box' } : undefined}
                     data-testid={`dot-${dotIndex}`}
                   />
                 );
