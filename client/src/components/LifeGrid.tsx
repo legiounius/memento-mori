@@ -25,17 +25,17 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
 
   return (
     <div className="w-full max-w-[960px] mx-auto p-4 md:p-8">
-      <div className="flex flex-wrap justify-between items-end mb-6 font-mono text-xs text-muted-foreground uppercase tracking-widest border-b border-border pb-2 gap-2">
-        <span>Birth</span>
-        <span data-testid="text-stats">
-          {birthdate
-            ? `${weeksLived.toLocaleString()} weeks lived · ${percentRemaining}% remaining`
-            : "Select your birthdate"}
-        </span>
-        <span>Age 80</span>
-      </div>
+      <div className="overflow-x-auto flex flex-col items-center">
+        <div className="flex flex-wrap justify-between items-end mb-6 font-mono text-xs text-muted-foreground uppercase tracking-widest border-b border-border pb-2 gap-2 w-full" style={{ maxWidth: 'fit-content' }}>
+          <span>Birth</span>
+          <span data-testid="text-stats">
+            {birthdate
+              ? `${weeksLived.toLocaleString()} weeks lived · ${percentRemaining}% remaining`
+              : "Select your birthdate"}
+          </span>
+          <span>Age 80</span>
+        </div>
 
-      <div className="overflow-x-auto">
         <div className="inline-grid" style={{
           gridTemplateColumns: `32px repeat(${WEEKS_PER_YEAR}, minmax(0, 1fr))`,
           gap: '2px',
@@ -87,10 +87,10 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
             return [yearLabel, ...dots];
           })}
         </div>
-      </div>
 
-      <div className="mt-8 text-center font-mono text-xs text-muted-foreground">
-        <p>1 row = 1 year  ·  1 dot = 1 week</p>
+        <div className="mt-8 text-center font-mono text-xs text-muted-foreground">
+          <p>1 row = 1 year  ·  1 dot = 1 week</p>
+        </div>
       </div>
     </div>
   );
