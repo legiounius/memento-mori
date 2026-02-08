@@ -46,7 +46,7 @@ export default function Home() {
             Memento Your Mori
           </h1>
           <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
-            Remember You Must Die
+            Live Accordingly
           </p>
         </motion.div>
 
