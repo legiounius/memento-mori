@@ -28,8 +28,8 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
   const currentWeekIndex = birthdate ? weeksLived - 1 : -1;
 
   const eventWeekMap = useMemo(() => {
-    if (!birthdate) return new Map<number, { color: string; labels: string[] }>();
-    const map = new Map<number, { color: string; labels: string[] }>();
+    if (!birthdate) return new Map<number, string[]>();
+    const map = new Map<number, string[]>();
     for (const event of events) {
       const eventDate = new Date(event.date);
       const diffMs = eventDate.getTime() - birthdate.getTime();
@@ -37,9 +37,9 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
       if (weekIndex >= 0 && weekIndex < totalWeeks) {
         const existing = map.get(weekIndex);
         if (existing) {
-          existing.labels.push(event.label);
+          existing.push(event.label);
         } else {
-          map.set(weekIndex, { color: event.color, labels: [event.label] });
+          map.set(weekIndex, [event.label]);
         }
       }
     }
@@ -123,7 +123,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
               const dots = Array.from({ length: WEEKS_PER_YEAR }, (_, weekIndex) => {
                 const dotIndex = yearIndex * WEEKS_PER_YEAR + weekIndex;
-                const eventData = eventWeekMap.get(dotIndex);
+                const eventLabels = eventWeekMap.get(dotIndex);
                 const isLived = birthdate && dotIndex < weeksLived;
                 const isCurrentWeek = dotIndex === currentWeekIndex;
 
@@ -146,11 +146,11 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                   );
                 }
 
-                const isEvent = !!eventData;
+                const isEvent = !!eventLabels;
 
                 let dotClasses: string;
                 if (isEvent) {
-                  dotClasses = `border-2 ${eventData.color} bg-transparent`;
+                  dotClasses = 'border-2 border-black dark:border-white bg-transparent';
                 } else if (isLived) {
                   dotClasses = 'bg-red-600';
                 } else {
@@ -169,14 +169,14 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                   />
                 );
 
-                if (eventData) {
+                if (eventLabels) {
                   return (
                     <Tooltip key={`d-${dotIndex}`}>
                       <TooltipTrigger asChild>
                         {dot}
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs max-w-[200px]">
-                        <p className="font-medium">{eventData.labels.join(", ")}</p>
+                        <p className="font-medium">{eventLabels.join(", ")}</p>
                         <p className="text-muted-foreground">Year {yearIndex}, Week {weekIndex + 1}</p>
                       </TooltipContent>
                     </Tooltip>
