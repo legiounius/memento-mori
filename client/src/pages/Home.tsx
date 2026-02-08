@@ -5,7 +5,7 @@ import { EventForm, type LifeEvent } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Printer } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -207,6 +207,17 @@ export default function Home() {
             </div>
           </div>
         )}
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center print:hidden">
+          <Button
+            variant="outline"
+            data-testid="button-print"
+            onClick={() => window.print()}
+            className="font-mono text-xs uppercase tracking-widest"
+          >
+            <Printer className="w-3.5 h-3.5 mr-2" />
+            Print Dot Matrix
+          </Button>
+        </div>
       </motion.main>
     </div>
   );
