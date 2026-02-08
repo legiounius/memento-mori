@@ -3,25 +3,26 @@ import { differenceInWeeks } from 'date-fns';
 
 interface LifeGridProps {
   birthdate: Date | undefined;
+  targetAge: number;
 }
 
-const TOTAL_YEARS = 80;
 const WEEKS_PER_YEAR = 52;
-const TOTAL_WEEKS = TOTAL_YEARS * WEEKS_PER_YEAR;
 
-export function LifeGrid({ birthdate }: LifeGridProps) {
+export function LifeGrid({ birthdate, targetAge }: LifeGridProps) {
+  const totalWeeks = targetAge * WEEKS_PER_YEAR;
+
   const weeksLived = useMemo(() => {
     if (!birthdate) return 0;
     const today = new Date();
-    return Math.min(TOTAL_WEEKS, Math.max(0, differenceInWeeks(today, birthdate)));
-  }, [birthdate]);
+    return Math.min(totalWeeks, Math.max(0, differenceInWeeks(today, birthdate)));
+  }, [birthdate, totalWeeks]);
 
-  const weeksRemaining = TOTAL_WEEKS - weeksLived;
+  const weeksRemaining = totalWeeks - weeksLived;
   const percentLived = birthdate
-    ? ((weeksLived / TOTAL_WEEKS) * 100).toFixed(1)
+    ? ((weeksLived / totalWeeks) * 100).toFixed(1)
     : null;
   const percentRemaining = birthdate
-    ? ((weeksRemaining / TOTAL_WEEKS) * 100).toFixed(1)
+    ? ((weeksRemaining / totalWeeks) * 100).toFixed(1)
     : null;
 
   const weekNumbers = Array.from({ length: WEEKS_PER_YEAR }, (_, i) => i + 1);
@@ -80,7 +81,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
               </div>
             ))}
 
-            {Array.from({ length: TOTAL_YEARS }).flatMap((_, yearIndex) => {
+            {Array.from({ length: targetAge }).flatMap((_, yearIndex) => {
               const yearLabel = (
                 <div
                   key={`yl-${yearIndex}`}
@@ -106,7 +107,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
                         : 'bg-zinc-300 dark:bg-zinc-700'
                       }
                     `}
-                    title={`Year ${yearIndex + 1}, Week ${weekIndex + 1}`}
+                    title={`Year ${yearIndex}, Week ${weekIndex + 1}`}
                     data-testid={`dot-${dotIndex}`}
                   />
                 );

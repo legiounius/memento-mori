@@ -3,8 +3,16 @@ import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const STORAGE_KEY = "memento-birthdate";
+const AGE_STORAGE_KEY = "memento-target-age";
 
 export default function Home() {
   const [birthdate, setBirthdate] = useState<Date | undefined>(() => {
@@ -16,6 +24,11 @@ export default function Home() {
     return undefined;
   });
 
+  const [targetAge, setTargetAge] = useState<number>(() => {
+    const saved = localStorage.getItem(AGE_STORAGE_KEY);
+    return saved ? parseInt(saved) : 80;
+  });
+
   useEffect(() => {
     if (birthdate) {
       localStorage.setItem(STORAGE_KEY, birthdate.toISOString());
@@ -23,6 +36,12 @@ export default function Home() {
       localStorage.removeItem(STORAGE_KEY);
     }
   }, [birthdate]);
+
+  useEffect(() => {
+    localStorage.setItem(AGE_STORAGE_KEY, String(targetAge));
+  }, [targetAge]);
+
+  const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
@@ -56,10 +75,28 @@ export default function Home() {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="w-full flex justify-center pt-2"
         >
-          <div className="flex flex-col items-center gap-1.5 w-full max-w-sm">
+          <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
             <DatePicker date={birthdate} setDate={setBirthdate} />
-            <p className="text-[10px] text-muted-foreground text-center">
-              Enter your birthdate to visualize your life in weeks until age 80.
+            <p className="text-[10px] text-muted-foreground text-center inline-flex items-center gap-1 flex-wrap justify-center">
+              <span>Enter your birthdate to visualize your life in weeks until age</span>
+              <Select
+                value={String(targetAge)}
+                onValueChange={(v) => setTargetAge(parseInt(v))}
+              >
+                <SelectTrigger
+                  data-testid="select-target-age"
+                  className="inline-flex w-[52px] h-5 text-[10px] px-1.5 border border-primary/10"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ages.map((a) => (
+                    <SelectItem key={a} value={String(a)} data-testid={`option-age-${a}`}>
+                      {a}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </p>
           </div>
         </motion.div>
@@ -71,7 +108,7 @@ export default function Home() {
         transition={{ duration: 1, ease: "easeOut" }}
         className="w-full flex-1 pb-20 px-4"
       >
-        <LifeGrid birthdate={birthdate} />
+        <LifeGrid birthdate={birthdate} targetAge={targetAge} />
       </motion.main>
     </div>
   );
