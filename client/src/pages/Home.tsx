@@ -26,27 +26,26 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
-      <header className="w-full max-w-4xl mx-auto pt-12 pb-8 px-6 text-center flex flex-col items-center space-y-6">
+      <header className="w-full max-w-4xl mx-auto pt-4 pb-3 px-6 text-center flex flex-col items-center space-y-2">
         
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative group"
         >
-           <img src={skullImage} alt="Memento Mori" className="w-24 h-24 object-contain" />
+           <img src={skullImage} alt="Memento Mori" className="w-12 h-12 object-contain" />
         </motion.div>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="space-y-2"
+          className="space-y-0.5"
         >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground tracking-tight">
             Memento Your Mori
           </h1>
-          <p className="text-muted-foreground font-mono text-sm md:text-base tracking-widest uppercase">
+          <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
             Remember You Must Die
           </p>
         </motion.div>
@@ -55,13 +54,12 @@ export default function Home() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="w-full flex justify-center pt-6"
+          className="w-full flex justify-center pt-2"
         >
-          <div className="flex flex-col items-center gap-4 w-full max-w-sm">
+          <div className="flex flex-col items-center gap-1.5 w-full max-w-sm">
             <DatePicker date={birthdate} setDate={setBirthdate} />
-            <p className="text-xs text-muted-foreground text-center max-w-[300px]">
-              Enter your birthdate to visualize your life in weeks. 
-              <br/>Each row represents one year.
+            <p className="text-[10px] text-muted-foreground text-center">
+              Enter your birthdate to visualize your life in weeks.
             </p>
           </div>
         </motion.div>

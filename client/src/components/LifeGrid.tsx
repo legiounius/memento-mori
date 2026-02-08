@@ -26,7 +26,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
   return (
     <div className="w-full max-w-[960px] mx-auto p-4 md:p-8">
       <div className="overflow-x-auto flex flex-col items-center">
-        <div className="flex flex-wrap justify-between items-end mb-6 font-mono text-xs text-muted-foreground uppercase tracking-widest border-b border-border pb-2 gap-2 w-full" style={{ maxWidth: 'fit-content' }}>
+        <div className="flex flex-wrap justify-between items-end mb-4 font-mono text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 gap-2 w-full" style={{ maxWidth: 'fit-content' }}>
           <span>Birth</span>
           <span data-testid="text-stats">
             {birthdate
@@ -38,7 +38,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
 
         <div className="inline-grid" style={{
           gridTemplateColumns: `32px repeat(${WEEKS_PER_YEAR}, minmax(0, 1fr))`,
-          gap: '2px',
+          gap: '3px',
           minWidth: '500px',
         }}>
           <div />
@@ -46,7 +46,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
             <div
               key={`wh-${w}`}
               className="text-center font-mono text-muted-foreground select-none"
-              style={{ fontSize: '6px', lineHeight: '10px' }}
+              style={{ fontSize: '8px', lineHeight: '12px' }}
             >
               {w}
             </div>
@@ -57,7 +57,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
               <div
                 key={`yl-${yearIndex}`}
                 className="flex items-center justify-end pr-1 font-mono text-muted-foreground select-none"
-                style={{ fontSize: '7px', lineHeight: '10px' }}
+                style={{ fontSize: '9px', lineHeight: '12px' }}
               >
                 {yearIndex + 1}
               </div>
@@ -88,7 +88,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
           })}
         </div>
 
-        <div className="mt-8 text-center font-mono text-xs text-muted-foreground">
+        <div className="mt-6 text-center font-mono text-sm text-muted-foreground">
           <p>1 row = 1 year  ·  1 dot = 1 week</p>
         </div>
       </div>
