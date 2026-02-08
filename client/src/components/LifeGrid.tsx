@@ -17,6 +17,9 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
   }, [birthdate]);
 
   const weeksRemaining = TOTAL_WEEKS - weeksLived;
+  const percentLived = birthdate
+    ? ((weeksLived / TOTAL_WEEKS) * 100).toFixed(1)
+    : null;
   const percentRemaining = birthdate
     ? ((weeksRemaining / TOTAL_WEEKS) * 100).toFixed(1)
     : null;
@@ -29,7 +32,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
         <div className="text-center mb-4 font-mono text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full" style={{ maxWidth: 'fit-content' }}>
           <span data-testid="text-stats">
             {birthdate
-              ? `${weeksLived.toLocaleString()} weeks lived · ${percentRemaining}% remaining until age 80`
+              ? `${weeksLived.toLocaleString()} weeks lived (${percentLived}%) · ${weeksRemaining.toLocaleString()} weeks remaining (${percentRemaining}%)`
               : "Select your birthdate"}
           </span>
         </div>

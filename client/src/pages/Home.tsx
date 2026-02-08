@@ -59,7 +59,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-1.5 w-full max-w-sm">
             <DatePicker date={birthdate} setDate={setBirthdate} />
             <p className="text-[10px] text-muted-foreground text-center">
-              Enter your birthdate to visualize your life in weeks.
+              Enter your birthdate to visualize your life in weeks until age 80.
             </p>
           </div>
         </motion.div>
