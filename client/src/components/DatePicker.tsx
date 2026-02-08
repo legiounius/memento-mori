@@ -25,9 +25,15 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
-  const [month, setMonth] = useState<string>("");
-  const [day, setDay] = useState<string>("");
-  const [year, setYear] = useState<string>("");
+  const [month, setMonth] = useState<string>(() =>
+    date ? String(date.getMonth()) : ""
+  );
+  const [day, setDay] = useState<string>(() =>
+    date ? String(date.getDate()) : ""
+  );
+  const [year, setYear] = useState<string>(() =>
+    date ? String(date.getFullYear()) : ""
+  );
 
   const selectedMonth = month ? parseInt(month) : undefined;
   const selectedYear = year ? parseInt(year) : undefined;
