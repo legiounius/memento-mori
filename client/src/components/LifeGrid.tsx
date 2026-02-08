@@ -87,7 +87,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
                   className="flex items-center justify-end pr-1 font-mono text-muted-foreground select-none"
                   style={{ fontSize: '9px', lineHeight: '12px' }}
                 >
-                  {yearIndex + 1}
+                  {yearIndex}
                 </div>
               );
 
