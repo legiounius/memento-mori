@@ -1,14 +1,16 @@
 import { useMemo } from 'react';
 import { differenceInWeeks } from 'date-fns';
+import type { LifeEvent } from './EventForm';
 
 interface LifeGridProps {
   birthdate: Date | undefined;
   targetAge: number;
+  events: LifeEvent[];
 }
 
 const WEEKS_PER_YEAR = 52;
 
-export function LifeGrid({ birthdate, targetAge }: LifeGridProps) {
+export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
   const totalWeeks = targetAge * WEEKS_PER_YEAR;
 
   const weeksLived = useMemo(() => {
@@ -16,6 +18,20 @@ export function LifeGrid({ birthdate, targetAge }: LifeGridProps) {
     const today = new Date();
     return Math.min(totalWeeks, Math.max(0, differenceInWeeks(today, birthdate)));
   }, [birthdate, totalWeeks]);
+
+  const eventWeekSet = useMemo(() => {
+    if (!birthdate) return new Set<number>();
+    const set = new Set<number>();
+    for (const event of events) {
+      const eventDate = new Date(event.date);
+      const diffMs = eventDate.getTime() - birthdate.getTime();
+      const weekIndex = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
+      if (weekIndex >= 0 && weekIndex < totalWeeks) {
+        set.add(weekIndex);
+      }
+    }
+    return set;
+  }, [birthdate, events, totalWeeks]);
 
   const weeksRemaining = totalWeeks - weeksLived;
   const percentLived = birthdate
@@ -94,7 +110,17 @@ export function LifeGrid({ birthdate, targetAge }: LifeGridProps) {
 
               const dots = Array.from({ length: WEEKS_PER_YEAR }, (_, weekIndex) => {
                 const dotIndex = yearIndex * WEEKS_PER_YEAR + weekIndex;
+                const isEvent = eventWeekSet.has(dotIndex);
                 const isLived = birthdate && dotIndex < weeksLived;
+
+                let dotColor: string;
+                if (isEvent) {
+                  dotColor = 'bg-blue-500';
+                } else if (isLived) {
+                  dotColor = 'bg-red-600';
+                } else {
+                  dotColor = 'bg-zinc-300 dark:bg-zinc-700';
+                }
 
                 return (
                   <div
@@ -102,10 +128,7 @@ export function LifeGrid({ birthdate, targetAge }: LifeGridProps) {
                     className={`
                       aspect-square rounded-full w-full
                       transition-colors duration-300
-                      ${isLived
-                        ? 'bg-red-600'
-                        : 'bg-zinc-300 dark:bg-zinc-700'
-                      }
+                      ${dotColor}
                     `}
                     title={`Year ${yearIndex}, Week ${weekIndex + 1}`}
                     data-testid={`dot-${dotIndex}`}

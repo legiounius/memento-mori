@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
+import { EventForm, type LifeEvent } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -13,6 +16,17 @@ import {
 
 const STORAGE_KEY = "memento-birthdate";
 const AGE_STORAGE_KEY = "memento-target-age";
+const EVENTS_STORAGE_KEY = "memento-events";
+
+const MONTHS_SHORT = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return `${MONTHS_SHORT[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
 
 export default function Home() {
   const [birthdate, setBirthdate] = useState<Date | undefined>(() => {
@@ -29,6 +43,14 @@ export default function Home() {
     return saved ? parseInt(saved) : 80;
   });
 
+  const [events, setEvents] = useState<LifeEvent[]>(() => {
+    const saved = localStorage.getItem(EVENTS_STORAGE_KEY);
+    if (saved) {
+      try { return JSON.parse(saved); } catch { return []; }
+    }
+    return [];
+  });
+
   useEffect(() => {
     if (birthdate) {
       localStorage.setItem(STORAGE_KEY, birthdate.toISOString());
@@ -40,6 +62,18 @@ export default function Home() {
   useEffect(() => {
     localStorage.setItem(AGE_STORAGE_KEY, String(targetAge));
   }, [targetAge]);
+
+  useEffect(() => {
+    localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(events));
+  }, [events]);
+
+  const handleAddEvent = (event: LifeEvent) => {
+    setEvents((prev) => [...prev, event]);
+  };
+
+  const handleRemoveEvent = (id: string) => {
+    setEvents((prev) => prev.filter((e) => e.id !== id));
+  };
 
   const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
 
@@ -100,6 +134,15 @@ export default function Home() {
             </p>
           </div>
         </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="w-full flex justify-center pt-3"
+        >
+          <EventForm onAdd={handleAddEvent} />
+        </motion.div>
       </header>
 
       <motion.main
@@ -108,7 +151,62 @@ export default function Home() {
         transition={{ duration: 1, ease: "easeOut" }}
         className="w-full flex-1 pb-20 px-4"
       >
-        <LifeGrid birthdate={birthdate} targetAge={targetAge} />
+        <LifeGrid birthdate={birthdate} targetAge={targetAge} events={events} />
+
+        {events.length > 0 && (
+          <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8">
+            <h2 className="font-mono text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 mb-3 text-center">
+              Key Events of My Life
+            </h2>
+            <div className="space-y-1">
+              {events.map((event) => {
+                let weekInfo = "";
+                if (birthdate) {
+                  const eventDate = new Date(event.date);
+                  const diffMs = eventDate.getTime() - birthdate.getTime();
+                  const diffWeeks = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
+                  if (diffWeeks >= 0) {
+                    const yearNum = Math.floor(diffWeeks / 52);
+                    const weekNum = (diffWeeks % 52) + 1;
+                    weekInfo = `Year ${yearNum}, Week ${weekNum}`;
+                  }
+                }
+                return (
+                  <div
+                    key={event.id}
+                    data-testid={`event-row-${event.id}`}
+                    className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" />
+                      <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
+                        {event.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">
+                        {formatDate(event.date)}
+                      </span>
+                      {weekInfo && (
+                        <span className="text-xs text-muted-foreground shrink-0">
+                          ({weekInfo})
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      data-testid={`button-remove-event-${event.id}`}
+                      onClick={() => handleRemoveEvent(event.id)}
+                      className="text-muted-foreground shrink-0"
+                    >
+                      <Trash2 className="w-3.5 h-3.5 mr-1" />
+                      Remove
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </motion.main>
     </div>
   );
