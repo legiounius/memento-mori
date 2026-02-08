@@ -178,7 +178,7 @@ export default function Home() {
                     className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0" />
+                      <div className={`w-2.5 h-2.5 rounded-full ${event.color || 'bg-blue-500'} shrink-0`} />
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
                       </span>

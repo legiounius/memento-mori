@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
 import { differenceInWeeks } from 'date-fns';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import type { LifeEvent } from './EventForm';
 
 interface LifeGridProps {
@@ -19,18 +24,23 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
     return Math.min(totalWeeks, Math.max(0, differenceInWeeks(today, birthdate)));
   }, [birthdate, totalWeeks]);
 
-  const eventWeekSet = useMemo(() => {
-    if (!birthdate) return new Set<number>();
-    const set = new Set<number>();
+  const eventWeekMap = useMemo(() => {
+    if (!birthdate) return new Map<number, { color: string; labels: string[] }>();
+    const map = new Map<number, { color: string; labels: string[] }>();
     for (const event of events) {
       const eventDate = new Date(event.date);
       const diffMs = eventDate.getTime() - birthdate.getTime();
       const weekIndex = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
       if (weekIndex >= 0 && weekIndex < totalWeeks) {
-        set.add(weekIndex);
+        const existing = map.get(weekIndex);
+        if (existing) {
+          existing.labels.push(event.label);
+        } else {
+          map.set(weekIndex, { color: event.color, labels: [event.label] });
+        }
       }
     }
-    return set;
+    return map;
   }, [birthdate, events, totalWeeks]);
 
   const weeksRemaining = totalWeeks - weeksLived;
@@ -110,29 +120,47 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
               const dots = Array.from({ length: WEEKS_PER_YEAR }, (_, weekIndex) => {
                 const dotIndex = yearIndex * WEEKS_PER_YEAR + weekIndex;
-                const isEvent = eventWeekSet.has(dotIndex);
+                const eventData = eventWeekMap.get(dotIndex);
                 const isLived = birthdate && dotIndex < weeksLived;
 
                 let dotColor: string;
-                if (isEvent) {
-                  dotColor = 'bg-blue-500';
+                if (eventData) {
+                  dotColor = eventData.color;
                 } else if (isLived) {
                   dotColor = 'bg-red-600';
                 } else {
                   dotColor = 'bg-zinc-300 dark:bg-zinc-700';
                 }
 
-                return (
+                const dot = (
                   <div
-                    key={`d-${dotIndex}`}
                     className={`
                       aspect-square rounded-full w-full
                       transition-colors duration-300
                       ${dotColor}
                     `}
-                    title={`Year ${yearIndex}, Week ${weekIndex + 1}`}
                     data-testid={`dot-${dotIndex}`}
                   />
+                );
+
+                if (eventData) {
+                  return (
+                    <Tooltip key={`d-${dotIndex}`}>
+                      <TooltipTrigger asChild>
+                        {dot}
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="text-xs max-w-[200px]">
+                        <p className="font-medium">{eventData.labels.join(", ")}</p>
+                        <p className="text-muted-foreground">Year {yearIndex}, Week {weekIndex + 1}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                }
+
+                return (
+                  <div key={`d-${dotIndex}`} title={`Year ${yearIndex}, Week ${weekIndex + 1}`}>
+                    {dot}
+                  </div>
                 );
               });
 
