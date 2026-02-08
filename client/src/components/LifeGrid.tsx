@@ -3,7 +3,7 @@ import { differenceInWeeks } from 'date-fns';
 import { motion } from 'framer-motion';
 
 interface LifeGridProps {
-  birthdate: Date;
+  birthdate: Date | undefined;
 }
 
 const TOTAL_YEARS = 80;
@@ -12,8 +12,8 @@ const TOTAL_WEEKS = TOTAL_YEARS * WEEKS_PER_YEAR;
 
 export function LifeGrid({ birthdate }: LifeGridProps) {
   const weeksLived = useMemo(() => {
+    if (!birthdate) return 0;
     const today = new Date();
-    // Calculate full weeks lived
     return Math.max(0, differenceInWeeks(today, birthdate));
   }, [birthdate]);
 
@@ -25,7 +25,7 @@ export function LifeGrid({ birthdate }: LifeGridProps) {
     <div className="w-full max-w-[900px] mx-auto p-4 md:p-8">
       <div className="flex justify-between items-end mb-6 font-mono text-xs text-muted-foreground uppercase tracking-widest border-b border-border pb-2">
         <span>Birth</span>
-        <span>{weeksLived.toLocaleString()} Weeks Lived</span>
+        <span>{birthdate ? `${weeksLived.toLocaleString()} Weeks Lived` : "Select your birthdate"}</span>
         <span>Age 80</span>
       </div>
 

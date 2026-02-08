@@ -1,47 +1,113 @@
-import * as React from "react";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { useState, useEffect } from "react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface DatePickerProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
 }
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+function getDaysInMonth(month: number, year: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}
+
 export function DatePicker({ date, setDate }: DatePickerProps) {
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+
+  const [month, setMonth] = useState<string>("");
+  const [day, setDay] = useState<string>("");
+  const [year, setYear] = useState<string>("");
+
+  const selectedMonth = month ? parseInt(month) : undefined;
+  const selectedYear = year ? parseInt(year) : undefined;
+
+  const maxDays =
+    selectedMonth !== undefined && selectedYear !== undefined
+      ? getDaysInMonth(selectedMonth, selectedYear)
+      : 31;
+
+  const days = Array.from({ length: maxDays }, (_, i) => i + 1);
+
+  useEffect(() => {
+    if (day && parseInt(day) > maxDays) {
+      setDay("");
+    }
+  }, [maxDays, day]);
+
+  useEffect(() => {
+    if (month !== "" && day !== "" && year !== "") {
+      const m = parseInt(month);
+      const d = parseInt(day);
+      const y = parseInt(year);
+      const newDate = new Date(y, m, d);
+      if (newDate <= new Date()) {
+        setDate(newDate);
+      }
+    } else {
+      setDate(undefined);
+    }
+  }, [month, day, year, setDate]);
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={"outline"}
-          className={cn(
-            "w-full md:w-[280px] justify-start text-left font-normal h-12 rounded-none border-2 border-primary/10 hover:border-primary hover:bg-transparent transition-all duration-300",
-            !date && "text-muted-foreground"
-          )}
+    <div className="flex flex-row items-center gap-3 w-full max-w-sm flex-wrap justify-center">
+      <Select value={month} onValueChange={setMonth}>
+        <SelectTrigger
+          data-testid="select-month"
+          className="w-[130px] border-2 border-primary/10"
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick your birthdate</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          disabled={(date) =>
-            date > new Date() || date < new Date("1900-01-01")
-          }
-          initialFocus
-          className="rounded-md border shadow-xl bg-background"
-        />
-      </PopoverContent>
-    </Popover>
+          <SelectValue placeholder="Month" />
+        </SelectTrigger>
+        <SelectContent>
+          {MONTHS.map((m, i) => (
+            <SelectItem key={m} value={String(i)} data-testid={`option-month-${i}`}>
+              {m}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Select value={day} onValueChange={setDay}>
+        <SelectTrigger
+          data-testid="select-day"
+          className="w-[90px] border-2 border-primary/10"
+        >
+          <SelectValue placeholder="Day" />
+        </SelectTrigger>
+        <SelectContent>
+          {days.map((d) => (
+            <SelectItem key={d} value={String(d)} data-testid={`option-day-${d}`}>
+              {d}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Select value={year} onValueChange={setYear}>
+        <SelectTrigger
+          data-testid="select-year"
+          className="w-[100px] border-2 border-primary/10"
+        >
+          <SelectValue placeholder="Year" />
+        </SelectTrigger>
+        <SelectContent>
+          {years.map((y) => (
+            <SelectItem key={y} value={String(y)} data-testid={`option-year-${y}`}>
+              {y}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
