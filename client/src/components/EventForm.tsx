@@ -93,15 +93,15 @@ export function EventForm({ onAdd }: EventFormProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 w-full">
-      <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+    <div className="flex flex-col items-center gap-1 w-full">
+      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
         Add a Key Date in Your Life
       </p>
-      <div className="flex flex-row items-center gap-2 flex-wrap justify-center w-full max-w-3xl">
+      <div className="flex flex-row items-center gap-1.5 flex-wrap justify-center w-full max-w-3xl">
         <Select value={month} onValueChange={setMonth}>
           <SelectTrigger
             data-testid="select-event-month"
-            className="w-[120px] border border-primary/10 text-sm"
+            className="w-[100px] h-7 border border-primary/10 text-xs px-2"
           >
             <SelectValue placeholder="Month" />
           </SelectTrigger>
@@ -117,7 +117,7 @@ export function EventForm({ onAdd }: EventFormProps) {
         <Select value={day} onValueChange={setDay}>
           <SelectTrigger
             data-testid="select-event-day"
-            className="w-[80px] border border-primary/10 text-sm"
+            className="w-[65px] h-7 border border-primary/10 text-xs px-2"
           >
             <SelectValue placeholder="Day" />
           </SelectTrigger>
@@ -133,7 +133,7 @@ export function EventForm({ onAdd }: EventFormProps) {
         <Select value={year} onValueChange={setYear}>
           <SelectTrigger
             data-testid="select-event-year"
-            className="w-[90px] border border-primary/10 text-sm"
+            className="w-[75px] h-7 border border-primary/10 text-xs px-2"
           >
             <SelectValue placeholder="Year" />
           </SelectTrigger>
@@ -152,26 +152,26 @@ export function EventForm({ onAdd }: EventFormProps) {
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
-          className="w-[200px] border border-primary/10 text-sm"
+          className="w-[170px] h-7 border border-primary/10 text-xs px-2"
         />
 
         <Select value={color} onValueChange={setColor}>
           <SelectTrigger
             data-testid="select-event-color"
-            className="w-[120px] border border-primary/10 text-sm"
+            className="w-[100px] h-7 border border-primary/10 text-xs px-2"
           >
             <SelectValue>
-              <span className="flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-full ${color}`} />
-                {EVENT_COLORS.find((c) => c.value === color)?.name}
+              <span className="flex items-center gap-1.5">
+                <span className={`w-2.5 h-2.5 rounded-full ${color}`} />
+                <span className="text-xs">{EVENT_COLORS.find((c) => c.value === color)?.name}</span>
               </span>
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {EVENT_COLORS.map((c) => (
               <SelectItem key={c.value} value={c.value}>
-                <span className="flex items-center gap-2">
-                  <span className={`w-3 h-3 rounded-full ${c.value}`} />
+                <span className="flex items-center gap-1.5">
+                  <span className={`w-2.5 h-2.5 rounded-full ${c.value}`} />
                   {c.name}
                 </span>
               </SelectItem>
@@ -184,8 +184,9 @@ export function EventForm({ onAdd }: EventFormProps) {
           size="sm"
           disabled={!isValid}
           onClick={handleAdd}
+          className="h-7 text-xs px-2.5"
         >
-          <Plus className="w-4 h-4 mr-1" />
+          <Plus className="w-3 h-3 mr-1" />
           Add
         </Button>
       </div>

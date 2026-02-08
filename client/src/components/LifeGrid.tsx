@@ -135,7 +135,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                           className="aspect-square w-full flex items-center justify-center"
                           data-testid={`dot-${dotIndex}`}
                         >
-                          <Star className="w-full h-full text-yellow-500 fill-yellow-500" />
+                          <Star className="w-full h-full text-black fill-black dark:text-white dark:fill-white" />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs">
