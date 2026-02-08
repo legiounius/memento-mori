@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { differenceInWeeks } from 'date-fns';
+import { Star } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +24,8 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
     const today = new Date();
     return Math.min(totalWeeks, Math.max(0, differenceInWeeks(today, birthdate)));
   }, [birthdate, totalWeeks]);
+
+  const currentWeekIndex = birthdate ? weeksLived - 1 : -1;
 
   const eventWeekMap = useMemo(() => {
     if (!birthdate) return new Map<number, { color: string; labels: string[] }>();
@@ -122,6 +125,26 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                 const dotIndex = yearIndex * WEEKS_PER_YEAR + weekIndex;
                 const eventData = eventWeekMap.get(dotIndex);
                 const isLived = birthdate && dotIndex < weeksLived;
+                const isCurrentWeek = dotIndex === currentWeekIndex;
+
+                if (isCurrentWeek && birthdate) {
+                  return (
+                    <Tooltip key={`d-${dotIndex}`}>
+                      <TooltipTrigger asChild>
+                        <div
+                          className="aspect-square w-full flex items-center justify-center"
+                          data-testid={`dot-${dotIndex}`}
+                        >
+                          <Star className="w-full h-full text-yellow-500 fill-yellow-500" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="text-xs">
+                        <p className="font-medium">You are here</p>
+                        <p className="text-muted-foreground">Year {yearIndex}, Week {weekIndex + 1}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  );
+                }
 
                 let dotColor: string;
                 if (eventData) {
