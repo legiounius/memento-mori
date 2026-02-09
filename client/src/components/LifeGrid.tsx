@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { LifeEvent } from './EventForm';
+import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 
 interface LifeGridProps {
   birthdate: Date | undefined;
@@ -15,6 +16,17 @@ interface LifeGridProps {
 }
 
 const WEEKS_PER_YEAR = 52;
+
+const skullStyle = {
+  WebkitMaskImage: `url(${skullImage})`,
+  maskImage: `url(${skullImage})`,
+  WebkitMaskSize: 'contain',
+  maskSize: 'contain',
+  WebkitMaskRepeat: 'no-repeat',
+  maskRepeat: 'no-repeat',
+  WebkitMaskPosition: 'center',
+  maskPosition: 'center',
+} as React.CSSProperties;
 
 export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
   const totalWeeks = targetAge * WEEKS_PER_YEAR;
@@ -148,23 +160,23 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
                 const isEvent = !!eventLabels;
 
-                let dotClasses: string;
+                let bgClass: string;
                 if (isEvent) {
-                  dotClasses = 'border-2 border-black dark:border-white bg-transparent';
+                  bgClass = 'bg-black dark:bg-white';
                 } else if (isLived) {
-                  dotClasses = 'bg-red-600';
+                  bgClass = 'bg-red-600';
                 } else {
-                  dotClasses = 'bg-zinc-300 dark:bg-zinc-700';
+                  bgClass = 'bg-zinc-300 dark:bg-zinc-700';
                 }
 
                 const dot = (
                   <div
                     className={`
-                      aspect-square rounded-full w-full
+                      aspect-square w-full
                       transition-colors duration-300
-                      ${dotClasses}
+                      ${bgClass}
                     `}
-                    style={isEvent ? { boxSizing: 'border-box' } : undefined}
+                    style={skullStyle}
                     data-testid={`dot-${dotIndex}`}
                   />
                 );
@@ -196,7 +208,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
         </div>
 
         <div className="mt-6 text-center font-mono text-sm text-muted-foreground">
-          <p>1 row = 1 year  ·  1 dot = 1 week</p>
+          <p>1 row = 1 year  ·  1 skull = 1 week</p>
         </div>
       </div>
     </div>
