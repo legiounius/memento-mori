@@ -5,7 +5,7 @@ import { EventForm, type LifeEvent } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Printer } from "lucide-react";
+import { Trash2, Printer, Star } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -96,7 +96,7 @@ export default function Home() {
           className="space-y-0.5"
         >
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground tracking-tight">
-            Memento Your Mori
+            Memento Mori
           </h1>
           <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
             Live Accordingly
@@ -178,7 +178,7 @@ export default function Home() {
                     className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-2.5 h-2.5 rounded-full border-2 border-black dark:border-white shrink-0" />
+                      <Star className="w-3 h-3 text-black fill-black dark:text-white dark:fill-white shrink-0" />
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
                       </span>

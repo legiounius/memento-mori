@@ -107,15 +107,15 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           </div>
 
           <div className="inline-grid" style={{
-            gridTemplateColumns: `32px repeat(${WEEKS_PER_YEAR}, minmax(0, 1fr))`,
-            gap: '3px',
-            minWidth: '500px',
+            gridTemplateColumns: `24px repeat(${WEEKS_PER_YEAR}, minmax(0, 1fr))`,
+            gap: '2px',
+            minWidth: '460px',
           }}>
             <div />
             {weekNumbers.map((w) => (
               <div
                 key={`wh-${w}`}
-                className="text-center font-mono text-muted-foreground select-none"
+                className="text-center font-mono text-muted-foreground select-none hidden md:block"
                 style={{ fontSize: '8px', lineHeight: '12px' }}
               >
                 {w}
@@ -160,32 +160,16 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
                 const isEvent = !!eventLabels;
 
-                let bgClass: string;
                 if (isEvent) {
-                  bgClass = 'bg-black dark:bg-white';
-                } else if (isLived) {
-                  bgClass = 'bg-red-600';
-                } else {
-                  bgClass = 'bg-zinc-300 dark:bg-zinc-700';
-                }
-
-                const dot = (
-                  <div
-                    className={`
-                      aspect-square w-full
-                      transition-colors duration-300
-                      ${bgClass}
-                    `}
-                    style={skullStyle}
-                    data-testid={`dot-${dotIndex}`}
-                  />
-                );
-
-                if (eventLabels) {
                   return (
                     <Tooltip key={`d-${dotIndex}`}>
                       <TooltipTrigger asChild>
-                        {dot}
+                        <div
+                          className="aspect-square w-full flex items-center justify-center"
+                          data-testid={`dot-${dotIndex}`}
+                        >
+                          <Star className="w-full h-full text-black fill-black dark:text-white dark:fill-white" />
+                        </div>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs max-w-[200px]">
                         <p className="font-medium">{eventLabels.join(", ")}</p>
@@ -194,6 +178,18 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                     </Tooltip>
                   );
                 }
+
+                const dot = (
+                  <div
+                    className={`
+                      aspect-square w-full
+                      transition-colors duration-300
+                      ${isLived ? 'bg-red-600' : 'bg-zinc-300 dark:bg-zinc-700'}
+                    `}
+                    style={skullStyle}
+                    data-testid={`dot-${dotIndex}`}
+                  />
+                );
 
                 return (
                   <div key={`d-${dotIndex}`} title={`Year ${yearIndex}, Week ${weekIndex + 1}`}>
