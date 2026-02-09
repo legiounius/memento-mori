@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { LifeEvent } from './EventForm';
-import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
+const SKULL_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 5C28 5 15 22 15 42c0 12 5 22 13 28v10c0 3 2 5 5 5h2v5c0 3 2 5 5 5s5-2 5-5v-5h10v5c0 3 2 5 5 5s5-2 5-5v-5h2c3 0 5-2 5-5V70c8-6 13-16 13-28C85 22 72 5 50 5zM35 50c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm30 0c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zM50 68c-6 0-11-2-11-5s5-5 11-5 11 2 11 5-5 5-11 5z" fill="black"/></svg>`)}`;
 
 interface LifeGridProps {
   birthdate: Date | undefined;
@@ -18,8 +18,8 @@ interface LifeGridProps {
 const WEEKS_PER_YEAR = 52;
 
 const skullStyle = {
-  WebkitMaskImage: `url(${skullImage})`,
-  maskImage: `url(${skullImage})`,
+  WebkitMaskImage: `url("${SKULL_SVG}")`,
+  maskImage: `url("${SKULL_SVG}")`,
   WebkitMaskSize: 'contain',
   maskSize: 'contain',
   WebkitMaskRepeat: 'no-repeat',
