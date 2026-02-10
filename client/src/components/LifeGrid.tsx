@@ -108,6 +108,11 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
 
+            const skullPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
+            const barFillPercent = isCurrentYear
+              ? Math.max(0, skullPercent - 1.5)
+              : fillPercent;
+
             return (
               <div
                 key={`year-${yearIndex}`}
@@ -122,10 +127,10 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                 </div>
 
                 <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-zinc-200 dark:bg-zinc-800">
-                  {fillPercent > 0 && (
+                  {barFillPercent > 0 && (
                     <div
                       className="absolute inset-y-0 left-0 bg-black dark:bg-white rounded-sm transition-all duration-300"
-                      style={{ width: `${fillPercent}%` }}
+                      style={{ width: `${barFillPercent}%` }}
                       data-testid={`bar-fill-${yearIndex}`}
                     />
                   )}
