@@ -37,6 +37,21 @@ const QUOTES = [
   "No man can have a peaceful life who thinks too much about lengthening it. — Seneca",
   "We are dying every day. — Seneca",
   "The soul that is not prepared today is even less so tomorrow. — Ovid",
+  "Do not act as if you had ten thousand years to throw away. — Marcus Aurelius",
+  "Loss is nothing else but change, and change is nature's delight. — Marcus Aurelius",
+  "How long are you going to wait before you demand the best for yourself? — Epictetus",
+  "Waste no more time arguing about what a good man should be. Be one. — Marcus Aurelius",
+  "While we wait for life, life passes. — Seneca",
+  "Luck is what happens when preparation meets opportunity. — Seneca",
+  "Death smiles at us all; all we can do is smile back. — Marcus Aurelius",
+  "Every new beginning comes from some other beginning's end. — Seneca",
+  "Life is long, if you know how to use it. — Seneca",
+  "If you live each day as if it were your last, someday you'll be right. — Marcus Aurelius",
+  "The happiness of your life depends upon the quality of your thoughts. — Marcus Aurelius",
+  "True happiness is to enjoy the present, without anxious dependence upon the future. — Seneca",
+  "He suffers more than necessary, who suffers before it is necessary. — Seneca",
+  "Man is affected not by events but by the view he takes of them. — Epictetus",
+  "It is not death that a man should fear, but rather he should fear never beginning to live. — Marcus Aurelius",
 ];
 
 function formatDate(iso: string) {
@@ -205,14 +220,6 @@ export default function Home() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="w-full flex justify-center pt-3"
-        >
-          <EventForm onAdd={handleAddEvent} />
-        </motion.div>
       </header>
 
       <motion.main
@@ -222,6 +229,10 @@ export default function Home() {
         className="w-full flex-1 pb-20 px-4"
       >
         <LifeGrid birthdate={birthdate} targetAge={targetAge} events={events} />
+
+        <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 mt-4">
+          <EventForm onAdd={handleAddEvent} />
+        </div>
 
         {events.length > 0 && (
           <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8">
