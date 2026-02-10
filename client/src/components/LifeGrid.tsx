@@ -73,12 +73,20 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
   return (
     <div className="w-full max-w-[700px] mx-auto p-4 md:p-8">
       <div className="flex flex-col items-center">
-        <div className="text-center mb-4 font-mono text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full">
+        <div className="text-center mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full">
           <span data-testid="text-stats">
             {birthdate
               ? `${weeksLived.toLocaleString()} weeks lived (${percentLived}%) · ${weeksRemaining.toLocaleString()} weeks remaining (${percentRemaining}%)`
               : "Select your birthdate"}
           </span>
+        </div>
+
+        <div className="w-full flex items-center gap-2 mb-1">
+          <div className="shrink-0" style={{ width: '28px' }} />
+          <div className="flex-1 flex justify-between">
+            <span className="text-[9px] text-muted-foreground select-none" data-testid="label-0wks">0wks</span>
+            <span className="text-[9px] text-muted-foreground select-none" data-testid="label-52wks">52wks</span>
+          </div>
         </div>
 
         <div className="w-full space-y-[2px]">
@@ -109,7 +117,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                 data-testid={`year-row-${yearIndex}`}
               >
                 <div
-                  className="font-mono text-muted-foreground select-none text-right shrink-0"
+                  className="text-muted-foreground select-none text-right shrink-0"
                   style={{ fontSize: '9px', width: '28px' }}
                 >
                   {showEveryLabel ? yearIndex : ''}
@@ -191,7 +199,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           })}
         </div>
 
-        <div className="mt-6 text-center font-mono text-sm text-muted-foreground space-y-1">
+        <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
           <p>1 row = 1 year · bar fills by weeks lived</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">

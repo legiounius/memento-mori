@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { EventForm, type LifeEvent } from "@/components/EventForm";
@@ -23,9 +23,26 @@ const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+const QUOTES = [
+  "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
+  "Let us prepare our minds as if we'd come to the very end of life. — Seneca",
+  "It is not that we have a short time to live, but that we waste a great deal of it. — Seneca",
+  "Think of yourself as dead. You have lived your life. Now, take what's left and live it properly. — Marcus Aurelius",
+  "The whole future lies in uncertainty: live immediately. — Seneca",
+  "He who fears death will never do anything worthy of a man who is alive. — Seneca",
+  "Begin at once to live, and count each separate day as a separate life. — Seneca",
+  "No man can have a peaceful life who thinks too much about lengthening it. — Seneca",
+  "We are dying every day. — Seneca",
+  "The soul that is not prepared today is even less so tomorrow. — Ovid",
+];
+
 function formatDate(iso: string) {
   const d = new Date(iso);
   return `${MONTHS_SHORT[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+
+function formatDateFull(date: Date) {
+  return `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 export default function Home() {
@@ -37,6 +54,8 @@ export default function Home() {
     }
     return undefined;
   });
+
+  const [editingBirthdate, setEditingBirthdate] = useState(false);
 
   const [targetAge, setTargetAge] = useState<number>(() => {
     const saved = localStorage.getItem(AGE_STORAGE_KEY);
@@ -50,6 +69,10 @@ export default function Home() {
     }
     return [];
   });
+
+  const randomQuote = useMemo(() => {
+    return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  }, []);
 
   useEffect(() => {
     if (birthdate) {
@@ -75,7 +98,16 @@ export default function Home() {
     setEvents((prev) => prev.filter((e) => e.id !== id));
   };
 
+  const handleBirthdateSet = (date: Date | undefined) => {
+    setBirthdate(date);
+    if (date) {
+      setEditingBirthdate(false);
+    }
+  };
+
   const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
+
+  const showDatePicker = !birthdate || editingBirthdate;
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
@@ -86,20 +118,29 @@ export default function Home() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-           <img src={skullImage} alt="Memento Mori" className="w-12 h-12 object-contain" />
+           <img
+             src={skullImage}
+             alt="Memento Mori"
+             className="w-12 h-12 object-contain"
+             style={{ mixBlendMode: 'multiply' }}
+             data-testid="img-skull-header"
+           />
         </motion.div>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="space-y-0.5"
+          className="space-y-1"
         >
-          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <p className="text-muted-foreground font-mono text-xs tracking-widest uppercase">
+          <p className="text-muted-foreground text-xs tracking-widest uppercase">
             Live Accordingly
+          </p>
+          <p className="text-muted-foreground text-[11px] italic max-w-sm mx-auto leading-relaxed pt-1" data-testid="text-quote">
+            "{randomQuote}"
           </p>
         </motion.div>
 
@@ -110,9 +151,24 @@ export default function Home() {
           className="w-full flex justify-center pt-2"
         >
           <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
-            <DatePicker date={birthdate} setDate={setBirthdate} />
+            {showDatePicker ? (
+              <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+            ) : (
+              <div className="flex items-center gap-2" data-testid="birthdate-display">
+                <span className="text-sm text-foreground">
+                  Born: {formatDateFull(birthdate)}
+                </span>
+                <button
+                  onClick={() => setEditingBirthdate(true)}
+                  className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+                  data-testid="button-change-birthdate"
+                >
+                  change
+                </button>
+              </div>
+            )}
             <p className="text-[10px] text-muted-foreground text-center inline-flex items-center gap-1 flex-wrap justify-center">
-              <span>Enter your birthdate to visualize your life in weeks until age</span>
+              <span>{showDatePicker ? "Enter your birthdate to visualize your life in weeks until age" : "Visualizing your life in weeks until age"}</span>
               <Select
                 value={String(targetAge)}
                 onValueChange={(v) => setTargetAge(parseInt(v))}
@@ -155,7 +211,7 @@ export default function Home() {
 
         {events.length > 0 && (
           <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8">
-            <h2 className="font-mono text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 mb-3 text-center">
+            <h2 className="text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 mb-3 text-center">
               Key Events of My Life
             </h2>
             <div className="space-y-1">
@@ -212,10 +268,10 @@ export default function Home() {
             variant="outline"
             data-testid="button-print"
             onClick={() => window.print()}
-            className="font-mono text-xs uppercase tracking-widest"
+            className="text-xs uppercase tracking-widest"
           >
             <Printer className="w-3.5 h-3.5 mr-2" />
-            Print Dot Matrix
+            Print Life Chart
           </Button>
         </div>
       </motion.main>
