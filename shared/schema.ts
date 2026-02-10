@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -6,6 +6,11 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   birthdate: timestamp("birthdate").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const tracker = pgTable("tracker", {
+  id: serial("id").primaryKey(),
+  count: integer("count").notNull().default(0),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({ 

@@ -13,10 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 const STORAGE_KEY = "memento-birthdate";
 const AGE_STORAGE_KEY = "memento-target-age";
 const EVENTS_STORAGE_KEY = "memento-events";
+const TRACKED_KEY = "memento-tracked";
 
 const MONTHS_SHORT = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -74,9 +77,20 @@ export default function Home() {
     return QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }, []);
 
+  const { data: trackerData } = useQuery<{ count: number }>({
+    queryKey: ['/api/tracker/count'],
+  });
+
   useEffect(() => {
     if (birthdate) {
       localStorage.setItem(STORAGE_KEY, birthdate.toISOString());
+      const alreadyTracked = localStorage.getItem(TRACKED_KEY);
+      if (!alreadyTracked) {
+        localStorage.setItem(TRACKED_KEY, "true");
+        apiRequest("POST", "/api/tracker/increment")
+          .then(() => queryClient.invalidateQueries({ queryKey: ['/api/tracker/count'] }))
+          .catch(() => {});
+      }
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
@@ -155,7 +169,7 @@ export default function Home() {
               <DatePicker date={birthdate} setDate={handleBirthdateSet} />
             ) : (
               <div className="flex items-center gap-2" data-testid="birthdate-display">
-                <span className="text-sm text-foreground">
+                <span className="text-sm font-bold text-foreground">
                   Born: {formatDateFull(birthdate)}
                 </span>
                 <button
@@ -234,7 +248,7 @@ export default function Home() {
                     className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Star className="w-3 h-3 text-black fill-black dark:text-white dark:fill-white shrink-0" />
+                      <Star className="w-3 h-3 shrink-0" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
                       </span>
@@ -275,6 +289,12 @@ export default function Home() {
           </Button>
         </div>
       </motion.main>
+
+      {trackerData && trackerData.count > 0 && (
+        <div className="fixed bottom-2 right-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-tracker-count">
+          {trackerData.count.toLocaleString()} {trackerData.count === 1 ? 'soul' : 'souls'} reflecting
+        </div>
+      )}
     </div>
   );
 }

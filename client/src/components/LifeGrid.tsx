@@ -76,7 +76,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
         <div className="text-center mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full">
           <span data-testid="text-stats">
             {birthdate
-              ? `${weeksLived.toLocaleString()} weeks lived (${percentLived}%) · ${weeksRemaining.toLocaleString()} weeks remaining (${percentRemaining}%)`
+              ? <><span className="font-bold">{weeksLived.toLocaleString()} weeks lived</span> ({percentLived}%) · <span className="font-bold">{weeksRemaining.toLocaleString()} weeks remaining</span> ({percentRemaining}%)</>
               : "Select your birthdate"}
           </span>
         </div>
@@ -108,8 +108,6 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
 
-            const showEveryLabel = yearIndex % 5 === 0;
-
             return (
               <div
                 key={`year-${yearIndex}`}
@@ -120,13 +118,13 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                   className="text-muted-foreground select-none text-right shrink-0"
                   style={{ fontSize: '9px', width: '28px' }}
                 >
-                  {showEveryLabel ? yearIndex : ''}
+                  {yearIndex}
                 </div>
 
                 <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-zinc-200 dark:bg-zinc-800">
                   {fillPercent > 0 && (
                     <div
-                      className="absolute inset-y-0 left-0 bg-red-600 rounded-sm transition-all duration-300"
+                      className="absolute inset-y-0 left-0 bg-black dark:bg-white rounded-sm transition-all duration-300"
                       style={{ width: `${fillPercent}%` }}
                       data-testid={`bar-fill-${yearIndex}`}
                     />
@@ -148,8 +146,9 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                           data-testid="marker-current-week"
                         >
                           <div
-                            className="w-full h-full bg-black dark:bg-white"
+                            className="w-full h-full"
                             style={{
+                              backgroundColor: '#D4AF37',
                               WebkitMaskImage: `url("${SKULL_SVG}")`,
                               maskImage: `url("${SKULL_SVG}")`,
                               WebkitMaskSize: 'contain',
@@ -184,7 +183,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                           }}
                           data-testid={`marker-event-${yearIndex}-${evt.weekInYear}`}
                         >
-                          <Star className="w-full h-full text-black fill-black dark:text-white dark:fill-white" />
+                          <Star className="w-full h-full" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs max-w-[200px]">
@@ -203,7 +202,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           <p>1 row = 1 year · bar fills by weeks lived</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-4 h-[8px] bg-red-600 rounded-sm border border-zinc-300 dark:border-zinc-600" />
+              <span className="inline-block w-4 h-[8px] bg-black dark:bg-white rounded-sm border border-zinc-300 dark:border-zinc-600" />
               <span className="text-xs">Lived</span>
             </span>
             <span className="flex items-center gap-1.5">
@@ -211,7 +210,8 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[14px] h-[14px] bg-black dark:bg-white" style={{
+              <span className="inline-block w-[14px] h-[14px]" style={{
+                backgroundColor: '#D4AF37',
                 WebkitMaskImage: `url("${SKULL_SVG}")`,
                 maskImage: `url("${SKULL_SVG}")`,
                 WebkitMaskSize: 'contain',
@@ -224,7 +224,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <Star className="w-3 h-3 text-black fill-black dark:text-white dark:fill-white" />
+              <Star className="w-3 h-3" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
               <span className="text-xs">Event</span>
             </span>
           </div>

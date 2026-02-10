@@ -121,8 +121,8 @@
   }
 
   /* Force bars to print in color */
-  .bg-red-600 {
-    background-color: #dc2626 !important;
+  .bg-black {
+    background-color: #000000 !important;
   }
   .bg-zinc-200 {
     background-color: #e4e4e7 !important;

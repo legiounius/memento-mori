@@ -77,7 +77,7 @@ export function EventForm({ onAdd }: EventFormProps) {
 
   return (
     <div className="flex flex-col items-center gap-1 w-full">
-      <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+      <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
         Add a Key Date in Your Life
       </p>
       <div className="flex flex-row items-center gap-1.5 flex-wrap justify-center w-full max-w-3xl">
