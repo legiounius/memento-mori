@@ -2,9 +2,9 @@
 
 ## Overview
 
-Memento Mori is a "life in weeks" visualization app. Users enter their birthdate and a target age, and the app renders a grid showing every week of their expected life — weeks lived are filled in, future weeks are empty. Users can also mark life events on the grid. The app's theme is stark black-and-white, inspired by the Stoic concept of remembering mortality.
+Memento Mori is a "life in weeks" visualization app. Users enter their birthdate and a target age (60-100), and the app renders horizontal year bars showing their life progress — black fill for weeks lived, gray for remaining. Users can mark life events (gold stars) and see their current week (gold skull marker). The app's theme is stark black-and-white with gold accents, inspired by the Stoic concept of remembering mortality.
 
-The project follows a full-stack TypeScript architecture with a React frontend (Vite) and Express backend, using PostgreSQL via Drizzle ORM. Most of the app logic is client-side — the grid calculations and event management use localStorage. The backend primarily exists for optional user persistence.
+The project follows a full-stack TypeScript architecture with a React frontend (Vite) and Express backend, using PostgreSQL via Drizzle ORM. Most of the app logic is client-side — the grid calculations and event management use localStorage. The backend handles a user tracker that counts how many people have saved their birthdate.
 
 ## User Preferences
 
@@ -21,13 +21,19 @@ Preferred communication style: Simple, everyday language.
 - **Date Calculations**: `date-fns` (specifically `differenceInWeeks`)
 - **Path aliases**: `@/` maps to `client/src/`, `@shared/` maps to `shared/`, `@assets/` maps to `attached_assets/`
 - **Key pages**: Home (main life grid view), NotFound (404)
-- **Key components**: `LifeGrid` (the week grid visualization), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
-- **Fonts**: Cinzel (display), Inter (body), Space Mono (monospace) — loaded via Google Fonts with CSS custom properties (`--font-display`, `--font-body`, `--font-mono`)
+- **Key components**: `LifeGrid` (horizontal year bars visualization with black fill for lived, gold skull/star markers), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
+- **Birthdate UX**: Once set, birthdate shows as bold text "Born: Jan 15, 1990" with a subtle "change" link. Dropdowns only appear on first use or when changing.
+- **Quotes**: 10 embedded Stoic/memento mori quotes rotate randomly on each page load under "Live Accordingly"
+- **Fonts**: Cinzel used site-wide (body and headings) — loaded via Google Fonts with CSS custom property `--font-display`
+- **Colors**: Lived bars = black, event stars = gold (#D4AF37), skull marker = gold (#D4AF37), remaining = gray
 
 ### Backend
 - **Framework**: Express 5 on Node.js, using TypeScript compiled via `tsx`
 - **API Pattern**: Typed route definitions in `shared/routes.ts` — input/output schemas defined with Zod, shared between client and server
-- **Current endpoints**: `POST /api/users` — creates a user record with a birthdate
+- **Current endpoints**:
+  - `POST /api/users` — creates a user record with a birthdate
+  - `POST /api/tracker/increment` — atomically increments the user counter (called once per browser via localStorage flag)
+  - `GET /api/tracker/count` — returns the total count of users who saved their birthdate
 - **Storage layer**: `server/storage.ts` uses a `DatabaseStorage` class implementing `IStorage` interface (dependency inversion pattern)
 - **Dev server**: Vite dev middleware served through Express with HMR support
 - **Production build**: Vite builds the client to `dist/public`, esbuild bundles the server to `dist/index.cjs`
@@ -36,7 +42,7 @@ Preferred communication style: Simple, everyday language.
 - **ORM**: Drizzle ORM with PostgreSQL dialect (`drizzle-orm/node-postgres`)
 - **Connection**: `pg.Pool` using `DATABASE_URL` environment variable
 - **Schema location**: `shared/schema.ts`
-- **Current schema**: Single `users` table with `id` (serial PK), `birthdate` (timestamp, required), `createdAt` (timestamp, auto-set)
+- **Current schema**: `users` table with `id` (serial PK), `birthdate` (timestamp, required), `createdAt` (timestamp, auto-set); `tracker` table with `id` (serial PK), `count` (integer) — singleton row for atomic user counting
 - **Schema management**: `drizzle-kit push` via `npm run db:push`; migrations output to `./migrations`
 - **Validation**: `drizzle-zod` generates Zod schemas from Drizzle table definitions
 
