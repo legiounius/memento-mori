@@ -106,10 +106,8 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
 
-            const skullPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
-            const barFillPercent = isCurrentYear
-              ? Math.max(0, skullPercent - 1.5)
-              : fillPercent;
+            const nowPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
+            const barFillPercent = isCurrentYear ? nowPercent : fillPercent;
 
             return (
               <div
@@ -139,13 +137,14 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                         <div
                           className="absolute"
                           style={{
-                            left: `${(currentWeekInYear / WEEKS_PER_YEAR) * 100}%`,
+                            left: `${nowPercent}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '10px',
-                            height: '10px',
+                            width: '14px',
+                            height: '14px',
                             borderRadius: '50%',
-                            backgroundColor: '#dc2626',
+                            border: '2.5px solid black',
+                            backgroundColor: 'transparent',
                             zIndex: 10,
                           }}
                           data-testid="marker-current-week"
@@ -200,7 +199,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: '#dc2626' }} />
+              <span className="inline-block w-[12px] h-[12px] rounded-full" style={{ border: '2.5px solid black', backgroundColor: 'transparent' }} />
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">
