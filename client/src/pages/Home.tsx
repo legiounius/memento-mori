@@ -136,9 +136,6 @@ export default function Home() {
 
   const handleBirthdateSet = (date: Date | undefined) => {
     setBirthdate(date);
-    if (date) {
-      setEditingBirthdate(false);
-    }
   };
 
   const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
@@ -281,7 +278,18 @@ export default function Home() {
         >
           <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
             {showDatePicker ? (
-              <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+              <div className="flex flex-col items-center gap-2">
+                <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+                {editingBirthdate && birthdate && (
+                  <button
+                    onClick={() => setEditingBirthdate(false)}
+                    className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+                    data-testid="button-done-birthdate"
+                  >
+                    done
+                  </button>
+                )}
+              </div>
             ) : (
               <div className="flex items-center gap-2" data-testid="birthdate-display">
                 <span className="text-sm font-bold text-foreground">
