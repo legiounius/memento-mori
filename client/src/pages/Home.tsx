@@ -255,7 +255,7 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <p className="text-muted-foreground text-xs tracking-widest uppercase">
+          <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
             Live Accordingly
           </p>
           <div className="text-muted-foreground text-[11px] italic max-w-sm mx-auto leading-relaxed pt-1 text-center" data-testid="text-quote">
