@@ -140,11 +140,11 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                             left: `${nowPercent}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '14px',
-                            height: '14px',
+                            width: '16px',
+                            height: '16px',
                             borderRadius: '50%',
-                            border: '2.5px solid black',
-                            backgroundColor: 'transparent',
+                            border: '3px solid #dc2626',
+                            backgroundColor: 'black',
                             zIndex: 10,
                           }}
                           data-testid="marker-current-week"
@@ -199,7 +199,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[12px] h-[12px] rounded-full" style={{ border: '2.5px solid black', backgroundColor: 'transparent' }} />
+              <span className="inline-block w-[14px] h-[14px] rounded-full" style={{ border: '3px solid #dc2626', backgroundColor: 'black' }} />
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">
