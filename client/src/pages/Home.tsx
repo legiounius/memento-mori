@@ -410,6 +410,10 @@ export default function Home() {
         </div>
       </motion.main>
 
+      <div className="fixed bottom-2 left-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-copyright">
+        Copyright Legio Unius MMXXVI
+      </div>
+
       {trackerData && trackerData.count > 0 && (
         <div className="fixed bottom-2 right-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-tracker-count">
           {trackerData.count.toLocaleString()} {trackerData.count === 1 ? 'soul' : 'souls'} reflecting
