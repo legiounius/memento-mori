@@ -131,7 +131,7 @@ export function EventForm({ onAdd }: EventFormProps) {
 
         <Input
           data-testid="input-event-label"
-          placeholder="e.g. Kid's First Birthday"
+          placeholder="E.G. KID'S BDAY"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
