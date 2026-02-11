@@ -75,6 +75,7 @@ export default function Home() {
 
   const [editingBirthdate, setEditingBirthdate] = useState(false);
   const [editingTargetAge, setEditingTargetAge] = useState(false);
+  const [splashBirthdate, setSplashBirthdate] = useState<Date | undefined>(undefined);
 
   const [targetAge, setTargetAge] = useState<number>(() => {
     const saved = localStorage.getItem(AGE_STORAGE_KEY);
@@ -174,7 +175,7 @@ export default function Home() {
                 When were you born?
               </p>
               <div className="flex justify-center w-full">
-                <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+                <DatePicker date={splashBirthdate} setDate={setSplashBirthdate} />
               </div>
             </div>
             <div className="flex flex-col items-center space-y-3">
@@ -200,6 +201,22 @@ export default function Home() {
                 </Select>
               </p>
             </div>
+            {splashBirthdate && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
+                <Button
+                  variant="outline"
+                  data-testid="button-start-to-live"
+                  onClick={() => handleBirthdateSet(splashBirthdate)}
+                  className="text-sm font-bold uppercase tracking-widest px-8"
+                >
+                  Start To Live
+                </Button>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>
