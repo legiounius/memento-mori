@@ -80,7 +80,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
         </div>
 
         <div className="w-full flex">
-          <div className="flex flex-col items-center mr-1.5 pt-5" style={{ width: '18px' }}>
+          <div className="flex flex-col items-center mr-1.5 pt-5" style={{ width: '18px', maxHeight: '200px' }}>
             <span className="text-xs font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Years</span>
             <div className="flex-1 mt-1 flex flex-col items-center">
               <div className="flex-1 w-[1px] bg-muted-foreground/30" />
