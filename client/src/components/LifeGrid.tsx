@@ -7,7 +7,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { LifeEvent } from './EventForm';
-import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 
 interface LifeGridProps {
   birthdate: Date | undefined;
@@ -109,7 +108,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
             const skullPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
             const barFillPercent = isCurrentYear
-              ? Math.max(0, skullPercent - 2.5)
+              ? Math.max(0, skullPercent - 1.5)
               : fillPercent;
 
             return (
@@ -138,26 +137,19 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
-                          className="absolute flex items-center justify-center"
+                          className="absolute"
                           style={{
                             left: `${(currentWeekInYear / WEEKS_PER_YEAR) * 100}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '20px',
-                            height: '20px',
+                            width: '10px',
+                            height: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: '#dc2626',
                             zIndex: 10,
                           }}
                           data-testid="marker-current-week"
-                        >
-                          <img
-                            src={skullImage}
-                            alt="You are here"
-                            className="w-full h-full object-contain"
-                            style={{
-                              filter: 'brightness(0) saturate(100%) invert(16%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(100%) contrast(112%)',
-                            }}
-                          />
-                        </div>
+                        />
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs">
                         <p className="font-medium">You are here</p>
@@ -208,14 +200,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <img
-                src={skullImage}
-                alt="Now"
-                className="w-[16px] h-[16px] object-contain"
-                style={{
-                  filter: 'brightness(0) saturate(100%) invert(16%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(100%) contrast(112%)',
-                }}
-              />
+              <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: '#dc2626' }} />
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">

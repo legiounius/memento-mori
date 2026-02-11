@@ -2,7 +2,7 @@
 
 ## Overview
 
-Memento Mori is a "life in weeks" visualization app. Users enter their birthdate and a target age (60-100), and the app renders horizontal year bars showing their life progress — black fill for weeks lived, gray for remaining. Users can mark life events (gold stars) and see their current week (gold skull marker). The app's theme is stark black-and-white with gold accents, inspired by the Stoic concept of remembering mortality.
+Memento Mori is a "life in weeks" visualization app. First-time visitors see a splash page with a large skull & crossbones, "Memento Mori" title, and a birthdate picker. Returning visitors (birthdate saved in localStorage) skip directly to the main visualization. Users enter their birthdate and a target age (60-100), and the app renders horizontal year bars showing their life progress — black fill for weeks lived, gray for remaining. Users can mark life events (red stars) and see their current week (red dot marker). The app's theme is stark black-and-white with red accents (#dc2626), inspired by the Stoic concept of remembering mortality.
 
 The project follows a full-stack TypeScript architecture with a React frontend (Vite) and Express backend, using PostgreSQL via Drizzle ORM. Most of the app logic is client-side — the grid calculations and event management use localStorage. The backend handles a user tracker that counts how many people have saved their birthdate.
 
@@ -21,11 +21,11 @@ Preferred communication style: Simple, everyday language.
 - **Date Calculations**: `date-fns` (specifically `differenceInWeeks`)
 - **Path aliases**: `@/` maps to `client/src/`, `@shared/` maps to `shared/`, `@assets/` maps to `attached_assets/`
 - **Key pages**: Home (main life grid view), NotFound (404)
-- **Key components**: `LifeGrid` (horizontal year bars visualization with black fill for lived, gold skull/star markers), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
-- **Birthdate UX**: Once set, birthdate shows as bold text "Born: Jan 15, 1990" with a subtle "change" link. Dropdowns only appear on first use or when changing.
-- **Quotes**: 10 embedded Stoic/memento mori quotes rotate randomly on each page load under "Live Accordingly"
+- **Key components**: `LifeGrid` (horizontal year bars visualization with black fill for lived, red dot/star markers), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
+- **Birthdate UX**: First-time visitors see a splash page with large skull, title, and birthdate picker. Once set, birthdate shows as bold text "Born: Jan 15, 1990" with a subtle "change" link. Returning visitors skip the splash entirely.
+- **Quotes**: 25 embedded Stoic/memento mori quotes rotate randomly on each page load under "Live Accordingly"
 - **Fonts**: Cinzel used site-wide (body and headings) — loaded via Google Fonts with CSS custom property `--font-display`
-- **Colors**: Lived bars = black, event stars = gold (#D4AF37), skull marker = gold (#D4AF37), remaining = gray
+- **Colors**: Lived bars = black, event stars = red (#dc2626), current week dot = red (#dc2626), remaining = gray
 
 ### Backend
 - **Framework**: Express 5 on Node.js, using TypeScript compiled via `tsx`

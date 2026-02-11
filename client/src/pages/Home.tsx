@@ -138,6 +138,63 @@ export default function Home() {
 
   const showDatePicker = !birthdate || editingBirthdate;
 
+  if (!birthdate) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="flex flex-col items-center space-y-6 max-w-md w-full"
+        >
+          <img
+            src={skullImage}
+            alt="Memento Mori"
+            className="w-24 h-24 object-contain"
+            style={{ mixBlendMode: 'multiply' }}
+            data-testid="img-skull-splash"
+          />
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-center space-y-2"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+              Memento Mori
+            </h1>
+            <p className="text-muted-foreground text-sm tracking-widest uppercase">
+              Remember, you will die
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="w-full border-t border-border pt-6 text-center space-y-4"
+          >
+            <p className="text-sm text-muted-foreground">
+              When were you born?
+            </p>
+            <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="text-muted-foreground text-[11px] italic max-w-xs text-center leading-relaxed pt-4"
+            data-testid="text-quote-splash"
+          >
+            "{randomQuote}"
+          </motion.p>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
       <header className="w-full max-w-4xl mx-auto pt-4 pb-3 px-6 text-center flex flex-col items-center space-y-2">
