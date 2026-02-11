@@ -258,16 +258,17 @@ export default function Home() {
           <p className="text-muted-foreground text-xs tracking-widest uppercase">
             Live Accordingly
           </p>
-          <p className="text-muted-foreground text-[11px] italic max-w-sm mx-auto leading-relaxed pt-1" data-testid="text-quote">
-            "{randomQuote}"
-          </p>
+          <div className="text-muted-foreground text-[11px] italic max-w-sm mx-auto leading-relaxed pt-1 text-center" data-testid="text-quote">
+            <p>"{randomQuote.split(' — ')[0]}"</p>
+            <p className="mt-0.5 not-italic">— {randomQuote.split(' — ')[1]}</p>
+          </div>
         </motion.div>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="w-full flex justify-center pt-2"
+          className="w-full flex justify-center pt-0.5"
         >
           <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
             {showDatePicker ? (
