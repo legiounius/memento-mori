@@ -26,6 +26,11 @@ const MONTHS_SHORT = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
+const MONTHS_FULL = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
 const QUOTES = [
   "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
   "Let us prepare our minds as if we'd come to the very end of life. — Seneca",
@@ -60,7 +65,7 @@ function formatDate(iso: string) {
 }
 
 function formatDateFull(date: Date) {
-  return `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  return `${MONTHS_FULL[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 export default function Home() {
