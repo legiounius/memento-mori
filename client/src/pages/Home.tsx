@@ -259,7 +259,7 @@ export default function Home() {
                     className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Star className="w-3 h-3 shrink-0" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
+                      <Star className="w-4 h-4 shrink-0" style={{ color: '#dc2626', fill: '#dc2626' }} />
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
                       </span>

@@ -7,8 +7,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { LifeEvent } from './EventForm';
-
-const SKULL_SVG = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 5C28 5 15 22 15 42c0 12 5 22 13 28v10c0 3 2 5 5 5h2v5c0 3 2 5 5 5s5-2 5-5v-5h10v5c0 3 2 5 5 5s5-2 5-5v-5h2c3 0 5-2 5-5V70c8-6 13-16 13-28C85 22 72 5 50 5zM35 50c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zm30 0c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9zM50 68c-6 0-11-2-11-5s5-5 11-5 11 2 11 5-5 5-11 5z" fill="black"/></svg>`)}`;
+import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 
 interface LifeGridProps {
   birthdate: Date | undefined;
@@ -110,7 +109,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
 
             const skullPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
             const barFillPercent = isCurrentYear
-              ? Math.max(0, skullPercent - 1.5)
+              ? Math.max(0, skullPercent - 2.5)
               : fillPercent;
 
             return (
@@ -144,24 +143,18 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                             left: `${(currentWeekInYear / WEEKS_PER_YEAR) * 100}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '14px',
-                            height: '14px',
+                            width: '20px',
+                            height: '20px',
                             zIndex: 10,
                           }}
                           data-testid="marker-current-week"
                         >
-                          <div
-                            className="w-full h-full"
+                          <img
+                            src={skullImage}
+                            alt="You are here"
+                            className="w-full h-full object-contain"
                             style={{
-                              backgroundColor: '#D4AF37',
-                              WebkitMaskImage: `url("${SKULL_SVG}")`,
-                              maskImage: `url("${SKULL_SVG}")`,
-                              WebkitMaskSize: 'contain',
-                              maskSize: 'contain',
-                              WebkitMaskRepeat: 'no-repeat',
-                              maskRepeat: 'no-repeat',
-                              WebkitMaskPosition: 'center',
-                              maskPosition: 'center',
+                              filter: 'brightness(0) saturate(100%) invert(16%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(100%) contrast(112%)',
                             }}
                           />
                         </div>
@@ -182,13 +175,13 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                             left: `${(evt.weekInYear / WEEKS_PER_YEAR) * 100}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
-                            width: '12px',
-                            height: '12px',
+                            width: '18px',
+                            height: '18px',
                             zIndex: 10,
                           }}
                           data-testid={`marker-event-${yearIndex}-${evt.weekInYear}`}
                         >
-                          <Star className="w-full h-full" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
+                          <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs max-w-[200px]">
@@ -215,21 +208,18 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[14px] h-[14px]" style={{
-                backgroundColor: '#D4AF37',
-                WebkitMaskImage: `url("${SKULL_SVG}")`,
-                maskImage: `url("${SKULL_SVG}")`,
-                WebkitMaskSize: 'contain',
-                maskSize: 'contain',
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center',
-              }} />
+              <img
+                src={skullImage}
+                alt="Now"
+                className="w-[16px] h-[16px] object-contain"
+                style={{
+                  filter: 'brightness(0) saturate(100%) invert(16%) sepia(95%) saturate(6932%) hue-rotate(358deg) brightness(100%) contrast(112%)',
+                }}
+              />
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <Star className="w-3 h-3" style={{ color: '#D4AF37', fill: '#D4AF37' }} />
+              <Star className="w-4 h-4" style={{ color: '#dc2626', fill: '#dc2626' }} />
               <span className="text-xs">Event</span>
             </span>
           </div>
