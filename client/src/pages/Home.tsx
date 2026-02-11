@@ -264,6 +264,13 @@ export default function Home() {
               Live Accordingly
             </p>
           </div>
+          <img
+            src={skullImage}
+            alt="Memento Mori"
+            className="w-10 h-10 object-contain"
+            style={{ mixBlendMode: 'multiply' }}
+            data-testid="img-skull-header-right"
+          />
         </motion.div>
 
         <motion.div

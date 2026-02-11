@@ -95,7 +95,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
         </div>
 
         <div className="w-full flex">
-          <div className="flex flex-col items-center mr-1.5 pt-5" style={{ width: '18px', maxHeight: '200px' }}>
+          <div className="flex flex-col items-center mr-1.5" style={{ width: '18px', marginTop: '70px', height: '120px' }}>
             <span className="text-xs font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Years</span>
             <div className="flex-1 mt-1 flex flex-col items-center">
               <div className="flex-1 w-[1px] bg-muted-foreground/30" />
@@ -149,10 +149,10 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                 data-testid={`year-row-${yearIndex}`}
               >
                 <div
-                  className="text-xs font-bold text-muted-foreground select-none text-right shrink-0"
+                  className={`${yearIndex === 0 ? 'text-[10px]' : 'text-xs'} font-bold text-muted-foreground select-none text-right shrink-0`}
                   style={{ width: '32px' }}
                 >
-                  {yearIndex}
+                  {yearIndex === 0 ? 'Born' : yearIndex}
                 </div>
 
                 <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-transparent">
