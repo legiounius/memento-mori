@@ -74,6 +74,7 @@ export default function Home() {
   });
 
   const [editingBirthdate, setEditingBirthdate] = useState(false);
+  const [editingTargetAge, setEditingTargetAge] = useState(false);
 
   const [targetAge, setTargetAge] = useState<number>(() => {
     const saved = localStorage.getItem(AGE_STORAGE_KEY);
@@ -166,13 +167,38 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2.2, duration: 1.5, ease: "easeOut" }}
-            className="w-full border-t border-border pt-6 flex flex-col items-center space-y-4"
+            className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
           >
-            <p className="text-sm text-muted-foreground text-center">
-              When were you born?
-            </p>
-            <div className="flex justify-center w-full">
-              <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+            <div className="flex flex-col items-center space-y-4">
+              <p className="text-sm text-muted-foreground text-center">
+                When were you born?
+              </p>
+              <div className="flex justify-center w-full">
+                <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+              </div>
+            </div>
+            <div className="flex flex-col items-center space-y-3">
+              <p className="text-sm text-muted-foreground text-center inline-flex items-center gap-1.5 flex-wrap justify-center">
+                <span>I expect to live to</span>
+                <Select
+                  value={String(targetAge)}
+                  onValueChange={(v) => setTargetAge(parseInt(v))}
+                >
+                  <SelectTrigger
+                    data-testid="select-target-age-splash"
+                    className="inline-flex w-[56px] h-6 text-sm px-1.5 border border-primary/10"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ages.map((a) => (
+                      <SelectItem key={a} value={String(a)} data-testid={`option-age-splash-${a}`}>
+                        {a}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </p>
             </div>
           </motion.div>
         </div>
@@ -238,27 +264,45 @@ export default function Home() {
                 </button>
               </div>
             )}
-            <p className="text-[10px] text-muted-foreground text-center inline-flex items-center gap-1 flex-wrap justify-center">
-              <span>{showDatePicker ? "Enter your birthdate to visualize your life in weeks until age" : "Visualizing your life in weeks until age"}</span>
-              <Select
-                value={String(targetAge)}
-                onValueChange={(v) => setTargetAge(parseInt(v))}
-              >
-                <SelectTrigger
-                  data-testid="select-target-age"
-                  className="inline-flex w-[52px] h-5 text-[10px] px-1.5 border border-primary/10"
+            {editingTargetAge ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-foreground">Visualizing to age</span>
+                <Select
+                  value={String(targetAge)}
+                  onValueChange={(v) => {
+                    setTargetAge(parseInt(v));
+                    setEditingTargetAge(false);
+                  }}
                 >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ages.map((a) => (
-                    <SelectItem key={a} value={String(a)} data-testid={`option-age-${a}`}>
-                      {a}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </p>
+                  <SelectTrigger
+                    data-testid="select-target-age"
+                    className="inline-flex w-[56px] h-6 text-sm px-1.5 border border-primary/10"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ages.map((a) => (
+                      <SelectItem key={a} value={String(a)} data-testid={`option-age-${a}`}>
+                        {a}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2" data-testid="target-age-display">
+                <span className="text-sm font-bold text-foreground">
+                  Visualizing your life in weeks to age {targetAge}
+                </span>
+                <button
+                  onClick={() => setEditingTargetAge(true)}
+                  className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+                  data-testid="button-change-target-age"
+                >
+                  change
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
 
