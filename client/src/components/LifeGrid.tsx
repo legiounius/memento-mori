@@ -122,14 +122,20 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                   {yearIndex}
                 </div>
 
-                <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-zinc-200 dark:bg-zinc-800">
-                  {barFillPercent > 0 && (
-                    <div
-                      className="absolute inset-y-0 left-0 bg-black dark:bg-white rounded-sm transition-all duration-300"
-                      style={{ width: `${barFillPercent}%` }}
-                      data-testid={`bar-fill-${yearIndex}`}
-                    />
-                  )}
+                <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-transparent">
+                  {barFillPercent > 0 && (() => {
+                    const lastFilledYear = Math.floor((weeksLived - 1) / WEEKS_PER_YEAR);
+                    const progress = lastFilledYear > 0 ? yearIndex / lastFilledYear : 1;
+                    const lightness = Math.round(75 - (75 * progress));
+                    const fillColor = `hsl(0, 0%, ${lightness}%)`;
+                    return (
+                      <div
+                        className="absolute inset-y-0 left-0 rounded-sm transition-all duration-300"
+                        style={{ width: `${barFillPercent}%`, backgroundColor: fillColor }}
+                        data-testid={`bar-fill-${yearIndex}`}
+                      />
+                    );
+                  })()}
 
                   {isCurrentYear && birthdate && (
                     <Tooltip>
@@ -191,11 +197,16 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           <p>1 row = 1 year · bar fills by weeks lived</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-4 h-[8px] bg-black dark:bg-white rounded-sm border border-zinc-300 dark:border-zinc-600" />
+              <span className="inline-block w-8 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 overflow-hidden flex">
+                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
+                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 50%)' }} />
+                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 25%)' }} />
+                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 0%)' }} />
+              </span>
               <span className="text-xs">Lived</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-4 h-[8px] bg-zinc-200 dark:bg-zinc-800 rounded-sm border border-zinc-300 dark:border-zinc-600" />
+              <span className="inline-block w-4 h-[8px] bg-transparent rounded-sm border border-zinc-300 dark:border-zinc-600" />
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
