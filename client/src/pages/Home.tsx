@@ -230,37 +230,39 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
-      <header className="w-full max-w-4xl mx-auto pt-4 pb-3 px-6 text-center flex flex-col items-center space-y-2">
+      <header className="w-full max-w-[700px] mx-auto pt-4 pb-3 px-4 md:px-8 text-center flex flex-col items-center space-y-1.5">
         
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-full"
+        >
+          <p className="text-muted-foreground text-[11px] italic leading-relaxed text-center" data-testid="text-quote">
+            "{randomQuote}"
+          </p>
+        </motion.div>
+
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
+          className="flex items-center gap-2"
         >
-           <img
-             src={skullImage}
-             alt="Memento Mori"
-             className="w-12 h-12 object-contain"
-             style={{ mixBlendMode: 'multiply' }}
-             data-testid="img-skull-header"
-           />
-        </motion.div>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="space-y-1"
-        >
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-            Memento Mori
-          </h1>
-          <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
-            Live Accordingly
-          </p>
-          <div className="text-muted-foreground text-[11px] italic max-w-sm mx-auto leading-relaxed pt-1 text-center" data-testid="text-quote">
-            <p>"{randomQuote.split(' — ')[0]}"</p>
-            <p className="mt-0.5 not-italic">— {randomQuote.split(' — ')[1]}</p>
+          <img
+            src={skullImage}
+            alt="Memento Mori"
+            className="w-10 h-10 object-contain"
+            style={{ mixBlendMode: 'multiply' }}
+            data-testid="img-skull-header"
+          />
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+              Memento Mori
+            </h1>
+            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
+              Live Accordingly
+            </p>
           </div>
         </motion.div>
 
