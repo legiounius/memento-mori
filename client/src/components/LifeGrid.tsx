@@ -94,14 +94,14 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
             <div className="w-full flex items-center gap-2 mb-1">
               <div className="shrink-0" style={{ width: '32px' }} />
               <div className="flex-1 flex items-center">
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0wks">0 wks</span>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0wks">Week 1</span>
                 <div className="flex-1 mx-1.5 flex items-center">
                   <div className="flex-1 h-[1px] bg-muted-foreground/30" />
                   <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-foreground/50 shrink-0">
                     <path d="M0 0 L8 5 L0 10" fill="currentColor" />
                   </svg>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">52 wks</span>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">52nd Week</span>
               </div>
             </div>
 
