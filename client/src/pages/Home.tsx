@@ -162,36 +162,19 @@ export default function Home() {
             Memento Mori
           </motion.h1>
 
-          <motion.p
-            className="text-muted-foreground text-sm tracking-widest uppercase text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2.2, duration: 1.5, ease: "easeOut" }}
-          >
-            Remember, you will die
-          </motion.p>
-
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 3.2, duration: 1.5, ease: "easeOut" }}
-            className="w-full border-t border-border pt-6 text-center space-y-4"
+            transition={{ delay: 2.2, duration: 1.5, ease: "easeOut" }}
+            className="w-full border-t border-border pt-6 flex flex-col items-center space-y-4"
           >
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground text-center">
               When were you born?
             </p>
-            <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+            <div className="flex justify-center w-full">
+              <DatePicker date={birthdate} setDate={handleBirthdateSet} />
+            </div>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 4, duration: 1.5, ease: "easeOut" }}
-            className="text-muted-foreground text-[11px] italic max-w-xs text-center leading-relaxed pt-4"
-            data-testid="text-quote-splash"
-          >
-            "{randomQuote}"
-          </motion.p>
         </div>
       </div>
     );
