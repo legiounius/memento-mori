@@ -101,7 +101,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
                     <path d="M0 0 L8 5 L0 10" fill="currentColor" />
                   </svg>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">52nd Week</span>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">Week 52</span>
               </div>
             </div>
 
