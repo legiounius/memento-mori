@@ -141,38 +141,40 @@ export default function Home() {
   if (!birthdate) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="flex flex-col items-center space-y-6 max-w-md w-full"
-        >
-          <img
+        <div className="flex flex-col items-center space-y-6 max-w-md w-full">
+          <motion.img
             src={skullImage}
             alt="Memento Mori"
             className="w-24 h-24 object-contain"
             style={{ mixBlendMode: 'multiply' }}
             data-testid="img-skull-splash"
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 2, ease: "easeOut" }}
           />
 
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-center space-y-2"
+          <motion.h1
+            className="text-4xl md:text-5xl font-bold text-foreground tracking-tight text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
-              Memento Mori
-            </h1>
-            <p className="text-muted-foreground text-sm tracking-widest uppercase">
-              Remember, you will die
-            </p>
-          </motion.div>
+            Memento Mori
+          </motion.h1>
+
+          <motion.p
+            className="text-muted-foreground text-sm tracking-widest uppercase text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 1.5, ease: "easeOut" }}
+          >
+            Remember, you will die
+          </motion.p>
 
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.2, duration: 1.5, ease: "easeOut" }}
             className="w-full border-t border-border pt-6 text-center space-y-4"
           >
             <p className="text-sm text-muted-foreground">
@@ -184,13 +186,13 @@ export default function Home() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
+            transition={{ delay: 4, duration: 1.5, ease: "easeOut" }}
             className="text-muted-foreground text-[11px] italic max-w-xs text-center leading-relaxed pt-4"
             data-testid="text-quote-splash"
           >
             "{randomQuote}"
           </motion.p>
-        </motion.div>
+        </div>
       </div>
     );
   }
