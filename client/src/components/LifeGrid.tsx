@@ -79,22 +79,34 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           </span>
         </div>
 
-        <div className="w-full flex items-center gap-2 mb-1">
-          <div className="shrink-0" style={{ width: '32px' }} />
-          <div className="flex-1 flex items-center">
-            <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0wks">0 wks</span>
-            <div className="flex-1 mx-1.5 flex items-center">
-              <div className="flex-1 h-[1px] bg-muted-foreground/30" />
-              <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-foreground/50 shrink-0">
-                <path d="M0 0 L8 5 L0 10" fill="currentColor" />
+        <div className="w-full flex">
+          <div className="flex flex-col items-center mr-1.5 pt-5" style={{ width: '18px' }}>
+            <span className="text-xs font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Years</span>
+            <div className="flex-1 mt-1 flex flex-col items-center">
+              <div className="flex-1 w-[1px] bg-muted-foreground/30" />
+              <svg width="10" height="8" viewBox="0 0 10 8" className="text-muted-foreground/50 shrink-0">
+                <path d="M0 0 L5 8 L10 0" fill="currentColor" />
               </svg>
             </div>
-            <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">52 wks</span>
           </div>
-        </div>
 
-        <div className="w-full space-y-[2px]">
-          {Array.from({ length: targetAge }).map((_, yearIndex) => {
+          <div className="flex-1">
+            <div className="w-full flex items-center gap-2 mb-1">
+              <div className="shrink-0" style={{ width: '32px' }} />
+              <div className="flex-1 flex items-center">
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0wks">0 wks</span>
+                <div className="flex-1 mx-1.5 flex items-center">
+                  <div className="flex-1 h-[1px] bg-muted-foreground/30" />
+                  <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-foreground/50 shrink-0">
+                    <path d="M0 0 L8 5 L0 10" fill="currentColor" />
+                  </svg>
+                </div>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">52 wks</span>
+              </div>
+            </div>
+
+            <div className="w-full space-y-[2px]">
+              {Array.from({ length: targetAge }).map((_, yearIndex) => {
             const yearStartWeek = yearIndex * WEEKS_PER_YEAR;
             const yearEndWeek = yearStartWeek + WEEKS_PER_YEAR;
 
@@ -197,6 +209,8 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               </div>
             );
           })}
+            </div>
+          </div>
         </div>
 
         <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
