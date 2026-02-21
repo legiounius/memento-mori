@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { differenceInWeeks } from 'date-fns';
 import { Star } from 'lucide-react';
 import {
@@ -68,15 +68,28 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
     ? ((weeksRemaining / totalWeeks) * 100).toFixed(1)
     : null;
 
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const hoursLeft = useMemo(() => {
     if (!birthdate) return null;
     const targetDate = new Date(birthdate);
     targetDate.setFullYear(targetDate.getFullYear() + targetAge);
-    const now = new Date();
     const diffMs = targetDate.getTime() - now.getTime();
     if (diffMs <= 0) return 0;
     return Math.floor(diffMs / (1000 * 60 * 60));
-  }, [birthdate, targetAge]);
+  }, [birthdate, targetAge, now]);
+
+  const secondsLived = useMemo(() => {
+    if (!birthdate) return null;
+    const diffMs = now.getTime() - birthdate.getTime();
+    if (diffMs <= 0) return 0;
+    return Math.floor(diffMs / 1000);
+  }, [birthdate, now]);
 
   return (
     <div className="w-full max-w-[700px] mx-auto p-4 md:p-8">
@@ -90,6 +103,11 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
           {hoursLeft !== null && (
             <div data-testid="text-hours-left">
               <span className="font-bold">Hours Left: {hoursLeft.toLocaleString()}</span> <span className="italic normal-case">Being Productive?</span>
+            </div>
+          )}
+          {secondsLived !== null && (
+            <div data-testid="text-seconds-lived">
+              <span className="font-bold">Seconds Lived: {secondsLived.toLocaleString()}</span>
             </div>
           )}
         </div>
