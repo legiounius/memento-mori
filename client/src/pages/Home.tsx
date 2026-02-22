@@ -3,7 +3,7 @@ import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
-import skullImage from "@assets/skull_ouroboros.png";
+import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
 import { Trash2, Printer } from "lucide-react";
 import {
