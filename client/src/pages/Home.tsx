@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { Link } from "wouter";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
@@ -274,7 +275,7 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <div className="flex items-center gap-1.5 mt-0.5" style={{ paddingLeft: '0.35em' }}>
+          <div className="flex items-center gap-1.5 mt-0.5 relative w-full justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
               src={skullImage}
@@ -283,6 +284,7 @@ export default function Home() {
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
+            <Link href="/peace" className="absolute right-0 text-[9px] text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-find-peace">Find Peace</Link>
           </div>
         </motion.div>
 

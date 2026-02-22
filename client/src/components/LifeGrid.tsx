@@ -122,12 +122,12 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           const renderColumnHeader = (side: string) => (
             <div className="w-full flex flex-col mb-1">
               <div className="flex items-center gap-1">
-                <div className="shrink-0" style={{ width: '28px' }} />
+                <div className="shrink-0" style={{ width: '20px' }} />
                 <div className="shrink-0 w-[1px]" />
                 <span className="flex-1 text-[10px] font-extrabold text-foreground select-none text-center">{side === 'left' ? 'First Half' : 'Second Half'}</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="shrink-0" style={{ width: '28px' }} />
+                <div className="shrink-0" style={{ width: '20px' }} />
                 <div className="shrink-0 w-[1px]" />
                 <div className="flex-1 flex items-center">
                   <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
@@ -163,7 +163,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
               >
                 <div
                   className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-extrabold text-foreground select-none text-right shrink-0`}
-                  style={{ width: '28px' }}
+                  style={{ width: '20px' }}
                 >
                   {yearIndex === 0 ? 'B' : yearIndex}
                 </div>
@@ -263,7 +263,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                   {leftYears.map(renderYearRow)}
                 </div>
               </div>
-              <div className="shrink-0" style={{ width: '16px' }} />
+              <div className="shrink-0" style={{ width: '8px' }} />
               <div className="flex-1 min-w-0">
                 {renderColumnHeader('right')}
                 <div className="w-full space-y-[2px]">
@@ -274,9 +274,9 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           );
         })()}
 
-        <div className="mt-6 text-center text-muted-foreground space-y-2">
-          <p className="text-[10px] font-bold">12 Dots = 12 Months</p>
-          <div className="inline-grid grid-cols-4 gap-x-4 gap-y-1 items-center text-[10px]">
+        <div className="mt-6 text-center text-muted-foreground space-y-1.5">
+          <p className="text-[8px] font-bold">12 Dots = 12 Months</p>
+          <div className="inline-grid grid-cols-4 gap-x-3 gap-y-0.5 items-center text-[8px]">
             <span className="flex items-center gap-1.5">
               <span className="inline-flex gap-0.5">
                 <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
