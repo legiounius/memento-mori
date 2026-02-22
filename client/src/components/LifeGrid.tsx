@@ -259,7 +259,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                   {leftYears.map(renderYearRow)}
                 </div>
               </div>
-              <div className="flex flex-col items-center" style={{ width: '16px', marginTop: '18px' }}>
+              <div className="flex flex-col items-center" style={{ width: '14px', marginTop: '18px' }}>
+                <div style={{ height: '80px' }} />
                 <span className="text-[9px] font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Years</span>
                 <div className="flex flex-col items-center mt-0.5 flex-1">
                   <div className="flex-1 w-[1px] bg-muted-foreground/30" />
@@ -268,7 +269,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                   </svg>
                 </div>
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0" style={{ marginLeft: '0px' }}>
                 {renderColumnHeader('right')}
                 <div className="w-full space-y-[2px]">
                   {rightYears.map(renderYearRow)}
