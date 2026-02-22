@@ -224,8 +224,44 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center">
-      <header className="w-full max-w-[900px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1">
+    <div className="min-h-screen bg-background flex flex-col items-center relative">
+      <div
+        className="absolute top-0 left-0 w-full pointer-events-none select-none"
+        style={{ height: '60px', opacity: 0.06, overflow: 'hidden' }}
+        data-testid="gravestone-banner"
+      >
+        <svg
+          width="100%"
+          height="60"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 60"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full"
+          style={{ minWidth: '100%' }}
+        >
+          <defs>
+            <pattern id="gravestones" x="0" y="0" width="120" height="60" patternUnits="userSpaceOnUse">
+              <rect x="8" y="20" width="18" height="40" fill="currentColor" />
+              <path d="M8 20 Q8 6 17 6 Q26 6 26 20" fill="currentColor" />
+              <rect x="14" y="10" width="6" height="4" rx="1" fill="currentColor" />
+              <rect x="38" y="28" width="14" height="32" fill="currentColor" />
+              <path d="M38 28 Q38 18 45 18 Q52 18 52 28" fill="currentColor" />
+              <rect x="62" y="14" width="20" height="46" fill="currentColor" />
+              <path d="M62 14 Q62 2 72 2 Q82 2 82 14" fill="currentColor" />
+              <rect x="68" y="6" width="8" height="3" rx="1" fill="currentColor" />
+              <rect x="66" y="8" width="12" height="2" rx="1" fill="currentColor" />
+              <rect x="92" y="32" width="12" height="28" fill="currentColor" />
+              <path d="M92 32 Q92 24 98 24 Q104 24 104 32" fill="currentColor" />
+              <rect x="108" y="22" width="10" height="38" fill="currentColor" />
+              <rect x="106" y="18" width="14" height="4" fill="currentColor" />
+              <rect x="111" y="10" width="4" height="12" fill="currentColor" />
+              <rect x="106" y="16" width="14" height="2" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="1200" height="60" fill="url(#gravestones)" />
+        </svg>
+      </div>
+      <header className="w-full max-w-[900px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1 relative z-10">
         
         <motion.div
           initial={{ opacity: 0 }}
