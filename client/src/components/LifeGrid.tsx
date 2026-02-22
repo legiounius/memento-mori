@@ -122,12 +122,12 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           const renderColumnHeader = (side: string) => (
             <div className="w-full flex flex-col mb-1">
               <div className="flex items-center gap-1">
-                <div className="shrink-0" style={{ width: '20px' }} />
+                <div className="shrink-0" style={{ width: '28px' }} />
                 <div className="shrink-0 w-[1px]" />
                 <span className="flex-1 text-[10px] font-extrabold text-foreground select-none text-center">{side === 'left' ? 'First Half' : 'Second Half'}</span>
               </div>
               <div className="flex items-center gap-1">
-                <div className="shrink-0" style={{ width: '20px' }} />
+                <div className="shrink-0" style={{ width: '28px' }} />
                 <div className="shrink-0 w-[1px]" />
                 <div className="flex-1 flex items-center">
                   <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
@@ -162,8 +162,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                 data-testid={`year-row-${yearIndex}`}
               >
                 <div
-                  className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-extrabold text-foreground select-none text-right shrink-0`}
-                  style={{ width: '20px' }}
+                  className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-extrabold text-foreground select-none text-right shrink-0 pr-1`}
+                  style={{ width: '28px' }}
                 >
                   {yearIndex === 0 ? 'B' : yearIndex}
                 </div>

@@ -455,7 +455,7 @@ export default function Home() {
         </div>
       </motion.main>
 
-      <div className="fixed bottom-2 left-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-copyright">
+      <div className="fixed bottom-2 left-3 text-[9px] text-foreground select-none" data-testid="text-copyright">
         Copyright Legio Unius MMXXVI
       </div>
 
@@ -494,7 +494,7 @@ export default function Home() {
       </div>
 
       <footer className="w-full py-4 text-center relative z-10">
-        <div className="flex items-center justify-center gap-3 text-[8px] text-muted-foreground/40">
+        <div className="flex items-center justify-center gap-3 text-[8px] text-foreground">
           <Link href="/philosophy" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-philosophy">The Philosophy</Link>
           <span>&middot;</span>
           <Link href="/privacy" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-privacy-policy">Privacy Policy</Link>
