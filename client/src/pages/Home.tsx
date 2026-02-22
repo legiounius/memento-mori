@@ -239,28 +239,28 @@ export default function Home() {
           style={{ minWidth: '100%' }}
         >
           <defs>
-            <pattern id="gravestones" x="0" y="0" width="160" height="60" patternUnits="userSpaceOnUse">
-              {/* Rounded-top gravestone - wide & short */}
-              <rect x="4" y="28" width="24" height="32" fill="currentColor" />
-              <path d="M4 28 Q4 14 16 14 Q28 14 28 28" fill="currentColor" />
+            <pattern id="gravestones" x="0" y="0" width="200" height="60" patternUnits="userSpaceOnUse">
+              {/* Wide rounded gravestone */}
+              <rect x="4" y="26" width="32" height="34" fill="currentColor" />
+              <path d="M4 26 Q4 10 20 10 Q36 10 36 26" fill="currentColor" />
 
-              {/* Cross-topped gravestone */}
-              <rect x="38" y="24" width="22" height="36" fill="currentColor" />
-              <rect x="45" y="8" width="8" height="20" fill="currentColor" />
-              <rect x="40" y="14" width="18" height="6" fill="currentColor" />
+              {/* Wide cross-topped gravestone */}
+              <rect x="46" y="22" width="30" height="38" fill="currentColor" />
+              <rect x="57" y="6" width="8" height="20" fill="currentColor" />
+              <rect x="50" y="12" width="22" height="6" fill="currentColor" />
 
-              {/* Tall rounded gravestone */}
-              <rect x="70" y="18" width="26" height="42" fill="currentColor" />
-              <path d="M70 18 Q70 4 83 4 Q96 4 96 18" fill="currentColor" />
+              {/* Large rounded gravestone */}
+              <rect x="86" y="16" width="34" height="44" fill="currentColor" />
+              <path d="M86 16 Q86 0 103 0 Q120 0 120 16" fill="currentColor" />
 
-              {/* Small rounded gravestone */}
-              <rect x="106" y="34" width="18" height="26" fill="currentColor" />
-              <path d="M106 34 Q106 24 115 24 Q124 24 124 34" fill="currentColor" />
+              {/* Small wide rounded gravestone */}
+              <rect x="130" y="32" width="26" height="28" fill="currentColor" />
+              <path d="M130 32 Q130 20 143 20 Q156 20 156 32" fill="currentColor" />
 
-              {/* Cross-topped short gravestone */}
-              <rect x="134" y="30" width="20" height="30" fill="currentColor" />
-              <rect x="140" y="18" width="8" height="16" fill="currentColor" />
-              <rect x="136" y="22" width="16" height="6" fill="currentColor" />
+              {/* Wide cross-topped short gravestone */}
+              <rect x="166" y="28" width="28" height="32" fill="currentColor" />
+              <rect x="176" y="14" width="8" height="18" fill="currentColor" />
+              <rect x="170" y="18" width="20" height="6" fill="currentColor" />
             </pattern>
           </defs>
           <rect width="1200" height="60" fill="url(#gravestones)" />
