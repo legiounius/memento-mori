@@ -225,7 +225,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
-      <header className="w-full max-w-[700px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1">
+      <header className="w-full max-w-[900px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1">
         
         <motion.div
           initial={{ opacity: 0 }}
@@ -332,7 +332,7 @@ export default function Home() {
           onChangeTargetAge={() => setEditingTargetAge(true)}
         />
 
-        <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 mt-4">
+        <div className="w-full max-w-[900px] mx-auto px-4 md:px-8 mt-4">
           <EventForm onAdd={handleAddEvent} />
         </div>
 

@@ -85,7 +85,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
   }, [birthdate, targetAge]);
 
   return (
-    <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 pt-1 pb-4">
+    <div className="w-full max-w-[900px] mx-auto px-4 md:px-8 pt-1 pb-4">
       <div className="flex flex-col items-center">
         <div className="mb-4 text-muted-foreground border-b border-border pb-2 w-full space-y-0.5">
           {birthdate ? (
@@ -140,48 +140,37 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
           )}
         </div>
 
-        <div className="w-full flex">
-          <div className="flex flex-col items-center mr-1.5" style={{ width: '18px', marginTop: '70px', height: '120px' }}>
-            <span className="text-xs font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Years</span>
-            <div className="flex-1 mt-1 flex flex-col items-center">
-              <div className="flex-1 w-[1px] bg-muted-foreground/30" />
-              <svg width="10" height="8" viewBox="0 0 10 8" className="text-muted-foreground/50 shrink-0">
-                <path d="M0 0 L5 8 L10 0" fill="currentColor" />
-              </svg>
-            </div>
-          </div>
+        {(() => {
+          const halfAge = Math.ceil(targetAge / 2);
+          const leftYears = Array.from({ length: halfAge }, (_, i) => i);
+          const rightYears = Array.from({ length: targetAge - halfAge }, (_, i) => halfAge + i);
+          const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
 
-          <div className="flex-1">
-            <div className="w-full flex items-center gap-2 mb-1">
-              <div className="shrink-0" style={{ width: '32px' }} />
-              <div className="flex-1 flex items-center">
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0mo">Month 1</span>
-                <div className="flex-1 mx-1.5 flex items-center">
-                  <div className="flex-1 h-[1px] bg-muted-foreground/30" />
-                  <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-foreground/50 shrink-0">
-                    <path d="M0 0 L8 5 L0 10" fill="currentColor" />
-                  </svg>
-                </div>
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-12mo">Month 12</span>
+          const renderColumnHeader = (side: string) => (
+            <div className="w-full flex items-center gap-1 mb-1">
+              <div className="shrink-0" style={{ width: '28px' }} />
+              <div className="flex-1 flex items-center justify-between">
+                <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
+                <span className="text-[10px] font-bold text-muted-foreground select-none">Month</span>
+                <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-12mo-${side}`}>12</span>
               </div>
             </div>
+          );
 
-            <div className="w-full space-y-[2px]">
-              {Array.from({ length: targetAge }).map((_, yearIndex) => {
+          const renderYearRow = (yearIndex: number) => {
             const yearStartMonth = yearIndex * MONTHS_PER_YEAR;
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
-            const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
 
             return (
               <div
                 key={`year-${yearIndex}`}
-                className="flex items-center gap-2"
+                className="flex items-center gap-1"
                 data-testid={`year-row-${yearIndex}`}
               >
                 <div
-                  className={`${yearIndex === 0 ? 'text-[10px]' : 'text-xs'} font-bold text-muted-foreground select-none text-right shrink-0`}
-                  style={{ width: '32px' }}
+                  className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-bold text-muted-foreground select-none text-right shrink-0`}
+                  style={{ width: '28px' }}
                 >
                   {yearIndex === 0 ? 'Born' : yearIndex}
                 </div>
@@ -203,7 +192,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                           <TooltipTrigger asChild>
                             <div
                               className="flex items-center justify-center"
-                              style={{ width: '14px', height: '14px' }}
+                              style={{ width: '12px', height: '12px' }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
                             >
                               <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
@@ -224,9 +213,9 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                             <div
                               className="rounded-full"
                               style={{
-                                width: '14px',
-                                height: '14px',
-                                border: '3px solid #dc2626',
+                                width: '12px',
+                                height: '12px',
+                                border: '2.5px solid #dc2626',
                                 backgroundColor: 'black',
                               }}
                               data-testid="marker-current-month"
@@ -245,8 +234,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                         key={`dot-${yearIndex}-${monthIndex}`}
                         className="rounded-full"
                         style={{
-                          width: '10px',
-                          height: '10px',
+                          width: '8px',
+                          height: '8px',
                           backgroundColor: isLived ? dotColor : 'transparent',
                           border: isLived ? 'none' : '1.5px solid #a1a1aa',
                         }}
@@ -257,10 +246,25 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                 </div>
               </div>
             );
-          })}
+          };
+
+          return (
+            <div className="w-full flex gap-6">
+              <div className="flex-1">
+                {renderColumnHeader('left')}
+                <div className="w-full space-y-[2px]">
+                  {leftYears.map(renderYearRow)}
+                </div>
+              </div>
+              <div className="flex-1">
+                {renderColumnHeader('right')}
+                <div className="w-full space-y-[2px]">
+                  {rightYears.map(renderYearRow)}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          );
+        })()}
 
         <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
           <p>1 row = 1 year · 12 dots = 12 months</p>
