@@ -225,7 +225,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center">
-      <header className="w-full max-w-[700px] mx-auto pt-4 pb-3 px-4 md:px-8 text-center flex flex-col items-center space-y-1.5">
+      <header className="w-full max-w-[700px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1">
         
         <motion.div
           initial={{ opacity: 0 }}
@@ -264,9 +264,9 @@ export default function Home() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="w-full flex justify-center pt-0.5"
+          className="w-full flex justify-center pt-0"
         >
-          <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
+          <div className="flex flex-col items-center gap-1 w-full max-w-md">
             {editingBirthdate && (
               <div className="flex flex-col items-center gap-2">
                 <DatePicker date={birthdate} setDate={handleBirthdateSet} />
@@ -281,9 +281,9 @@ export default function Home() {
                 )}
               </div>
             )}
-            {editingTargetAge ? (
+            {editingTargetAge && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-foreground">Your life in weeks to age</span>
+                <span className="text-[11px] text-foreground">Your life in weeks to age</span>
                 <Select
                   value={String(targetAge)}
                   onValueChange={(v) => {
@@ -293,7 +293,7 @@ export default function Home() {
                 >
                   <SelectTrigger
                     data-testid="select-target-age"
-                    className="inline-flex w-[56px] h-6 text-sm px-1.5 border border-primary/10"
+                    className="inline-flex w-[56px] h-6 text-[11px] px-1.5 border border-primary/10"
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -305,19 +305,6 @@ export default function Home() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2" data-testid="target-age-display">
-                <span className="text-sm font-bold text-foreground">
-                  Your life in weeks to age {targetAge}
-                </span>
-                <button
-                  onClick={() => setEditingTargetAge(true)}
-                  className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
-                  data-testid="button-change-target-age"
-                >
-                  change
-                </button>
               </div>
             )}
           </div>
@@ -342,6 +329,7 @@ export default function Home() {
             return formatDateFull(d);
           })() : undefined}
           onChangeBirthdate={() => setEditingBirthdate(true)}
+          onChangeTargetAge={() => setEditingTargetAge(true)}
         />
 
         <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 mt-4">

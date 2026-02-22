@@ -15,6 +15,7 @@ interface LifeGridProps {
   bornLabel?: string;
   deadLabel?: string;
   onChangeBirthdate?: () => void;
+  onChangeTargetAge?: () => void;
 }
 
 const WEEKS_PER_YEAR = 52;
@@ -24,7 +25,7 @@ interface YearEvent {
   labels: string[];
 }
 
-export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, onChangeBirthdate }: LifeGridProps) {
+export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, onChangeBirthdate, onChangeTargetAge }: LifeGridProps) {
   const totalWeeks = targetAge * WEEKS_PER_YEAR;
 
   const weeksLived = useMemo(() => {
@@ -85,14 +86,25 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
   }, [birthdate, targetAge]);
 
   return (
-    <div className="w-full max-w-[700px] mx-auto p-4 md:p-8">
+    <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 pt-1 pb-4">
       <div className="flex flex-col items-center">
         <div className="mb-4 text-muted-foreground border-b border-border pb-2 w-full space-y-0.5">
           {birthdate ? (
             <>
-              <div className="flex text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
+              <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
-                <span className="w-1/3" />
+                <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="target-age-display">
+                  <span className="font-bold text-foreground normal-case tracking-normal">Your life in weeks to age {targetAge}</span>
+                  {onChangeTargetAge && (
+                    <button
+                      onClick={onChangeTargetAge}
+                      className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
+                      data-testid="button-change-target-age"
+                    >
+                      change
+                    </button>
+                  )}
+                </div>
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
               </div>
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
