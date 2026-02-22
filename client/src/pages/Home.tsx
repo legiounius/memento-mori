@@ -76,6 +76,16 @@ export default function Home() {
     return undefined;
   });
 
+  const isReturningUser = !!birthdate;
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    if (isReturningUser && showSplash) {
+      const timer = setTimeout(() => setShowSplash(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [isReturningUser, showSplash]);
+
   const [editingBirthdate, setEditingBirthdate] = useState(false);
   const [editingTargetAge, setEditingTargetAge] = useState(false);
   const [splashBirthdate, setSplashBirthdate] = useState<Date | undefined>(undefined);
@@ -127,6 +137,31 @@ export default function Home() {
 
   const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
 
+  if (isReturningUser && showSplash) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
+        <motion.img
+          src={skullImage}
+          alt=""
+          className="absolute pointer-events-none select-none object-contain"
+          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px' }}
+          data-testid="img-skull-returning"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.06, scale: 1 }}
+          transition={{ duration: 2.5, ease: "easeOut" }}
+        />
+        <motion.h1
+          className="text-4xl md:text-5xl font-bold text-foreground tracking-tight text-center relative z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
+        >
+          Memento<br />Mori
+        </motion.h1>
+      </div>
+    );
+  }
+
   if (!birthdate) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative overflow-hidden">
@@ -134,11 +169,11 @@ export default function Home() {
           src={skullImage}
           alt=""
           className="absolute pointer-events-none select-none object-contain"
-          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px', opacity: 0 }}
+          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px' }}
           data-testid="img-skull-splash"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.06, scale: 1 }}
-          transition={{ duration: 3, ease: "easeOut" }}
+          transition={{ duration: 5, ease: "easeOut" }}
         />
 
         <div className="flex flex-col items-center space-y-6 max-w-md w-full relative z-10">
@@ -158,7 +193,7 @@ export default function Home() {
             className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
           >
             <div className="flex flex-col items-center space-y-4">
-              <p className="text-sm text-muted-foreground text-center">
+              <p className="text-sm text-foreground/70 text-center">
                 When were you born?
               </p>
               <div className="flex justify-center w-full">
@@ -166,7 +201,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col items-center space-y-3">
-              <p className="text-sm text-muted-foreground text-center inline-flex items-center gap-1.5 flex-wrap justify-center">
+              <p className="text-sm text-foreground/70 text-center inline-flex items-center gap-1.5 flex-wrap justify-center">
                 <span>I expect to live to</span>
                 <Select
                   value={String(targetAge)}
