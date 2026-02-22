@@ -293,6 +293,19 @@ export default function FindPeace() {
         Copyright Legio Unius MMXXVI
       </div>
 
+      <a
+        href="/peace_archive.csv"
+        download="peace_archive.csv"
+        className="fixed bottom-2 right-3 text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors"
+        title="Download archive"
+        data-testid="link-download-csv"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+      </a>
+
       <div
         className="absolute left-0 w-full pointer-events-none select-none"
         style={{ bottom: '0', height: '60px', opacity: 0.06, overflow: 'hidden' }}
