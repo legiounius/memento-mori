@@ -1,9 +1,75 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import skullImage from "@assets/skull_minimal.png";
-import { stoicPassages } from '@/data/meditations';
+
+interface PeaceEntry {
+  type: string;
+  author: string;
+  source: string;
+  text: string;
+}
+
+function parseCSV(csv: string): PeaceEntry[] {
+  const entries: PeaceEntry[] = [];
+  const rows: string[][] = [];
+  let current = '';
+  let inQuotes = false;
+  let fields: string[] = [];
+
+  for (let i = 0; i < csv.length; i++) {
+    const ch = csv[i];
+    if (inQuotes) {
+      if (ch === '"' && csv[i + 1] === '"') {
+        current += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = false;
+      } else {
+        current += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        fields.push(current);
+        current = '';
+      } else if (ch === '\n' || (ch === '\r' && csv[i + 1] === '\n')) {
+        if (ch === '\r') i++;
+        fields.push(current);
+        current = '';
+        rows.push(fields);
+        fields = [];
+      } else {
+        current += ch;
+      }
+    }
+  }
+  if (current || fields.length > 0) {
+    fields.push(current);
+    rows.push(fields);
+  }
+
+  const headers = rows[0]?.map(h => h.trim().toLowerCase()) || [];
+  const typeIdx = headers.indexOf('type');
+  const authorIdx = headers.indexOf('author');
+  const sourceIdx = headers.indexOf('source');
+  const textIdx = headers.indexOf('text');
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    const text = textIdx >= 0 ? row[textIdx]?.trim() : '';
+    if (!text) continue;
+    entries.push({
+      type: typeIdx >= 0 ? row[typeIdx]?.trim() || '' : '',
+      author: authorIdx >= 0 ? row[authorIdx]?.trim() || '' : '',
+      source: sourceIdx >= 0 ? row[sourceIdx]?.trim() || '' : '',
+      text,
+    });
+  }
+  return entries;
+}
 
 const QUOTES = [
   "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
@@ -33,27 +99,31 @@ const QUOTES = [
   "The hour which gives us life begins to take it away. — Seneca",
 ];
 
-function getRandomPassage(excludeRef?: string): { ref: string; source: string; text: string } {
-  let passage;
-  do {
-    passage = stoicPassages[Math.floor(Math.random() * stoicPassages.length)];
-  } while (passage.ref === excludeRef && stoicPassages.length > 1);
-  return passage;
-}
-
 export default function FindPeace() {
   const randomQuote = useMemo(() => {
     return QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }, []);
 
-  const [currentPassage, setCurrentPassage] = useState<{ ref: string; source: string; text: string } | null>(null);
+  const [entries, setEntries] = useState<PeaceEntry[]>([]);
+  const [currentEntry, setCurrentEntry] = useState<PeaceEntry | null>(null);
   const [passageKey, setPassageKey] = useState(0);
 
+  useEffect(() => {
+    fetch('/peace_archive.csv')
+      .then(r => r.text())
+      .then(csv => setEntries(parseCSV(csv)))
+      .catch(() => {});
+  }, []);
+
   const handleFindPeace = useCallback(() => {
-    const passage = getRandomPassage(currentPassage?.ref);
-    setCurrentPassage(passage);
+    if (entries.length === 0) return;
+    let entry;
+    do {
+      entry = entries[Math.floor(Math.random() * entries.length)];
+    } while (entry.source === currentEntry?.source && entry.text === currentEntry?.text && entries.length > 1);
+    setCurrentEntry(entry);
     setPassageKey(k => k + 1);
-  }, [currentPassage]);
+  }, [entries, currentEntry]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
@@ -143,7 +213,7 @@ export default function FindPeace() {
           </Button>
 
           <AnimatePresence mode="wait">
-            {currentPassage && (
+            {currentEntry && (
               <motion.div
                 key={passageKey}
                 initial={{ opacity: 0, y: 10 }}
@@ -154,10 +224,10 @@ export default function FindPeace() {
                 data-testid="passage-container"
               >
                 <p className="text-sm leading-relaxed text-foreground/80 italic max-w-lg mx-auto" data-testid="text-passage-content">
-                  "{currentPassage.text}"
+                  "{currentEntry.text}"
                 </p>
                 <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 mt-4" data-testid="text-passage-ref">
-                  — {currentPassage.ref} · {currentPassage.source} —
+                  — {currentEntry.author}, {currentEntry.source} —
                 </p>
               </motion.div>
             )}
