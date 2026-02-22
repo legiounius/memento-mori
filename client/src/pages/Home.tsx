@@ -284,7 +284,7 @@ export default function Home() {
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
-            <Link href="/peace" className="absolute right-0 text-[9px] text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-find-peace">Find Peace</Link>
+            <Link href="/peace" className="absolute right-0 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-find-peace">Find Peace</Link>
           </div>
         </motion.div>
 

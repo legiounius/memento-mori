@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Link } from 'wouter';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import skullImage from "@assets/skull_minimal.png";
+import { meditations } from '@/data/meditations';
 
 const QUOTES = [
   "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
@@ -31,10 +33,27 @@ const QUOTES = [
   "The hour which gives us life begins to take it away. — Seneca",
 ];
 
+function getRandomPassage(excludeRef?: string): { ref: string; text: string } {
+  let passage;
+  do {
+    passage = meditations[Math.floor(Math.random() * meditations.length)];
+  } while (passage.ref === excludeRef && meditations.length > 1);
+  return passage;
+}
+
 export default function FindPeace() {
   const randomQuote = useMemo(() => {
     return QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }, []);
+
+  const [currentPassage, setCurrentPassage] = useState<{ ref: string; text: string } | null>(null);
+  const [passageKey, setPassageKey] = useState(0);
+
+  const handleFindPeace = useCallback(() => {
+    const passage = getRandomPassage(currentPassage?.ref);
+    setCurrentPassage(passage);
+    setPassageKey(k => k + 1);
+  }, [currentPassage]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
@@ -102,7 +121,7 @@ export default function FindPeace() {
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
-            <Link href="/" className="absolute right-0 text-[9px] text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-back-to-life">Back To Life</Link>
+            <Link href="/" className="absolute right-0 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-back-to-life">Back To Life</Link>
           </div>
         </motion.div>
       </header>
@@ -111,12 +130,38 @@ export default function FindPeace() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.8 }}
-        className="w-full max-w-[900px] mx-auto px-4 md:px-8 flex-1 flex flex-col items-center justify-center"
+        className="w-full max-w-[600px] mx-auto px-4 md:px-8 flex-1 flex flex-col items-center justify-center"
       >
-        <div className="text-center space-y-6 py-12">
-          <p className="text-muted-foreground text-sm italic leading-relaxed max-w-md mx-auto">
-            This page is a space for stillness. Take a breath. Remember that each moment is a gift.
-          </p>
+        <div className="text-center w-full py-8">
+          <Button
+            variant="outline"
+            onClick={handleFindPeace}
+            className="px-8 py-4 h-auto text-sm font-bold tracking-widest uppercase rounded-none"
+            data-testid="button-find-peace"
+          >
+            Find Peace
+          </Button>
+
+          <AnimatePresence mode="wait">
+            {currentPassage && (
+              <motion.div
+                key={passageKey}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="mt-8 text-left"
+                data-testid="passage-container"
+              >
+                <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 mb-3" data-testid="text-passage-ref">
+                  — {currentPassage.ref} —
+                </p>
+                <p className="text-sm leading-relaxed text-foreground/80 italic" data-testid="text-passage-content">
+                  "{currentPassage.text}"
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.main>
 
