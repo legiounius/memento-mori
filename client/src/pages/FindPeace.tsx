@@ -459,6 +459,16 @@ export default function FindPeace() {
           <rect width="1200" height="60" fill="url(#gravestones-peace-bottom)" />
         </svg>
       </div>
+
+      <footer className="w-full py-4 text-center relative z-10">
+        <div className="flex items-center justify-center gap-3 text-[8px] text-muted-foreground/40">
+          <Link href="/privacy" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-privacy-policy">Privacy Policy</Link>
+          <span>&middot;</span>
+          <Link href="/terms" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-terms">Terms of Use</Link>
+          <span>&middot;</span>
+          <a href="mailto:floorzero@gmail.com" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-contact">Contact</a>
+        </div>
+      </footer>
     </div>
   );
 }
