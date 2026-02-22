@@ -6,8 +6,10 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Share2 } from "lucide-react";
+import { Trash2, Share2, Heart } from "lucide-react";
 import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+import { differenceInWeeks } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -109,6 +111,13 @@ export default function Home() {
   const chartRef = useRef<HTMLDivElement>(null);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
+  const weeksRemaining = useMemo(() => {
+    if (!birthdate) return 0;
+    const targetDate = new Date(birthdate);
+    targetDate.setFullYear(targetDate.getFullYear() + targetAge);
+    return Math.max(0, differenceInWeeks(targetDate, new Date()));
+  }, [birthdate, targetAge]);
+
   const handleShareLife = async () => {
     if (!chartRef.current || !birthdate) return;
     setIsGeneratingPdf(true);
@@ -120,58 +129,71 @@ export default function Home() {
         logging: false,
       });
 
-      const padding = 40;
-      const footerHeight = 60;
+      const imgData = canvas.toDataURL('image/png');
       const chartAspect = canvas.width / canvas.height;
-      const pageWidth = Math.max(1056, canvas.width);
-      const chartHeight = pageWidth / chartAspect;
-      const pageHeight = Math.round(chartHeight + padding * 2 + footerHeight);
 
-      const finalCanvas = document.createElement('canvas');
-      finalCanvas.width = pageWidth;
-      finalCanvas.height = pageHeight;
-      const ctx = finalCanvas.getContext('2d');
-      if (!ctx) { setIsGeneratingPdf(false); return; }
+      const pdfWidth = 11;
+      const pdfHeight = 8.5;
+      const margin = 0.3;
+      const footerSpace = 0.5;
+      const availW = pdfWidth - margin * 2;
+      const availH = pdfHeight - margin * 2 - footerSpace;
 
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, pageWidth, pageHeight);
+      const imgW = Math.min(availW, availH * chartAspect);
+      const imgH = imgW / chartAspect;
+      const offsetX = margin + (availW - imgW) / 2;
+      const offsetY = margin + (availH - imgH) / 2;
 
-      ctx.drawImage(canvas, 0, padding, pageWidth, chartHeight);
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'in', format: 'letter' });
 
-      const footerY = pageHeight - footerHeight;
-      ctx.fillStyle = '#a1a1aa';
-      ctx.font = '600 11px Cinzel, serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('Memento Mori  •  todieisto.live  •  Remember You Must Die', pageWidth / 2, footerY + 20);
-      ctx.font = '10px Cinzel, serif';
-      ctx.fillText('The Philosophy  •  Privacy Policy  •  Terms of Use  •  Contact: eric@legiounius.com', pageWidth / 2, footerY + 38);
+      doc.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
 
-      finalCanvas.toBlob(async (blob) => {
+      const footerY = pdfHeight - footerSpace + 0.15;
+      doc.setTextColor(161, 161, 170);
+      doc.setFontSize(7);
+      doc.text('Memento Mori  •  todieisto.live  •  Remember You Must Die', pdfWidth / 2, footerY, { align: 'center' });
+      doc.setFontSize(6);
+      doc.text('The Philosophy  •  Privacy Policy  •  Terms of Use  •  Contact: eric@legiounius.com', pdfWidth / 2, footerY + 0.15, { align: 'center' });
+
+      const pdfBlob = doc.output('blob');
+      const file = new File([pdfBlob], 'memento-mori-life-chart.pdf', { type: 'application/pdf' });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
         try {
-          if (!blob) { setIsGeneratingPdf(false); return; }
-          const file = new File([blob], 'memento-mori-life-chart.png', { type: 'image/png' });
-
-          if (navigator.share && navigator.canShare?.({ files: [file] })) {
-            try {
-              await navigator.share({
-                title: 'My Life Chart — Memento Mori',
-                text: 'My life visualized. Remember you must die. Live accordingly.\n\ntodieisto.live',
-                files: [file],
-              });
-            } catch (e: any) {
-              if (e.name !== 'AbortError') {
-                downloadFile(file);
-              }
-            }
-          } else {
+          await navigator.share({
+            title: 'My Life Chart — Memento Mori',
+            text: 'My life visualized. Remember you must die. Live accordingly.\n\ntodieisto.live',
+            files: [file],
+          });
+        } catch (e: any) {
+          if (e.name !== 'AbortError') {
             downloadFile(file);
           }
-        } finally {
-          setIsGeneratingPdf(false);
         }
-      }, 'image/png');
-    } catch {
+      } else {
+        downloadFile(file);
+      }
+    } finally {
       setIsGeneratingPdf(false);
+    }
+  };
+
+  const handleBeKind = async () => {
+    const message = `Be kind to me, I only have ${weeksRemaining.toLocaleString()} weeks to live.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Be Kind To Me — Memento Mori',
+          text: message,
+        });
+      } catch (e: any) {
+        if (e.name !== 'AbortError') {
+          await navigator.clipboard.writeText(message);
+        }
+      }
+    } else {
+      await navigator.clipboard.writeText(message);
     }
   };
 
@@ -508,7 +530,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center">
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center gap-4">
           <Button
             variant="outline"
             data-testid="button-share-life"
@@ -518,6 +540,15 @@ export default function Home() {
           >
             <Share2 className="w-3.5 h-3.5 mr-2" />
             {isGeneratingPdf ? 'Generating...' : 'Share My Life'}
+          </Button>
+          <Button
+            variant="outline"
+            data-testid="button-be-kind"
+            onClick={handleBeKind}
+            className="text-xs uppercase tracking-widest"
+          >
+            <Heart className="w-3.5 h-3.5 mr-2" />
+            Be Kind To Me
           </Button>
         </div>
         <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6">
