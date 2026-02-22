@@ -452,7 +452,7 @@ export default function Home() {
 
       <div
         className="absolute left-0 w-full pointer-events-none select-none"
-        style={{ bottom: '0', height: '60px', opacity: 0.06, overflow: 'hidden', transform: 'scaleY(-1)' }}
+        style={{ bottom: '0', height: '60px', opacity: 0.06, overflow: 'hidden' }}
         data-testid="gravestone-banner-bottom"
       >
         <svg
