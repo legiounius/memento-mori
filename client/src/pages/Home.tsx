@@ -129,23 +129,24 @@ export default function Home() {
 
   if (!birthdate) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
-        <div className="flex flex-col items-center space-y-6 max-w-md w-full">
-          <motion.img
-            src={skullImage}
-            alt="Memento Mori"
-            className="w-24 h-24 object-contain"
-            data-testid="img-skull-splash"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 2, ease: "easeOut" }}
-          />
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative overflow-hidden">
+        <motion.img
+          src={skullImage}
+          alt=""
+          className="absolute pointer-events-none select-none object-contain"
+          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px', opacity: 0 }}
+          data-testid="img-skull-splash"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 0.06, scale: 1 }}
+          transition={{ duration: 3, ease: "easeOut" }}
+        />
 
+        <div className="flex flex-col items-center space-y-6 max-w-md w-full relative z-10">
           <motion.h1
             className="text-4xl md:text-5xl font-bold text-foreground tracking-tight text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
+            transition={{ delay: 1.5, duration: 2, ease: "easeOut" }}
           >
             Memento<br />Mori
           </motion.h1>
@@ -153,7 +154,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.2, duration: 1.5, ease: "easeOut" }}
+            transition={{ delay: 2.8, duration: 1.5, ease: "easeOut" }}
             className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
           >
             <div className="flex flex-col items-center space-y-4">
