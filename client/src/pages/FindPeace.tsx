@@ -321,6 +321,21 @@ export default function FindPeace() {
               )}
             </button>
 
+            <button
+              onClick={() => handleFindPeace('Literary Peace')}
+              className="flex flex-col items-center gap-2 group cursor-pointer"
+              data-testid="button-literary-peace"
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Literary Peace</span>
+              {typeCounts['Literary Peace'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-literary-count">({typeCounts['Literary Peace']})</span>
+              )}
+            </button>
+
             {favorites.length > 0 && entries.length > 0 && (
               <button
                 onClick={() => handleFindPeace('My Favorites')}
