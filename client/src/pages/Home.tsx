@@ -226,8 +226,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
       <div
-        className="absolute top-0 left-0 w-full pointer-events-none select-none"
-        style={{ height: '60px', opacity: 0.06, overflow: 'hidden' }}
+        className="absolute left-0 w-full pointer-events-none select-none"
+        style={{ top: '38px', height: '60px', opacity: 0.06, overflow: 'hidden' }}
         data-testid="gravestone-banner"
       >
         <svg
