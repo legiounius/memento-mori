@@ -159,6 +159,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                 >
                   {yearIndex === 0 ? 'B' : yearIndex}
                 </div>
+                <div className="shrink-0 w-[1px] self-stretch bg-muted-foreground/30" />
 
                 <div className="flex-1 flex items-center justify-between">
                   {Array.from({ length: MONTHS_PER_YEAR }).map((_, monthIndex) => {
