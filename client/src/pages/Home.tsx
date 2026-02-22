@@ -270,12 +270,26 @@ export default function Home() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center"
+          className="flex flex-col items-center w-full relative"
         >
+          <Link href="/peace" className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-find-peace">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-70">
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+            Find Peace
+          </Link>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <div className="flex items-center gap-1.5 mt-0.5 relative w-full justify-center" style={{ paddingLeft: '0.35em' }}>
+          <div className="flex items-center gap-1.5 mt-0.5 justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
               src={skullImage}
@@ -284,7 +298,6 @@ export default function Home() {
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
-            <Link href="/peace" className="absolute right-0 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-find-peace">Find Peace</Link>
           </div>
         </motion.div>
 

@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import skullImage from "@assets/skull_minimal.png";
-import { meditations } from '@/data/meditations';
+import { stoicPassages } from '@/data/meditations';
 
 const QUOTES = [
   "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
@@ -33,11 +33,11 @@ const QUOTES = [
   "The hour which gives us life begins to take it away. — Seneca",
 ];
 
-function getRandomPassage(excludeRef?: string): { ref: string; text: string } {
+function getRandomPassage(excludeRef?: string): { ref: string; source: string; text: string } {
   let passage;
   do {
-    passage = meditations[Math.floor(Math.random() * meditations.length)];
-  } while (passage.ref === excludeRef && meditations.length > 1);
+    passage = stoicPassages[Math.floor(Math.random() * stoicPassages.length)];
+  } while (passage.ref === excludeRef && stoicPassages.length > 1);
   return passage;
 }
 
@@ -46,7 +46,7 @@ export default function FindPeace() {
     return QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }, []);
 
-  const [currentPassage, setCurrentPassage] = useState<{ ref: string; text: string } | null>(null);
+  const [currentPassage, setCurrentPassage] = useState<{ ref: string; source: string; text: string } | null>(null);
   const [passageKey, setPassageKey] = useState(0);
 
   const handleFindPeace = useCallback(() => {
@@ -107,12 +107,13 @@ export default function FindPeace() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center"
+          className="flex flex-col items-center w-full relative"
         >
+          <Link href="/" className="absolute right-0 top-1/2 -translate-y-1/2 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-back-to-life">Back To Life</Link>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <div className="flex items-center gap-1.5 mt-0.5 relative w-full justify-center" style={{ paddingLeft: '0.35em' }}>
+          <div className="flex items-center gap-1.5 mt-0.5 justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
               src={skullImage}
@@ -121,7 +122,6 @@ export default function FindPeace() {
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
-            <Link href="/" className="absolute right-0 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-back-to-life">Back To Life</Link>
           </div>
         </motion.div>
       </header>
@@ -130,16 +130,16 @@ export default function FindPeace() {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.8 }}
-        className="w-full max-w-[600px] mx-auto px-4 md:px-8 flex-1 flex flex-col items-center justify-center"
+        className="w-full max-w-[600px] mx-auto px-4 md:px-8 flex-1 flex flex-col items-center"
       >
-        <div className="text-center w-full py-8">
+        <div className="text-center w-full pt-6">
           <Button
             variant="outline"
             onClick={handleFindPeace}
             className="px-8 py-4 h-auto text-sm font-bold tracking-widest uppercase rounded-none"
             data-testid="button-find-peace"
           >
-            Find Peace
+            Find Stoic Peace
           </Button>
 
           <AnimatePresence mode="wait">
@@ -150,14 +150,14 @@ export default function FindPeace() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="mt-8 text-left"
+                className="mt-8 text-center"
                 data-testid="passage-container"
               >
-                <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 mb-3" data-testid="text-passage-ref">
-                  — {currentPassage.ref} —
-                </p>
-                <p className="text-sm leading-relaxed text-foreground/80 italic" data-testid="text-passage-content">
+                <p className="text-sm leading-relaxed text-foreground/80 italic max-w-lg mx-auto" data-testid="text-passage-content">
                   "{currentPassage.text}"
+                </p>
+                <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 mt-4" data-testid="text-passage-ref">
+                  — {currentPassage.ref} · {currentPassage.source} —
                 </p>
               </motion.div>
             )}
