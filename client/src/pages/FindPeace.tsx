@@ -71,39 +71,7 @@ function parseCSV(csv: string): PeaceEntry[] {
   return entries;
 }
 
-const QUOTES = [
-  "You could leave life right now. Let that determine what you do and say and think. — Marcus Aurelius",
-  "Let us prepare our minds as if we'd come to the very end of life. — Seneca",
-  "It is not that we have a short time to live, but that we waste a great deal of it. — Seneca",
-  "Think of yourself as dead. You have lived your life. Now, take what's left and live it properly. — Marcus Aurelius",
-  "The whole future lies in uncertainty: live immediately. — Seneca",
-  "He who fears death will never do anything worthy of a man who is alive. — Seneca",
-  "Begin at once to live, and count each separate day as a separate life. — Seneca",
-  "No man can have a peaceful life who thinks too much about lengthening it. — Seneca",
-  "We are dying every day. — Seneca",
-  "The soul that is not prepared today is even less so tomorrow. — Ovid",
-  "Do not act as if you had ten thousand years to throw away. — Marcus Aurelius",
-  "While we wait for life, life passes. — Seneca",
-  "Death smiles at us all; all we can do is smile back. — Marcus Aurelius",
-  "Life is long, if you know how to use it. — Seneca",
-  "If you live each day as if it were your last, someday you'll be right. — Marcus Aurelius",
-  "It is not death that a man should fear, but rather he should fear never beginning to live. — Marcus Aurelius",
-  "Time discovers truth. — Seneca",
-  "As is a tale, so is life: not how long it is, but how good it is, is what matters. — Seneca",
-  "When a man has made peace with mortality, he can get on with the business of living. — Epictetus",
-  "Let each thing you would do, say, or intend, be like that of a dying person. — Marcus Aurelius",
-  "No one is so old that he does not think he could live another year. — Cicero",
-  "The art of living well and dying well are one. — Epicurus",
-  "Live as if you were to die tomorrow. Learn as if you were to live forever. — Seneca",
-  "Every man dies. Not every man truly lives. — Seneca",
-  "The hour which gives us life begins to take it away. — Seneca",
-];
-
 export default function FindPeace() {
-  const randomQuote = useMemo(() => {
-    return QUOTES[Math.floor(Math.random() * QUOTES.length)];
-  }, []);
-
   const [entries, setEntries] = useState<PeaceEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState<(PeaceEntry & { idx: number }) | null>(null);
   const [passageKey, setPassageKey] = useState(0);
@@ -227,27 +195,12 @@ export default function FindPeace() {
 
       <header className="w-full max-w-[900px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1 relative z-10">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full"
-        >
-          <p className="text-muted-foreground text-[11px] italic leading-relaxed text-center" data-testid="text-quote">
-            "{randomQuote}"
-          </p>
-        </motion.div>
-
-        <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center w-full relative"
+          className="flex flex-col items-center w-full"
         >
-          <Link href="/" className="absolute right-0 top-1/2 -translate-y-1/2 text-[9px] font-bold text-muted-foreground/60 hover:text-foreground transition-colors tracking-wider uppercase" data-testid="link-back-to-life">Back To Life</Link>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-            Memento Mori
-          </h1>
-          <div className="flex items-center gap-1.5 mt-0.5 justify-center" style={{ paddingLeft: '0.35em' }}>
+          <div className="flex items-center gap-1.5 justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
               src={skullImage}
@@ -257,6 +210,12 @@ export default function FindPeace() {
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
           </div>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight mt-0.5">
+            Memento Mori
+          </h1>
+          <Link href="/" className="mt-2 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase underline underline-offset-2 decoration-foreground/30 hover:decoration-foreground/60" data-testid="link-back-to-life">
+            Back To Life
+          </Link>
         </motion.div>
       </header>
 
