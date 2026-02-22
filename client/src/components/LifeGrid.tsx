@@ -248,7 +248,6 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
 
           return (
             <div className="w-full flex">
-              <div style={{ width: '14px' }} />
               <div className="flex-1 min-w-0">
                 {renderColumnHeader('left')}
                 <div className="w-full space-y-[2px]">
