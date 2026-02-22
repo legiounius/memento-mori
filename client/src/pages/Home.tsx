@@ -287,7 +287,7 @@ export default function Home() {
             <img
               src={skullImage}
               alt="Memento Mori"
-              className="w-5 h-5 object-contain"
+              className="w-[30px] h-[30px] object-contain"
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
