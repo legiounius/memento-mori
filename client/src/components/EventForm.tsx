@@ -10,19 +10,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
+export type EventType = "BIRTHDAY" | "DEATH" | "MARRIAGE" | "MOVE" | "OTHER";
+
+export const EVENT_TYPES: { value: EventType; label: string; color: string }[] = [
+  { value: "BIRTHDAY", label: "Birthday", color: "#d4a017" },
+  { value: "DEATH", label: "Death", color: "#000000" },
+  { value: "MARRIAGE", label: "Marriage", color: "#dc2626" },
+  { value: "MOVE", label: "Move", color: "#16a34a" },
+  { value: "OTHER", label: "Other", color: "#2563eb" },
+];
+
 export interface LifeEvent {
   id: string;
   date: string;
   label: string;
+  type: EventType;
 }
 
 interface EventFormProps {
   onAdd: (event: LifeEvent) => void;
 }
 
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+const MONTHS_SHORT = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
 function getDaysInMonth(month: number, year: number): number {
@@ -37,6 +48,7 @@ export function EventForm({ onAdd }: EventFormProps) {
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
   const [label, setLabel] = useState("");
+  const [eventType, setEventType] = useState<string>("");
 
   const selectedMonth = month ? parseInt(month) : undefined;
   const selectedYear = year ? parseInt(year) : undefined;
@@ -54,7 +66,7 @@ export function EventForm({ onAdd }: EventFormProps) {
     }
   }, [maxDays, day]);
 
-  const isValid = month !== "" && day !== "" && year !== "" && label.trim() !== "";
+  const isValid = month !== "" && day !== "" && year !== "" && label.trim() !== "" && eventType !== "";
 
   const handleAdd = () => {
     if (!isValid) return;
@@ -67,12 +79,14 @@ export function EventForm({ onAdd }: EventFormProps) {
       id: crypto.randomUUID(),
       date: date.toISOString(),
       label: label.trim(),
+      type: eventType as EventType,
     });
 
     setMonth("");
     setDay("");
     setYear("");
     setLabel("");
+    setEventType("");
   };
 
   return (
@@ -84,12 +98,12 @@ export function EventForm({ onAdd }: EventFormProps) {
         <Select value={month} onValueChange={setMonth}>
           <SelectTrigger
             data-testid="select-event-month"
-            className="w-[100px] h-7 border border-primary/10 text-xs px-2"
+            className="w-[70px] h-7 border border-primary/10 text-xs px-2"
           >
             <SelectValue placeholder="Month" />
           </SelectTrigger>
           <SelectContent>
-            {MONTHS.map((m, i) => (
+            {MONTHS_SHORT.map((m, i) => (
               <SelectItem key={m} value={String(i)}>
                 {m}
               </SelectItem>
@@ -131,12 +145,28 @@ export function EventForm({ onAdd }: EventFormProps) {
 
         <Input
           data-testid="input-event-label"
-          placeholder="E.G. KID'S BDAY"
+          placeholder="Event"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
-          className="w-[170px] h-7 border border-primary/10 text-xs px-2"
+          className="w-[120px] h-7 border border-primary/10 text-xs px-2"
         />
+
+        <Select value={eventType} onValueChange={setEventType}>
+          <SelectTrigger
+            data-testid="select-event-type"
+            className="w-[100px] h-7 border border-primary/10 text-xs px-2"
+          >
+            <SelectValue placeholder="Type" />
+          </SelectTrigger>
+          <SelectContent>
+            {EVENT_TYPES.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <Button
           data-testid="button-add-event"

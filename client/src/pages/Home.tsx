@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
-import { EventForm, type LifeEvent } from "@/components/EventForm";
+import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 import { Button } from "@/components/ui/button";
@@ -328,8 +328,6 @@ export default function Home() {
             d.setFullYear(d.getFullYear() + targetAge);
             return formatDateFull(d);
           })() : undefined}
-          onChangeBirthdate={() => setEditingBirthdate(true)}
-          onChangeTargetAge={() => setEditingTargetAge(true)}
         />
 
         <div className="w-full max-w-[900px] mx-auto px-4 md:px-8 mt-4">
@@ -361,7 +359,10 @@ export default function Home() {
                     className="flex items-center justify-between gap-3 py-2 px-3 rounded-md bg-muted/30"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Star className="w-4 h-4 shrink-0" style={{ color: '#dc2626', fill: '#dc2626' }} />
+                      {(() => {
+                        const evtColor = EVENT_TYPES.find(t => t.value === event.type)?.color || '#2563eb';
+                        return <Star className="w-4 h-4 shrink-0" style={{ color: evtColor, fill: evtColor }} />;
+                      })()}
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
                       </span>
@@ -400,6 +401,22 @@ export default function Home() {
             <Printer className="w-3.5 h-3.5 mr-2" />
             Print Life Chart
           </Button>
+        </div>
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6 print:hidden">
+          <button
+            onClick={() => setEditingBirthdate(true)}
+            className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+            data-testid="link-change-birthday"
+          >
+            Change Birthday
+          </button>
+          <button
+            onClick={() => setEditingTargetAge(true)}
+            className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+            data-testid="link-change-age-of-death"
+          >
+            Change Age Of Death
+          </button>
         </div>
       </motion.main>
 

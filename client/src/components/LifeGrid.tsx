@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import type { LifeEvent } from './EventForm';
+import { type LifeEvent, type EventType, EVENT_TYPES } from './EventForm';
 
 interface LifeGridProps {
   birthdate: Date | undefined;
@@ -14,8 +14,6 @@ interface LifeGridProps {
   events: LifeEvent[];
   bornLabel?: string;
   deadLabel?: string;
-  onChangeBirthdate?: () => void;
-  onChangeTargetAge?: () => void;
 }
 
 const MONTHS_PER_YEAR = 12;
@@ -23,9 +21,10 @@ const MONTHS_PER_YEAR = 12;
 interface YearEvent {
   monthInYear: number;
   labels: string[];
+  types: EventType[];
 }
 
-export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, onChangeBirthdate, onChangeTargetAge }: LifeGridProps) {
+export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }: LifeGridProps) {
   const totalMonths = targetAge * MONTHS_PER_YEAR;
 
   const monthsLived = useMemo(() => {
@@ -47,11 +46,13 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
         const yearIdx = Math.floor(monthIndex / MONTHS_PER_YEAR);
         const monthInYear = monthIndex % MONTHS_PER_YEAR;
         const existing = map.get(yearIdx);
-        const yearEvent: YearEvent = { monthInYear, labels: [event.label] };
+        const eventType = (event as LifeEvent).type || 'OTHER';
+        const yearEvent: YearEvent = { monthInYear, labels: [event.label], types: [eventType] };
         if (existing) {
           const found = existing.find(e => e.monthInYear === monthInYear);
           if (found) {
             found.labels.push(event.label);
+            found.types.push(eventType);
           } else {
             existing.push(yearEvent);
           }
@@ -92,45 +93,18 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
             <>
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
-                <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="target-age-display">
-                  <span className="font-bold text-foreground normal-case tracking-normal">Months to age {targetAge}</span>
-                  {onChangeTargetAge && (
-                    <button
-                      onClick={onChangeTargetAge}
-                      className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
-                      data-testid="button-change-target-age"
-                    >
-                      change
-                    </button>
-                  )}
-                </div>
+                <span className="font-bold text-foreground normal-case tracking-normal w-1/3 text-center" data-testid="target-age-display">Months to age {targetAge}</span>
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
               </div>
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-months-stats">
                 <span className="font-bold w-1/3">{monthsLived.toLocaleString()} Months ({percentLived}%)</span>
-                <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="birthdate-display">
-                  <span className="font-bold text-foreground normal-case tracking-normal">Born: {bornLabel}</span>
-                  {onChangeBirthdate && (
-                    <button
-                      onClick={onChangeBirthdate}
-                      className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
-                      data-testid="button-change-birthdate"
-                    >
-                      change
-                    </button>
-                  )}
-                </div>
+                <span className="font-bold text-foreground normal-case tracking-normal w-1/3 text-center" data-testid="birthdate-display">Born: {bornLabel}</span>
                 <span className="font-bold w-1/3 text-right">{monthsRemaining.toLocaleString()} Months ({percentRemaining}%)</span>
               </div>
               {weeksLived !== null && weeksLeft !== null && (
                 <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
                   <span className="font-bold w-1/3">{weeksLived.toLocaleString()} Weeks</span>
-                  <div className="w-1/3 flex items-center justify-center gap-1.5">
-                    <span className="font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
-                    {onChangeBirthdate && (
-                      <span className="text-[9px] invisible" aria-hidden="true">chang</span>
-                    )}
-                  </div>
+                  <span className="font-bold text-foreground normal-case tracking-normal w-1/3 text-center" data-testid="text-death-date">Dead: {deadLabel}</span>
                   <span className="font-bold w-1/3 text-right">{weeksLeft.toLocaleString()} Weeks</span>
                 </div>
               )}
@@ -187,6 +161,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                     const dotColor = isLived ? `hsl(0, 0%, ${lightness}%)` : undefined;
 
                     if (event) {
+                      const evtType = event.types[0] || 'OTHER';
+                      const evtColor = EVENT_TYPES.find(t => t.value === evtType)?.color || '#2563eb';
                       return (
                         <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
                           <TooltipTrigger asChild>
@@ -195,7 +171,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                               style={{ width: '12px', height: '12px' }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
                             >
-                              <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
+                              <Star className="w-full h-full" style={{ color: evtColor, fill: evtColor }} />
                             </div>
                           </TooltipTrigger>
                           <TooltipContent side="top" className="text-xs max-w-[200px]">
@@ -266,7 +242,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
           );
         })()}
 
-        <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
+        <div className="mt-6 text-center text-sm text-muted-foreground space-y-1.5">
           <p>1 row = 1 year · 12 dots = 12 months</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">
@@ -285,10 +261,14 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
               <span className="inline-block w-[14px] h-[14px] rounded-full" style={{ border: '3px solid #dc2626', backgroundColor: 'black' }} />
               <span className="text-xs">Now</span>
             </span>
-            <span className="flex items-center gap-1.5">
-              <Star className="w-3.5 h-3.5" style={{ color: '#dc2626', fill: '#dc2626' }} />
-              <span className="text-xs">Event</span>
-            </span>
+          </div>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            {EVENT_TYPES.map((t) => (
+              <span key={t.value} className="flex items-center gap-1">
+                <Star className="w-3.5 h-3.5" style={{ color: t.color, fill: t.color }} />
+                <span className="text-xs">{t.label}</span>
+              </span>
+            ))}
           </div>
         </div>
       </div>
