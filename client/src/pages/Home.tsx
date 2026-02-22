@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
@@ -6,7 +6,8 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Printer } from "lucide-react";
+import { Trash2, Share2 } from "lucide-react";
+import html2canvas from "html2canvas";
 import {
   Select,
   SelectContent,
@@ -105,6 +106,85 @@ export default function Home() {
   };
 
   const ages = Array.from({ length: 120 }, (_, i) => i + 1);
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  const handleShareLife = async () => {
+    if (!chartRef.current || !birthdate) return;
+    setIsGeneratingPdf(true);
+    try {
+      const canvas = await html2canvas(chartRef.current, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const padding = 40;
+      const footerHeight = 60;
+      const chartAspect = canvas.width / canvas.height;
+      const pageWidth = Math.max(1056, canvas.width);
+      const chartHeight = pageWidth / chartAspect;
+      const pageHeight = Math.round(chartHeight + padding * 2 + footerHeight);
+
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = pageWidth;
+      finalCanvas.height = pageHeight;
+      const ctx = finalCanvas.getContext('2d');
+      if (!ctx) { setIsGeneratingPdf(false); return; }
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, pageWidth, pageHeight);
+
+      ctx.drawImage(canvas, 0, padding, pageWidth, chartHeight);
+
+      const footerY = pageHeight - footerHeight;
+      ctx.fillStyle = '#a1a1aa';
+      ctx.font = '600 11px Cinzel, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Memento Mori  •  todieisto.live  •  Remember You Must Die', pageWidth / 2, footerY + 20);
+      ctx.font = '10px Cinzel, serif';
+      ctx.fillText('The Philosophy  •  Privacy Policy  •  Terms of Use  •  Contact: eric@legiounius.com', pageWidth / 2, footerY + 38);
+
+      finalCanvas.toBlob(async (blob) => {
+        try {
+          if (!blob) { setIsGeneratingPdf(false); return; }
+          const file = new File([blob], 'memento-mori-life-chart.png', { type: 'image/png' });
+
+          if (navigator.share && navigator.canShare?.({ files: [file] })) {
+            try {
+              await navigator.share({
+                title: 'My Life Chart — Memento Mori',
+                text: 'My life visualized. Remember you must die. Live accordingly.\n\ntodieisto.live',
+                files: [file],
+              });
+            } catch (e: any) {
+              if (e.name !== 'AbortError') {
+                downloadFile(file);
+              }
+            }
+          } else {
+            downloadFile(file);
+          }
+        } finally {
+          setIsGeneratingPdf(false);
+        }
+      }, 'image/png');
+    } catch {
+      setIsGeneratingPdf(false);
+    }
+  };
+
+  const downloadFile = (file: File) => {
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   if (isReturningUser && showSplash) {
     return (
@@ -353,17 +433,19 @@ export default function Home() {
         transition={{ duration: 1, ease: "easeOut" }}
         className="w-full flex-1 pb-20 px-4"
       >
-        <LifeGrid
-          birthdate={birthdate}
-          targetAge={targetAge}
-          events={events}
-          bornLabel={birthdate ? formatDateFull(birthdate) : undefined}
-          deadLabel={birthdate ? (() => {
-            const d = new Date(birthdate);
-            d.setFullYear(d.getFullYear() + targetAge);
-            return formatDateFull(d);
-          })() : undefined}
-        />
+        <div ref={chartRef}>
+          <LifeGrid
+            birthdate={birthdate}
+            targetAge={targetAge}
+            events={events}
+            bornLabel={birthdate ? formatDateFull(birthdate) : undefined}
+            deadLabel={birthdate ? (() => {
+              const d = new Date(birthdate);
+              d.setFullYear(d.getFullYear() + targetAge);
+              return formatDateFull(d);
+            })() : undefined}
+          />
+        </div>
 
         <div className="w-full max-w-[900px] mx-auto px-4 md:px-8 mt-4">
           <EventForm onAdd={handleAddEvent} />
@@ -426,18 +508,19 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center print:hidden">
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center">
           <Button
             variant="outline"
-            data-testid="button-print"
-            onClick={() => window.print()}
+            data-testid="button-share-life"
+            onClick={handleShareLife}
+            disabled={isGeneratingPdf}
             className="text-xs uppercase tracking-widest"
           >
-            <Printer className="w-3.5 h-3.5 mr-2" />
-            Print Life Chart
+            <Share2 className="w-3.5 h-3.5 mr-2" />
+            {isGeneratingPdf ? 'Generating...' : 'Share My Life'}
           </Button>
         </div>
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6 print:hidden">
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6">
           <button
             onClick={() => setEditingBirthdate(true)}
             className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
