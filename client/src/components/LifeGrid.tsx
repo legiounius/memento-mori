@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { differenceInMonths, differenceInWeeks } from 'date-fns';
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { type LifeEvent, type EventType, EVENT_TYPES } from './EventForm';
 
 interface LifeGridProps {
@@ -189,46 +189,49 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                       const evtType = event.types[0] || 'OTHER';
                       const evtColor = EVENT_TYPES.find(t => t.value === evtType)?.color || '#2563eb';
                       return (
-                        <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className="rounded-full"
+                        <Popover key={`dot-${yearIndex}-${monthIndex}`}>
+                          <PopoverTrigger asChild>
+                            <button
+                              className="rounded-full cursor-pointer"
                               style={{
                                 width: '8px',
                                 height: '8px',
                                 backgroundColor: evtColor,
+                                border: 'none',
+                                padding: 0,
                               }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
                             />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" className="text-xs max-w-[200px]">
+                          </PopoverTrigger>
+                          <PopoverContent side="top" className="text-xs max-w-[200px] p-2">
                             <p className="font-medium">{event.labels.join(", ")}</p>
                             <p className="text-muted-foreground">Age {yearIndex}, Month {monthIndex + 1}</p>
-                          </TooltipContent>
-                        </Tooltip>
+                          </PopoverContent>
+                        </Popover>
                       );
                     }
 
                     if (isCurrent && birthdate) {
                       return (
-                        <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className="rounded-full"
+                        <Popover key={`dot-${yearIndex}-${monthIndex}`}>
+                          <PopoverTrigger asChild>
+                            <button
+                              className="rounded-full cursor-pointer"
                               style={{
                                 width: '8px',
                                 height: '8px',
                                 border: '2.5px solid #dc2626',
                                 backgroundColor: 'black',
+                                padding: 0,
                               }}
                               data-testid="marker-current-month"
                             />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" className="text-xs">
+                          </PopoverTrigger>
+                          <PopoverContent side="top" className="text-xs p-2">
                             <p className="font-medium">You are here</p>
                             <p className="text-muted-foreground">Age {yearIndex}, Month {monthIndex + 1}</p>
-                          </TooltipContent>
-                        </Tooltip>
+                          </PopoverContent>
+                        </Popover>
                       );
                     }
 
