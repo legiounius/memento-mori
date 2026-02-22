@@ -86,20 +86,35 @@
 /* Print styles — show only the dot grid, fitted to one page */
 @media print {
   @page {
-    size: portrait;
-    margin: 0.3in;
+    size: landscape;
+    margin: 0.15in;
   }
 
-  body {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
     background: white !important;
     color: black !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
+  body {
+    transform: scale(0.65);
+    transform-origin: top center;
+  }
+
+  .min-h-screen {
+    min-height: auto !important;
+    height: auto !important;
+  }
+
   header,
   .print\\:hidden,
   [data-testid="text-stats"],
+  [data-testid="gravestone-banner"],
+  [data-testid="gravestone-banner-bottom"],
+  [data-testid="text-copyright"],
   [class*="tooltip"],
   [role="tooltip"] {
     display: none !important;
@@ -107,6 +122,7 @@
 
   main {
     padding: 0 !important;
+    break-inside: avoid;
   }
 
   main > div:first-child {
@@ -120,7 +136,7 @@
     display: none !important;
   }
 
-  /* Force bars to print in color */
+  /* Force dots to print in color */
   .bg-black {
     background-color: #000000 !important;
   }
