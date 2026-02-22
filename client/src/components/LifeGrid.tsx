@@ -94,7 +94,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
                 <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="target-age-display">
-                  <span className="font-bold text-foreground normal-case tracking-normal">Your life in weeks to age {targetAge}</span>
+                  <span className="font-bold text-foreground normal-case tracking-normal">Weeks to age {targetAge}</span>
                   {onChangeTargetAge && (
                     <button
                       onClick={onChangeTargetAge}
