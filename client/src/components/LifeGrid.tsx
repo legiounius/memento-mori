@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { differenceInMonths, differenceInWeeks } from 'date-fns';
-import { Star } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -167,12 +166,15 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                         <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
                           <TooltipTrigger asChild>
                             <div
-                              className="flex items-center justify-center"
-                              style={{ width: '12px', height: '12px' }}
+                              className="rounded-full"
+                              style={{
+                                width: '8px',
+                                height: '8px',
+                                border: `2.5px solid ${evtColor}`,
+                                backgroundColor: isLived ? (dotColor || 'black') : 'transparent',
+                              }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
-                            >
-                              <Star className="w-full h-full" style={{ color: evtColor, fill: evtColor }} />
-                            </div>
+                            />
                           </TooltipTrigger>
                           <TooltipContent side="top" className="text-xs max-w-[200px]">
                             <p className="font-medium">{event.labels.join(", ")}</p>
@@ -265,7 +267,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           <div className="flex items-center justify-center gap-4 flex-wrap">
             {EVENT_TYPES.map((t) => (
               <span key={t.value} className="flex items-center gap-1">
-                <Star className="w-3.5 h-3.5" style={{ color: t.color, fill: t.color }} />
+                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ border: `2.5px solid ${t.color}`, backgroundColor: 'transparent' }} />
                 <span className="text-xs">{t.label}</span>
               </span>
             ))}

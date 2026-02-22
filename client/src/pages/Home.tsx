@@ -5,7 +5,7 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Printer, Star } from "lucide-react";
+import { Trash2, Printer } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -361,7 +361,7 @@ export default function Home() {
                     <div className="flex items-center gap-3 min-w-0">
                       {(() => {
                         const evtColor = EVENT_TYPES.find(t => t.value === event.type)?.color || '#2563eb';
-                        return <Star className="w-4 h-4 shrink-0" style={{ color: evtColor, fill: evtColor }} />;
+                        return <span className="inline-block w-[12px] h-[12px] rounded-full shrink-0" style={{ border: `2.5px solid ${evtColor}`, backgroundColor: 'black' }} />;
                       })()}
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}
