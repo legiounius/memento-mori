@@ -466,7 +466,7 @@ export default function FindPeace() {
           <span>&middot;</span>
           <Link href="/terms" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-terms">Terms of Use</Link>
           <span>&middot;</span>
-          <a href="mailto:floorzero@gmail.com" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-contact">Contact</a>
+          <a href="mailto:eric@legiounius.com" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-contact">Contact</a>
         </div>
       </footer>
     </div>

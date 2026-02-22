@@ -79,7 +79,7 @@ export default function Terms() {
 
           <section>
             <h3 className="text-xs font-bold tracking-widest uppercase text-foreground/80 mb-2">Contact</h3>
-            <p>For questions about these Terms of Use, please contact us at <a href="mailto:floorzero@gmail.com" className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-contact-email">floorzero@gmail.com</a>.</p>
+            <p>For questions about these Terms of Use, please contact us at <a href="mailto:eric@legiounius.com" className="underline underline-offset-2 hover:text-foreground transition-colors" data-testid="link-contact-email">eric@legiounius.com</a>.</p>
           </section>
         </div>
       </main>
