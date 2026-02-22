@@ -143,7 +143,7 @@ export default function Home() {
     return Math.max(0, differenceInWeeks(new Date(), birthdate));
   }, [birthdate]);
 
-  const brandingFooter = `\nCreated With\nMemento Mori App — todieisto.live\nLive Aware`;
+  const brandingFooter = `\n\nCreated With\nMemento Mori App — todieisto.live\nLive Aware`;
 
   const handleShareLife = async () => {
     if (!chartRef.current || !birthdate) return;

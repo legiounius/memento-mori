@@ -138,7 +138,7 @@ export default function FindPeace() {
 
   const handleShare = useCallback(() => {
     if (!currentEntry) return;
-    const text = `"${currentEntry.text}"\n\n— ${currentEntry.author}, ${currentEntry.source}\n\nCreated With\nMemento Mori App — todieisto.live\nLive Aware`;
+    const text = `"${currentEntry.text}"\n\n— ${currentEntry.author}, ${currentEntry.source}\n\n\nCreated With\nMemento Mori App — todieisto.live\nLive Aware`;
     const shareData = { title: 'Memento Mori', text };
     if (navigator.share) {
       navigator.share(shareData).catch(() => {});
