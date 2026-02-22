@@ -105,7 +105,12 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                       </button>
                     )}
                   </div>
-                  <span className="text-[11px] font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
+                    {onChangeBirthdate && (
+                      <span className="text-[9px] invisible" aria-hidden="true">change</span>
+                    )}
+                  </div>
                 </div>
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
               </div>
