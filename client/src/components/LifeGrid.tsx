@@ -169,24 +169,9 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
             <div className="w-full space-y-[2px]">
               {Array.from({ length: targetAge }).map((_, yearIndex) => {
             const yearStartMonth = yearIndex * MONTHS_PER_YEAR;
-            const yearEndMonth = yearStartMonth + MONTHS_PER_YEAR;
-
-            let fillPercent: number;
-            if (!birthdate) {
-              fillPercent = 0;
-            } else if (monthsLived >= yearEndMonth) {
-              fillPercent = 100;
-            } else if (monthsLived <= yearStartMonth) {
-              fillPercent = 0;
-            } else {
-              fillPercent = ((monthsLived - yearStartMonth) / MONTHS_PER_YEAR) * 100;
-            }
-
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
-
-            const nowPercent = isCurrentYear ? (currentMonthInYear / MONTHS_PER_YEAR) * 100 : 0;
-            const barFillPercent = isCurrentYear ? nowPercent : fillPercent;
+            const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
 
             return (
               <div
@@ -201,71 +186,74 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                   {yearIndex === 0 ? 'Born' : yearIndex}
                 </div>
 
-                <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-transparent">
-                  {barFillPercent > 0 && (() => {
-                    const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
+                <div className="flex-1 flex items-center justify-between">
+                  {Array.from({ length: MONTHS_PER_YEAR }).map((_, monthIndex) => {
+                    const globalMonth = yearStartMonth + monthIndex;
+                    const isLived = birthdate ? globalMonth < monthsLived : false;
+                    const isCurrent = isCurrentYear && monthIndex === currentMonthInYear;
+                    const event = yearEvents.find(e => e.monthInYear === monthIndex);
+
                     const progress = lastFilledYear > 0 ? yearIndex / lastFilledYear : 1;
-                    const lightness = Math.round(75 - (75 * progress));
-                    const fillColor = `hsl(0, 0%, ${lightness}%)`;
+                    const lightness = Math.round(75 - (75 * Math.min(1, progress)));
+                    const dotColor = isLived ? `hsl(0, 0%, ${lightness}%)` : undefined;
+
+                    if (event) {
+                      return (
+                        <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
+                          <TooltipTrigger asChild>
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ width: '14px', height: '14px' }}
+                              data-testid={`marker-event-${yearIndex}-${monthIndex}`}
+                            >
+                              <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="top" className="text-xs max-w-[200px]">
+                            <p className="font-medium">{event.labels.join(", ")}</p>
+                            <p className="text-muted-foreground">Age {yearIndex}, Month {monthIndex + 1}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    }
+
+                    if (isCurrent && birthdate) {
+                      return (
+                        <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
+                          <TooltipTrigger asChild>
+                            <div
+                              className="rounded-full"
+                              style={{
+                                width: '14px',
+                                height: '14px',
+                                border: '3px solid #dc2626',
+                                backgroundColor: 'black',
+                              }}
+                              data-testid="marker-current-month"
+                            />
+                          </TooltipTrigger>
+                          <TooltipContent side="top" className="text-xs">
+                            <p className="font-medium">You are here</p>
+                            <p className="text-muted-foreground">Age {yearIndex}, Month {monthIndex + 1}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    }
+
                     return (
                       <div
-                        className="absolute inset-y-0 left-0 rounded-sm transition-all duration-300"
-                        style={{ width: `${barFillPercent}%`, backgroundColor: fillColor }}
-                        data-testid={`bar-fill-${yearIndex}`}
+                        key={`dot-${yearIndex}-${monthIndex}`}
+                        className="rounded-full"
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          backgroundColor: isLived ? dotColor : 'transparent',
+                          border: isLived ? 'none' : '1.5px solid #a1a1aa',
+                        }}
+                        data-testid={`dot-${yearIndex}-${monthIndex}`}
                       />
                     );
-                  })()}
-
-                  {isCurrentYear && birthdate && (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          className="absolute"
-                          style={{
-                            left: `${nowPercent}%`,
-                            top: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '16px',
-                            height: '16px',
-                            borderRadius: '50%',
-                            border: '3px solid #dc2626',
-                            backgroundColor: 'black',
-                            zIndex: 10,
-                          }}
-                          data-testid="marker-current-week"
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="text-xs">
-                        <p className="font-medium">You are here</p>
-                        <p className="text-muted-foreground">Age {yearIndex}, Month {currentMonthInYear + 1}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-
-                  {yearEvents.map((evt, i) => (
-                    <Tooltip key={`evt-${yearIndex}-${i}`}>
-                      <TooltipTrigger asChild>
-                        <div
-                          className="absolute flex items-center justify-center"
-                          style={{
-                            left: `${(evt.monthInYear / MONTHS_PER_YEAR) * 100}%`,
-                            top: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            width: '18px',
-                            height: '18px',
-                            zIndex: 10,
-                          }}
-                          data-testid={`marker-event-${yearIndex}-${evt.monthInYear}`}
-                        >
-                          <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="text-xs max-w-[200px]">
-                        <p className="font-medium">{evt.labels.join(", ")}</p>
-                        <p className="text-muted-foreground">Age {yearIndex}, Month {evt.monthInYear + 1}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  ))}
+                  })}
                 </div>
               </div>
             );
@@ -275,19 +263,18 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
         </div>
 
         <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
-          <p>1 row = 1 year · bar fills by months lived</p>
+          <p>1 row = 1 year · 12 dots = 12 months</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-8 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 overflow-hidden flex">
-                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
-                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 50%)' }} />
-                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 25%)' }} />
-                <span className="h-full flex-1" style={{ backgroundColor: 'hsl(0, 0%, 0%)' }} />
+              <span className="inline-flex gap-0.5">
+                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
+                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 37%)' }} />
+                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 0%)' }} />
               </span>
               <span className="text-xs">Lived</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-4 h-[8px] bg-transparent rounded-sm border border-zinc-300 dark:border-zinc-600" />
+              <span className="inline-block w-[10px] h-[10px] rounded-full border-[1.5px] border-zinc-400" />
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
@@ -295,7 +282,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
               <span className="text-xs">Now</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <Star className="w-4 h-4" style={{ color: '#dc2626', fill: '#dc2626' }} />
+              <Star className="w-3.5 h-3.5" style={{ color: '#dc2626', fill: '#dc2626' }} />
               <span className="text-xs">Event</span>
             </span>
           </div>
