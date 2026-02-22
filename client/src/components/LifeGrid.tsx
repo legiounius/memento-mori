@@ -122,6 +122,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           const renderColumnHeader = (side: string) => (
             <div className="w-full flex items-center gap-1 mb-1">
               <div className="shrink-0" style={{ width: '28px' }} />
+              <div className="shrink-0 w-[1px]" />
               <div className="flex-1 flex items-center">
                 <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
                 <div className="flex-1 mx-0.5 flex items-center">
