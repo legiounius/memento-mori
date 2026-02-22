@@ -274,31 +274,29 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           );
         })()}
 
-        <div className="mt-6 text-center text-sm text-muted-foreground space-y-1.5">
-          <p>1 row = 1 year · 12 dots = 12 months</p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+        <div className="mt-6 text-center text-muted-foreground space-y-2">
+          <p className="text-[10px] font-bold">12 Dots = 12 Months</p>
+          <div className="inline-grid grid-cols-4 gap-x-4 gap-y-1 items-center text-[10px]">
             <span className="flex items-center gap-1.5">
               <span className="inline-flex gap-0.5">
-                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
-                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 37%)' }} />
-                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 0%)' }} />
+                <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 75%)' }} />
+                <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 37%)' }} />
+                <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ backgroundColor: 'hsl(0, 0%, 0%)' }} />
               </span>
-              <span className="text-xs">Lived</span>
+              <span>Lived</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[10px] h-[10px] rounded-full border-[1.5px] border-zinc-400" />
-              <span className="text-xs">Remaining</span>
+              <span className="inline-block w-[8px] h-[8px] rounded-full border-[1.5px] border-zinc-400" />
+              <span>Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ border: '2.5px solid #dc2626', backgroundColor: 'black' }} />
-              <span className="text-xs">Now</span>
+              <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ border: '2px solid #dc2626', backgroundColor: 'black' }} />
+              <span>Now</span>
             </span>
-          </div>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
             {EVENT_TYPES.map((t) => (
-              <span key={t.value} className="flex items-center gap-1">
-                <span className="inline-block w-[12px] h-[12px] rounded-full" style={{ backgroundColor: t.color }} />
-                <span className="text-xs">{t.label}</span>
+              <span key={t.value} className="flex items-center gap-1.5">
+                <span className="inline-block w-[8px] h-[8px] rounded-full" style={{ backgroundColor: t.color }} />
+                <span>{t.label}</span>
               </span>
             ))}
           </div>
