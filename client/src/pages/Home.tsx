@@ -6,10 +6,10 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Share2, Heart } from "lucide-react";
+import { Trash2, Share2, Heart, HandHeart, Sparkles } from "lucide-react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { differenceInWeeks } from "date-fns";
+import { differenceInWeeks, differenceInMonths } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -118,6 +118,13 @@ export default function Home() {
     return Math.max(0, differenceInWeeks(targetDate, new Date()));
   }, [birthdate, targetAge]);
 
+  const monthsRemaining = useMemo(() => {
+    if (!birthdate) return 0;
+    const targetDate = new Date(birthdate);
+    targetDate.setFullYear(targetDate.getFullYear() + targetAge);
+    return Math.max(0, differenceInMonths(targetDate, new Date()));
+  }, [birthdate, targetAge]);
+
   const handleShareLife = async () => {
     if (!chartRef.current || !birthdate) return;
     setIsGeneratingPdf(true);
@@ -178,15 +185,15 @@ export default function Home() {
     }
   };
 
-  const handleBeKind = async () => {
+  const handleBeKind = () => {
     const message = `Be kind to me, I only have ${weeksRemaining.toLocaleString()} weeks to live.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    shareTextMessage('Be Kind To Me — Memento Mori', message);
+  };
 
+  const shareTextMessage = async (title: string, message: string) => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: 'Be Kind To Me — Memento Mori',
-          text: message,
-        });
+        await navigator.share({ title, text: message });
       } catch (e: any) {
         if (e.name !== 'AbortError') {
           await navigator.clipboard.writeText(message);
@@ -195,6 +202,16 @@ export default function Home() {
     } else {
       await navigator.clipboard.writeText(message);
     }
+  };
+
+  const handleLetsNotFight = () => {
+    const message = `Let's not fight. I only have ${weeksRemaining.toLocaleString()} weeks left to live.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    shareTextMessage("Let's Not Fight — Memento Mori", message);
+  };
+
+  const handleThinkPositive = () => {
+    const message = `Think positive. We only have about ${monthsRemaining.toLocaleString()} months left to deal with this shit.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    shareTextMessage('Think Positive — Memento Mori', message);
   };
 
   const downloadFile = (file: File) => {
@@ -530,26 +547,47 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center gap-4">
-          <Button
-            variant="outline"
-            data-testid="button-share-life"
-            onClick={handleShareLife}
-            disabled={isGeneratingPdf}
-            className="text-xs uppercase tracking-widest"
-          >
-            <Share2 className="w-3.5 h-3.5 mr-2" />
-            {isGeneratingPdf ? 'Generating...' : 'Share My Life'}
-          </Button>
-          <Button
-            variant="outline"
-            data-testid="button-be-kind"
-            onClick={handleBeKind}
-            className="text-xs uppercase tracking-widest"
-          >
-            <Heart className="w-3.5 h-3.5 mr-2" />
-            Be Kind To Me
-          </Button>
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8">
+          <h3 className="text-center text-xs uppercase tracking-[0.25em] mb-4" style={{ fontFamily: 'Cinzel, serif' }} data-testid="text-send-message-header">Send A Message:</h3>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button
+              variant="outline"
+              data-testid="button-share-life"
+              onClick={handleShareLife}
+              disabled={isGeneratingPdf}
+              className="text-xs uppercase tracking-widest"
+            >
+              <Share2 className="w-3.5 h-3.5 mr-2" />
+              {isGeneratingPdf ? 'Generating...' : 'Share My Life'}
+            </Button>
+            <Button
+              variant="outline"
+              data-testid="button-be-kind"
+              onClick={handleBeKind}
+              className="text-xs uppercase tracking-widest"
+            >
+              <Heart className="w-3.5 h-3.5 mr-2" />
+              Be Kind To Me
+            </Button>
+            <Button
+              variant="outline"
+              data-testid="button-lets-not-fight"
+              onClick={handleLetsNotFight}
+              className="text-xs uppercase tracking-widest"
+            >
+              <HandHeart className="w-3.5 h-3.5 mr-2" />
+              Lets Not Fight
+            </Button>
+            <Button
+              variant="outline"
+              data-testid="button-think-positive"
+              onClick={handleThinkPositive}
+              className="text-xs uppercase tracking-widest"
+            >
+              <Sparkles className="w-3.5 h-3.5 mr-2" />
+              Think Positive
+            </Button>
+          </div>
         </div>
         <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6">
           <button
