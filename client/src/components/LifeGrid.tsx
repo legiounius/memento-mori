@@ -68,29 +68,38 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
     ? ((weeksRemaining / totalWeeks) * 100).toFixed(1)
     : null;
 
-  const hoursLeft = useMemo(() => {
-    if (!birthdate) return null;
+  const { hoursLived, hoursLeft } = useMemo(() => {
+    if (!birthdate) return { hoursLived: null, hoursLeft: null };
+    const now = new Date();
     const targetDate = new Date(birthdate);
     targetDate.setFullYear(targetDate.getFullYear() + targetAge);
-    const now = new Date();
-    const diffMs = targetDate.getTime() - now.getTime();
-    if (diffMs <= 0) return 0;
-    return Math.floor(diffMs / (1000 * 60 * 60));
+    const livedMs = now.getTime() - birthdate.getTime();
+    const leftMs = targetDate.getTime() - now.getTime();
+    return {
+      hoursLived: Math.max(0, Math.floor(livedMs / (1000 * 60 * 60))),
+      hoursLeft: Math.max(0, Math.floor(leftMs / (1000 * 60 * 60))),
+    };
   }, [birthdate, targetAge]);
 
   return (
     <div className="w-full max-w-[700px] mx-auto p-4 md:p-8">
       <div className="flex flex-col items-center">
-        <div className="text-center mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full space-y-0.5">
-          <div data-testid="text-stats">
-            {birthdate
-              ? <><span className="font-bold">{weeksLived.toLocaleString()} weeks lived</span> ({percentLived}%) · <span className="font-bold">{weeksRemaining.toLocaleString()} weeks remaining</span> ({percentRemaining}%)</>
-              : "Select your birthdate"}
-          </div>
-          {hoursLeft !== null && (
-            <div data-testid="text-hours-left">
-              <span className="font-bold">Hours Left: {hoursLeft.toLocaleString()}</span> <span className="italic normal-case">Being Productive?</span>
-            </div>
+        <div className="mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full space-y-0.5">
+          {birthdate ? (
+            <>
+              <div className="flex justify-between" data-testid="text-weeks-stats">
+                <span className="font-bold">{weeksLived.toLocaleString()} Weeks Lived ({percentLived}%)</span>
+                <span className="font-bold">{weeksRemaining.toLocaleString()} Weeks Left ({percentRemaining}%)</span>
+              </div>
+              {hoursLived !== null && hoursLeft !== null && (
+                <div className="flex justify-between" data-testid="text-hours-stats">
+                  <span className="font-bold">{hoursLived.toLocaleString()} Hours Lived</span>
+                  <span className="font-bold">{hoursLeft.toLocaleString()} Hours Left</span>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="text-center" data-testid="text-stats">Select your birthdate</div>
           )}
         </div>
 

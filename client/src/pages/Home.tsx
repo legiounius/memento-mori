@@ -258,7 +258,7 @@ export default function Home() {
               style={{ mixBlendMode: 'multiply' }}
               data-testid="img-skull-header"
             />
-            <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Accordingly</span>
+            <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
           </div>
         </motion.div>
 
@@ -283,17 +283,26 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2" data-testid="birthdate-display">
-                <span className="text-sm font-bold text-foreground">
-                  Born: {formatDateFull(birthdate)}
+              <div className="flex flex-col items-center gap-0.5" data-testid="birthdate-display">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-foreground">
+                    Born: {formatDateFull(birthdate)}
+                  </span>
+                  <button
+                    onClick={() => setEditingBirthdate(true)}
+                    className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
+                    data-testid="button-change-birthdate"
+                  >
+                    change
+                  </button>
+                </div>
+                <span className="text-sm font-bold text-foreground" data-testid="text-death-date">
+                  Dead: {(() => {
+                    const d = new Date(birthdate);
+                    d.setFullYear(d.getFullYear() + targetAge);
+                    return formatDateFull(d);
+                  })()}
                 </span>
-                <button
-                  onClick={() => setEditingBirthdate(true)}
-                  className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
-                  data-testid="button-change-birthdate"
-                >
-                  change
-                </button>
               </div>
             )}
             {editingTargetAge ? (
