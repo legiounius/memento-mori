@@ -158,6 +158,17 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.8, ease: "easeOut" }}
+            className="mt-2"
+          >
+            <Link href="/philosophy" className="text-[11px] font-bold text-foreground/50 hover:text-foreground/80 transition-colors tracking-widest uppercase underline underline-offset-2 decoration-foreground/20 hover:decoration-foreground/50" data-testid="link-click-to-understand">
+              Click To Understand
+            </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
             className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
           >
@@ -484,6 +495,8 @@ export default function Home() {
 
       <footer className="w-full py-4 text-center relative z-10">
         <div className="flex items-center justify-center gap-3 text-[8px] text-muted-foreground/40">
+          <Link href="/philosophy" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-philosophy">The Philosophy</Link>
+          <span>&middot;</span>
           <Link href="/privacy" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-privacy-policy">Privacy Policy</Link>
           <span>&middot;</span>
           <Link href="/terms" className="hover:text-foreground/60 transition-colors tracking-widest uppercase" data-testid="link-terms">Terms of Use</Link>
