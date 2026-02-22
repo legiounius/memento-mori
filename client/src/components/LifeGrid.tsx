@@ -91,14 +91,14 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           {birthdate ? (
             <>
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
-                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
+                <span className="font-bold w-1/3"><span className="underline underline-offset-4 decoration-muted-foreground/40">Lived</span> ({percentLived}%)</span>
                 <span className="font-bold text-foreground normal-case tracking-normal w-1/3 text-center" data-testid="target-age-display">Months to age {targetAge}</span>
-                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
+                <span className="font-bold w-1/3 text-right">({percentRemaining}%) <span className="underline underline-offset-4 decoration-muted-foreground/40">Left</span></span>
               </div>
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-months-stats">
-                <span className="font-bold w-1/3">{monthsLived.toLocaleString()} Months ({percentLived}%)</span>
+                <span className="font-bold w-1/3">{monthsLived.toLocaleString()} Months</span>
                 <span className="font-bold text-foreground normal-case tracking-normal w-1/3 text-center" data-testid="birthdate-display">Born: {bornLabel}</span>
-                <span className="font-bold w-1/3 text-right">{monthsRemaining.toLocaleString()} Months ({percentRemaining}%)</span>
+                <span className="font-bold w-1/3 text-right">{monthsRemaining.toLocaleString()} Months</span>
               </div>
               {weeksLived !== null && weeksLeft !== null && (
                 <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
