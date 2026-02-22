@@ -3,7 +3,7 @@ import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
-import skullImage from "@assets/Screenshot_2026-02-08_at_4.43.31_PM_1770587042191.png";
+import skullImage from "@assets/skull_transparent.png";
 import { Button } from "@/components/ui/button";
 import { Trash2, Printer } from "lucide-react";
 import {
@@ -148,7 +148,6 @@ export default function Home() {
             src={skullImage}
             alt="Memento Mori"
             className="w-24 h-24 object-contain"
-            style={{ mixBlendMode: 'multiply' }}
             data-testid="img-skull-splash"
             initial={{ opacity: 0, scale: 0.6 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -289,7 +288,6 @@ export default function Home() {
               src={skullImage}
               alt="Memento Mori"
               className="w-5 h-5 object-contain"
-              style={{ mixBlendMode: 'multiply' }}
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
