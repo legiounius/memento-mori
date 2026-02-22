@@ -391,6 +391,18 @@ export default function FindPeace() {
                       <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Show Me Another</span>
                     </button>
                   )}
+                  <Link href="/suggest-quote">
+                    <a
+                      className="group cursor-pointer border border-muted-foreground/20 hover:border-foreground/30 rounded px-4 py-2 flex items-center gap-2 transition-all"
+                      data-testid="link-suggest-quote"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/50 group-hover:text-foreground transition-colors">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                      <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Suggest A Quote</span>
+                    </a>
+                  </Link>
                 </div>
               </motion.div>
             )}

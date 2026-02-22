@@ -9,6 +9,7 @@ import FindPeace from "@/pages/FindPeace";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Terms from "@/pages/Terms";
 import Philosophy from "@/pages/Philosophy";
+import SuggestQuote from "@/pages/SuggestQuote";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/philosophy" component={Philosophy} />
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={Terms} />
+      <Route path="/suggest-quote" component={SuggestQuote} />
       <Route component={NotFound} />
     </Switch>
   );

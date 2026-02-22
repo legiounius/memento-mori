@@ -468,7 +468,6 @@ export default function Home() {
               </button>
               {messageOpen && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-background border border-foreground/20 rounded shadow-lg py-1 z-50 min-w-[180px]" data-testid="dropdown-message-menu">
-                  <button onClick={() => { handleShareLife(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-share-life">Share My Life</button>
                   <button onClick={() => { handleBeKind(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-be-kind">Be Kind To Me</button>
                   <button onClick={() => { handleLetsNotFight(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-lets-not-fight">Lets Not Fight</button>
                   <button onClick={() => { handleThinkPositive(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-think-positive">Think Positive</button>
@@ -476,6 +475,13 @@ export default function Home() {
                 </div>
               )}
             </div>
+            <button
+              onClick={() => { setWisdomOpen(false); setMessageOpen(false); handleShareLife(); }}
+              className="text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase"
+              data-testid="link-share-my-life"
+            >
+              Share My Life
+            </button>
           </div>
         </motion.div>
 
