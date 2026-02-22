@@ -129,7 +129,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
               <div className="flex items-center gap-1">
                 <div className="shrink-0" style={{ width: '28px' }} />
                 <div className="shrink-0 w-[1px]" />
-                <span className="flex-1 text-[10px] font-extrabold text-foreground select-none text-center">{side === 'left' ? 'First Half' : 'Second Half'}</span>
+                <span className="flex-1 text-[10px] font-extrabold text-foreground select-none text-center">{side === 'left' ? '1st Half Of Your Life' : '2nd Half Of Your Life'}</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="shrink-0" style={{ width: '28px' }} />
