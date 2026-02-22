@@ -14,10 +14,10 @@ export type EventType = "BIRTHDAY" | "DEATH" | "MARRIAGE" | "MOVE" | "OTHER";
 
 export const EVENT_TYPES: { value: EventType; label: string; color: string }[] = [
   { value: "BIRTHDAY", label: "Birthday", color: "#d4a017" },
-  { value: "DEATH", label: "Death", color: "#000000" },
-  { value: "MARRIAGE", label: "Marriage", color: "#dc2626" },
+  { value: "DEATH", label: "Death", color: "#2563eb" },
+  { value: "MARRIAGE", label: "Marriage", color: "#ec4899" },
   { value: "MOVE", label: "Move", color: "#16a34a" },
-  { value: "OTHER", label: "Other", color: "#2563eb" },
+  { value: "OTHER", label: "Other", color: "#7c3aed" },
 ];
 
 export interface LifeEvent {

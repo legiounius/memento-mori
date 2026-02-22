@@ -188,11 +188,9 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                         <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
                           <TooltipTrigger asChild>
                             <div
-                              className="rounded-full"
                               style={{
-                                width: '12px',
-                                height: '12px',
-                                border: '2.5px solid #dc2626',
+                                width: '8px',
+                                height: '8px',
                                 backgroundColor: 'black',
                               }}
                               data-testid="marker-current-month"
@@ -259,7 +257,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[14px] h-[14px] rounded-full" style={{ border: '3px solid #dc2626', backgroundColor: 'black' }} />
+              <span className="inline-block w-[8px] h-[8px]" style={{ backgroundColor: 'black' }} />
               <span className="text-xs">Now</span>
             </span>
           </div>
