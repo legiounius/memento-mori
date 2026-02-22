@@ -13,13 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useQuery } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
 
 const STORAGE_KEY = "memento-birthdate";
 const AGE_STORAGE_KEY = "memento-target-age";
 const EVENTS_STORAGE_KEY = "memento-events";
-const TRACKED_KEY = "memento-tracked";
 
 const MONTHS_SHORT = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -99,20 +96,9 @@ export default function Home() {
     return QUOTES[Math.floor(Math.random() * QUOTES.length)];
   }, []);
 
-  const { data: trackerData } = useQuery<{ count: number }>({
-    queryKey: ['/api/tracker/count'],
-  });
-
   useEffect(() => {
     if (birthdate) {
       localStorage.setItem(STORAGE_KEY, birthdate.toISOString());
-      const alreadyTracked = localStorage.getItem(TRACKED_KEY);
-      if (!alreadyTracked) {
-        localStorage.setItem(TRACKED_KEY, "true");
-        apiRequest("POST", "/api/tracker/increment")
-          .then(() => queryClient.invalidateQueries({ queryKey: ['/api/tracker/count'] }))
-          .catch(() => {});
-      }
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
@@ -464,11 +450,39 @@ export default function Home() {
         Copyright Legio Unius MMXXVI
       </div>
 
-      {trackerData && trackerData.count > 0 && (
-        <div className="fixed bottom-2 right-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-tracker-count">
-          {trackerData.count.toLocaleString()} {trackerData.count === 1 ? 'soul' : 'souls'} reflecting
-        </div>
-      )}
+      <div
+        className="absolute left-0 w-full pointer-events-none select-none"
+        style={{ bottom: '0', height: '60px', opacity: 0.06, overflow: 'hidden', transform: 'scaleY(-1)' }}
+        data-testid="gravestone-banner-bottom"
+      >
+        <svg
+          width="100%"
+          height="60"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 60"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-full"
+          style={{ minWidth: '100%' }}
+        >
+          <defs>
+            <pattern id="gravestones-bottom" x="0" y="0" width="200" height="60" patternUnits="userSpaceOnUse">
+              <rect x="4" y="26" width="32" height="34" fill="currentColor" />
+              <path d="M4 26 Q4 10 20 10 Q36 10 36 26" fill="currentColor" />
+              <rect x="46" y="22" width="30" height="38" fill="currentColor" />
+              <rect x="57" y="6" width="8" height="20" fill="currentColor" />
+              <rect x="50" y="12" width="22" height="6" fill="currentColor" />
+              <rect x="86" y="16" width="34" height="44" fill="currentColor" />
+              <path d="M86 16 Q86 0 103 0 Q120 0 120 16" fill="currentColor" />
+              <rect x="130" y="32" width="26" height="28" fill="currentColor" />
+              <path d="M130 32 Q130 20 143 20 Q156 20 156 32" fill="currentColor" />
+              <rect x="166" y="28" width="28" height="32" fill="currentColor" />
+              <rect x="176" y="14" width="8" height="18" fill="currentColor" />
+              <rect x="170" y="18" width="20" height="6" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="1200" height="60" fill="url(#gravestones-bottom)" />
+        </svg>
+      </div>
     </div>
   );
 }
