@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import { LifeGrid } from "@/components/LifeGrid";
 import { DatePicker } from "@/components/DatePicker";
 import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
+import { GravestoneBanner } from "@/components/GravestoneBanner";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
@@ -385,48 +386,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
-      <div
-        className="absolute left-0 w-full pointer-events-none select-none"
-        style={{ top: '38px', height: '60px', opacity: 0.06, overflow: 'hidden' }}
-        data-testid="gravestone-banner"
-      >
-        <svg
-          width="100%"
-          height="60"
-          preserveAspectRatio="none"
-          viewBox="0 0 1200 60"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full"
-          style={{ minWidth: '100%' }}
-        >
-          <defs>
-            <pattern id="gravestones" x="0" y="0" width="200" height="60" patternUnits="userSpaceOnUse">
-              {/* Wide rounded gravestone */}
-              <rect x="4" y="26" width="32" height="34" fill="currentColor" />
-              <path d="M4 26 Q4 10 20 10 Q36 10 36 26" fill="currentColor" />
-
-              {/* Wide cross-topped gravestone */}
-              <rect x="46" y="22" width="30" height="38" fill="currentColor" />
-              <rect x="57" y="6" width="8" height="20" fill="currentColor" />
-              <rect x="50" y="12" width="22" height="6" fill="currentColor" />
-
-              {/* Large rounded gravestone */}
-              <rect x="86" y="16" width="34" height="44" fill="currentColor" />
-              <path d="M86 16 Q86 0 103 0 Q120 0 120 16" fill="currentColor" />
-
-              {/* Small wide rounded gravestone */}
-              <rect x="130" y="32" width="26" height="28" fill="currentColor" />
-              <path d="M130 32 Q130 20 143 20 Q156 20 156 32" fill="currentColor" />
-
-              {/* Wide cross-topped short gravestone */}
-              <rect x="166" y="28" width="28" height="32" fill="currentColor" />
-              <rect x="176" y="14" width="8" height="18" fill="currentColor" />
-              <rect x="170" y="18" width="20" height="6" fill="currentColor" />
-            </pattern>
-          </defs>
-          <rect width="1200" height="60" fill="url(#gravestones)" />
-        </svg>
-      </div>
+      <GravestoneBanner position="top" patternId="gravestones" />
       <header className="w-full max-w-[900px] mx-auto pt-4 pb-1 px-4 md:px-8 text-center flex flex-col items-center space-y-1 relative z-10">
 
         <motion.div 
@@ -657,39 +617,7 @@ export default function Home() {
         Copyright Legio Unius MMXXVI
       </div>
 
-      <div
-        className="absolute left-0 w-full pointer-events-none select-none"
-        style={{ bottom: '0', height: '60px', opacity: 0.06, overflow: 'hidden' }}
-        data-testid="gravestone-banner-bottom"
-      >
-        <svg
-          width="100%"
-          height="60"
-          preserveAspectRatio="none"
-          viewBox="0 0 1200 60"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full"
-          style={{ minWidth: '100%' }}
-        >
-          <defs>
-            <pattern id="gravestones-bottom" x="0" y="0" width="200" height="60" patternUnits="userSpaceOnUse">
-              <rect x="4" y="26" width="32" height="34" fill="currentColor" />
-              <path d="M4 26 Q4 10 20 10 Q36 10 36 26" fill="currentColor" />
-              <rect x="46" y="22" width="30" height="38" fill="currentColor" />
-              <rect x="57" y="6" width="8" height="20" fill="currentColor" />
-              <rect x="50" y="12" width="22" height="6" fill="currentColor" />
-              <rect x="86" y="16" width="34" height="44" fill="currentColor" />
-              <path d="M86 16 Q86 0 103 0 Q120 0 120 16" fill="currentColor" />
-              <rect x="130" y="32" width="26" height="28" fill="currentColor" />
-              <path d="M130 32 Q130 20 143 20 Q156 20 156 32" fill="currentColor" />
-              <rect x="166" y="28" width="28" height="32" fill="currentColor" />
-              <rect x="176" y="14" width="8" height="18" fill="currentColor" />
-              <rect x="170" y="18" width="20" height="6" fill="currentColor" />
-            </pattern>
-          </defs>
-          <rect width="1200" height="60" fill="url(#gravestones-bottom)" />
-        </svg>
-      </div>
+      <GravestoneBanner position="bottom" patternId="gravestones-bottom" />
 
       <footer className="w-full py-4 text-center relative z-10">
         <div className="flex items-center justify-center gap-3 text-[8px] text-foreground">
