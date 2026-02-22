@@ -448,10 +448,11 @@ export default function Home() {
               </button>
               {wisdomOpen && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-background border border-foreground/20 rounded shadow-lg py-1 z-50 min-w-[160px]" data-testid="dropdown-wisdom-menu">
-                  <button onClick={() => { window.location.href = '/peace?type=Stoic Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-stoic">Stoic</button>
-                  <button onClick={() => { window.location.href = '/peace?type=Religious Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-religious">Religious</button>
-                  <button onClick={() => { window.location.href = '/peace?type=Existentialist Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-existentialist">Existentialist</button>
-                  <button onClick={() => { window.location.href = '/peace?type=Literary Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-literary">Literary</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Stoic Wisdom'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-stoic">Stoic</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Religious Wisdom'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-religious">Religious</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Existentialist Wisdom'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-existentialist">Existentialist</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Literary Wisdom'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-literary">Literary</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Movie Wisdom'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-movie">Movie</button>
                 </div>
               )}
             </div>

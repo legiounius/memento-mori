@@ -12,7 +12,7 @@ export default function SuggestQuote() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
 
-  const typeOptions = ['Stoic Peace', 'Religious Peace', 'Existentialist Peace', 'Literary Peace'];
+  const typeOptions = ['Stoic Wisdom', 'Religious Wisdom', 'Existentialist Wisdom', 'Literary Wisdom', 'Movie Wisdom'];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function SuggestQuote() {
 
     const subject = encodeURIComponent('Quote Suggestion — Memento Mori App');
     const body = encodeURIComponent(
-      `Type of Peace: ${type}\nAuthor: ${author}\nSource / Place: ${place}\n\nQuote:\n"${quote}"`
+      `Type of Wisdom: ${type}\nAuthor: ${author}\nSource / Place: ${place}\n\nQuote:\n"${quote}"`
     );
 
     setSubmitted(true);
@@ -86,7 +86,7 @@ export default function SuggestQuote() {
 
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground" htmlFor="type">
-                Type of Peace
+                Type of Wisdom
               </label>
               <select
                 id="type"

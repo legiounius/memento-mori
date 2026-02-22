@@ -4,15 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import skullImage from "@assets/skull_minimal.png";
 
-interface PeaceEntry {
+interface WisdomEntry {
   type: string;
   author: string;
   source: string;
   text: string;
 }
 
-function parseCSV(csv: string): PeaceEntry[] {
-  const entries: PeaceEntry[] = [];
+function parseCSV(csv: string): WisdomEntry[] {
+  const entries: WisdomEntry[] = [];
   const rows: string[][] = [];
   let current = '';
   let inQuotes = false;
@@ -72,8 +72,8 @@ function parseCSV(csv: string): PeaceEntry[] {
 }
 
 export default function FindPeace() {
-  const [entries, setEntries] = useState<PeaceEntry[]>([]);
-  const [currentEntry, setCurrentEntry] = useState<(PeaceEntry & { idx: number }) | null>(null);
+  const [entries, setEntries] = useState<WisdomEntry[]>([]);
+  const [currentEntry, setCurrentEntry] = useState<(WisdomEntry & { idx: number }) | null>(null);
   const [passageKey, setPassageKey] = useState(0);
   const [seenMap, setSeenMap] = useState<Record<string, number[]>>({});
   const [lastType, setLastType] = useState<string | null>(null);
@@ -252,9 +252,9 @@ export default function FindPeace() {
         <div className="text-center w-full pt-6">
           <div className="flex items-center justify-center gap-6">
             <button
-              onClick={() => handleFindPeace('Stoic Peace')}
+              onClick={() => handleFindPeace('Stoic Wisdom')}
               className="flex flex-col items-center gap-2 group cursor-pointer"
-              data-testid="button-stoic-peace"
+              data-testid="button-stoic-wisdom"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
                 <circle cx="12" cy="12" r="5" />
@@ -267,55 +267,76 @@ export default function FindPeace() {
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
               </svg>
-              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Stoic Peace</span>
-              {typeCounts['Stoic Peace'] > 0 && (
-                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-stoic-count">({typeCounts['Stoic Peace']})</span>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Stoic Wisdom</span>
+              {typeCounts['Stoic Wisdom'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-stoic-count">({typeCounts['Stoic Wisdom']})</span>
               )}
             </button>
 
             <button
-              onClick={() => handleFindPeace('Religious Peace')}
+              onClick={() => handleFindPeace('Religious Wisdom')}
               className="flex flex-col items-center gap-2 group cursor-pointer"
-              data-testid="button-religious-peace"
+              data-testid="button-religious-wisdom"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
                 <line x1="12" y1="2" x2="12" y2="22" />
                 <line x1="6" y1="8" x2="18" y2="8" />
               </svg>
-              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Religious Peace</span>
-              {typeCounts['Religious Peace'] > 0 && (
-                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-religious-count">({typeCounts['Religious Peace']})</span>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Religious Wisdom</span>
+              {typeCounts['Religious Wisdom'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-religious-count">({typeCounts['Religious Wisdom']})</span>
               )}
             </button>
 
             <button
-              onClick={() => handleFindPeace('Existentialist Peace')}
+              onClick={() => handleFindPeace('Existentialist Wisdom')}
               className="flex flex-col items-center gap-2 group cursor-pointer"
-              data-testid="button-existentialist-peace"
+              data-testid="button-existentialist-wisdom"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
                 <circle cx="12" cy="8" r="4" />
                 <path d="M12 12v6" />
                 <path d="M9 22h6" />
               </svg>
-              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Existentialist Peace</span>
-              {typeCounts['Existentialist Peace'] > 0 && (
-                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-existentialist-count">({typeCounts['Existentialist Peace']})</span>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Existentialist Wisdom</span>
+              {typeCounts['Existentialist Wisdom'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-existentialist-count">({typeCounts['Existentialist Wisdom']})</span>
               )}
             </button>
 
             <button
-              onClick={() => handleFindPeace('Literary Peace')}
+              onClick={() => handleFindPeace('Literary Wisdom')}
               className="flex flex-col items-center gap-2 group cursor-pointer"
-              data-testid="button-literary-peace"
+              data-testid="button-literary-wisdom"
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
               </svg>
-              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Literary Peace</span>
-              {typeCounts['Literary Peace'] > 0 && (
-                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-literary-count">({typeCounts['Literary Peace']})</span>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Literary Wisdom</span>
+              {typeCounts['Literary Wisdom'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-literary-count">({typeCounts['Literary Wisdom']})</span>
+              )}
+            </button>
+
+            <button
+              onClick={() => handleFindPeace('Movie Wisdom')}
+              className="flex flex-col items-center gap-2 group cursor-pointer"
+              data-testid="button-movie-wisdom"
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+                <line x1="17" y1="17" x2="22" y2="17" />
+              </svg>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Movie Wisdom</span>
+              {typeCounts['Movie Wisdom'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-movie-count">({typeCounts['Movie Wisdom']})</span>
               )}
             </button>
 
@@ -391,17 +412,15 @@ export default function FindPeace() {
                       <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Show Me Another</span>
                     </button>
                   )}
-                  <Link href="/suggest-quote">
-                    <a
-                      className="group cursor-pointer border border-muted-foreground/20 hover:border-foreground/30 rounded px-4 py-2 flex items-center gap-2 transition-all"
-                      data-testid="link-suggest-quote"
-                    >
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/50 group-hover:text-foreground transition-colors">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                      <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Suggest A Quote</span>
-                    </a>
+                  <Link href="/suggest-quote"
+                    className="group cursor-pointer border border-muted-foreground/20 hover:border-foreground/30 rounded px-4 py-2 flex items-center gap-2 transition-all"
+                    data-testid="link-suggest-quote"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/50 group-hover:text-foreground transition-colors">
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Suggest A Quote</span>
                   </Link>
                 </div>
               </motion.div>

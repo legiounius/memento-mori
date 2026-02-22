@@ -20,10 +20,10 @@ Preferred communication style: Simple, everyday language.
 - **Animations**: Framer Motion
 - **Date Calculations**: `date-fns` (specifically `differenceInWeeks`)
 - **Path aliases**: `@/` maps to `client/src/`, `@shared/` maps to `shared/`, `@assets/` maps to `attached_assets/`
-- **Key pages**: Home (main life grid view), NotFound (404)
+- **Key pages**: Home (main life grid view), FindPeace (wisdom quotes with 5 categories), SuggestQuote (quote suggestion form), NotFound (404)
 - **Key components**: `LifeGrid` (horizontal year bars visualization with black fill for lived, red dot/star markers), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
 - **Birthdate UX**: First-time visitors see a splash page with large skull, title, and birthdate picker. Once set, birthdate shows as bold text "Born: Jan 15, 1990" with a subtle "change" link. Returning visitors skip the splash entirely.
-- **Quotes**: 25 embedded Stoic/memento mori quotes rotate randomly on each page load under "Live Accordingly"
+- **Quotes**: ~850 quotes in CSV (`peace_archive.csv`) across 5 categories: Stoic Wisdom, Religious Wisdom, Existentialist Wisdom, Literary Wisdom, Movie Wisdom. FindPeace page with random selection, favorites, sharing. SuggestQuote page for user submissions via email.
 - **Fonts**: Cinzel used site-wide (body and headings) — loaded via Google Fonts with CSS custom property `--font-display`
 - **Colors**: Lived bars = black, event stars = red (#dc2626), current week dot = red (#dc2626), remaining = gray
 
