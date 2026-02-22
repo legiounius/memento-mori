@@ -244,7 +244,7 @@ export default function Home() {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center"
+          className="flex items-center gap-2"
         >
           <img
             src={skullImage}
@@ -253,12 +253,21 @@ export default function Home() {
             style={{ mixBlendMode: 'multiply' }}
             data-testid="img-skull-header"
           />
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-            Memento Mori
-          </h1>
-          <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase" data-testid="text-tagline">
-            Live Accordingly Chad
-          </p>
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
+              Memento Mori
+            </h1>
+            <p className="text-muted-foreground text-xs font-bold tracking-widest uppercase">
+              Live Accordingly
+            </p>
+          </div>
+          <img
+            src={skullImage}
+            alt="Memento Mori"
+            className="w-10 h-10 object-contain"
+            style={{ mixBlendMode: 'multiply' }}
+            data-testid="img-skull-header-right"
+          />
         </motion.div>
 
         <motion.div
