@@ -147,7 +147,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
           >
-            Memento Mori
+            Memento<br />Mori
           </motion.h1>
 
           <motion.div

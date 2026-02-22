@@ -66,38 +66,40 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
   }, [month, day, year, setDate]);
 
   return (
-    <div className="flex flex-row items-center gap-3 w-full max-w-sm flex-wrap justify-center">
-      <Select value={month} onValueChange={setMonth}>
-        <SelectTrigger
-          data-testid="select-month"
-          className="w-[130px] border-2 border-primary/10"
-        >
-          <SelectValue placeholder="Month" />
-        </SelectTrigger>
-        <SelectContent>
-          {MONTHS.map((m, i) => (
-            <SelectItem key={m} value={String(i)} data-testid={`option-month-${i}`}>
-              {m}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="flex flex-col items-center gap-3 w-full max-w-sm">
+      <div className="flex flex-row items-center gap-3 justify-center">
+        <Select value={month} onValueChange={setMonth}>
+          <SelectTrigger
+            data-testid="select-month"
+            className="w-[130px] border-2 border-primary/10"
+          >
+            <SelectValue placeholder="Month" />
+          </SelectTrigger>
+          <SelectContent>
+            {MONTHS.map((m, i) => (
+              <SelectItem key={m} value={String(i)} data-testid={`option-month-${i}`}>
+                {m}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      <Select value={day} onValueChange={setDay}>
-        <SelectTrigger
-          data-testid="select-day"
-          className="w-[90px] border-2 border-primary/10"
-        >
-          <SelectValue placeholder="Day" />
-        </SelectTrigger>
-        <SelectContent>
-          {days.map((d) => (
-            <SelectItem key={d} value={String(d)} data-testid={`option-day-${d}`}>
-              {d}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        <Select value={day} onValueChange={setDay}>
+          <SelectTrigger
+            data-testid="select-day"
+            className="w-[90px] border-2 border-primary/10"
+          >
+            <SelectValue placeholder="Day" />
+          </SelectTrigger>
+          <SelectContent>
+            {days.map((d) => (
+              <SelectItem key={d} value={String(d)} data-testid={`option-day-${d}`}>
+                {d}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       <Select value={year} onValueChange={setYear}>
         <SelectTrigger
