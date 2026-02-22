@@ -140,8 +140,6 @@ export default function Home() {
 
   const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
 
-  const showDatePicker = !birthdate || editingBirthdate;
-
   if (!birthdate) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6">
@@ -269,10 +267,10 @@ export default function Home() {
           className="w-full flex justify-center pt-0.5"
         >
           <div className="flex flex-col items-center gap-1.5 w-full max-w-md">
-            {showDatePicker ? (
+            {editingBirthdate && (
               <div className="flex flex-col items-center gap-2">
                 <DatePicker date={birthdate} setDate={handleBirthdateSet} />
-                {editingBirthdate && birthdate && (
+                {birthdate && (
                   <button
                     onClick={() => setEditingBirthdate(false)}
                     className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
@@ -281,28 +279,6 @@ export default function Home() {
                     done
                   </button>
                 )}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center gap-0.5" data-testid="birthdate-display">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-foreground">
-                    Born: {formatDateFull(birthdate)}
-                  </span>
-                  <button
-                    onClick={() => setEditingBirthdate(true)}
-                    className="text-[10px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
-                    data-testid="button-change-birthdate"
-                  >
-                    change
-                  </button>
-                </div>
-                <span className="text-sm font-bold text-foreground" data-testid="text-death-date">
-                  Dead:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(() => {
-                    const d = new Date(birthdate);
-                    d.setFullYear(d.getFullYear() + targetAge);
-                    return formatDateFull(d);
-                  })()}
-                </span>
               </div>
             )}
             {editingTargetAge ? (
@@ -355,7 +331,18 @@ export default function Home() {
         transition={{ duration: 1, ease: "easeOut" }}
         className="w-full flex-1 pb-20 px-4"
       >
-        <LifeGrid birthdate={birthdate} targetAge={targetAge} events={events} />
+        <LifeGrid
+          birthdate={birthdate}
+          targetAge={targetAge}
+          events={events}
+          bornLabel={birthdate ? formatDateFull(birthdate) : undefined}
+          deadLabel={birthdate ? (() => {
+            const d = new Date(birthdate);
+            d.setFullYear(d.getFullYear() + targetAge);
+            return formatDateFull(d);
+          })() : undefined}
+          onChangeBirthdate={() => setEditingBirthdate(true)}
+        />
 
         <div className="w-full max-w-[700px] mx-auto px-4 md:px-8 mt-4">
           <EventForm onAdd={handleAddEvent} />

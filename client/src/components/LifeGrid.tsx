@@ -12,6 +12,9 @@ interface LifeGridProps {
   birthdate: Date | undefined;
   targetAge: number;
   events: LifeEvent[];
+  bornLabel?: string;
+  deadLabel?: string;
+  onChangeBirthdate?: () => void;
 }
 
 const WEEKS_PER_YEAR = 52;
@@ -21,7 +24,7 @@ interface YearEvent {
   labels: string[];
 }
 
-export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
+export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, onChangeBirthdate }: LifeGridProps) {
   const totalWeeks = targetAge * WEEKS_PER_YEAR;
 
   const weeksLived = useMemo(() => {
@@ -84,12 +87,27 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
   return (
     <div className="w-full max-w-[700px] mx-auto p-4 md:p-8">
       <div className="flex flex-col items-center">
-        <div className="mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full space-y-0.5">
+        <div className="mb-4 text-muted-foreground border-b border-border pb-2 w-full space-y-0.5">
           {birthdate ? (
             <>
-              <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
-                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40">Lived</span>
-                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40">Left</span>
+              <div className="flex items-start text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
+                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
+                <div className="w-1/3 flex flex-col items-center" data-testid="birthdate-display">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold text-foreground normal-case tracking-normal">Born: {bornLabel}</span>
+                    {onChangeBirthdate && (
+                      <button
+                        onClick={onChangeBirthdate}
+                        className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
+                        data-testid="button-change-birthdate"
+                      >
+                        change
+                      </button>
+                    )}
+                  </div>
+                  <span className="text-[11px] font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
+                </div>
+                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
               </div>
               <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
                 <span className="font-bold">{weeksLived.toLocaleString()} Weeks ({percentLived}%)</span>
@@ -103,7 +121,7 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
               )}
             </>
           ) : (
-            <div className="text-center" data-testid="text-stats">Select your birthdate</div>
+            <div className="text-center text-sm uppercase tracking-widest" data-testid="text-stats">Select your birthdate</div>
           )}
         </div>
 
