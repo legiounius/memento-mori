@@ -247,11 +247,20 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           };
 
           return (
-            <div className="w-full flex gap-2">
+            <div className="w-full flex">
               <div className="flex-1 min-w-0">
                 {renderColumnHeader('left')}
                 <div className="w-full space-y-[2px]">
                   {leftYears.map(renderYearRow)}
+                </div>
+              </div>
+              <div className="flex flex-col items-center mx-1" style={{ width: '18px', marginTop: '18px' }}>
+                <span className="text-[9px] font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Year</span>
+                <div className="flex flex-col items-center mt-0.5 flex-1">
+                  <div className="flex-1 w-[1px] bg-muted-foreground/30" />
+                  <svg width="8" height="6" viewBox="0 0 8 6" className="text-muted-foreground/50 shrink-0">
+                    <path d="M0 0 L4 6 L8 0" fill="currentColor" />
+                  </svg>
                 </div>
               </div>
               <div className="flex-1 min-w-0">
