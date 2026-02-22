@@ -168,8 +168,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                             <div
                               className="rounded-full"
                               style={{
-                                width: '12px',
-                                height: '12px',
+                                width: '8px',
+                                height: '8px',
                                 backgroundColor: evtColor,
                               }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
