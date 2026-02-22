@@ -122,9 +122,21 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           const renderColumnHeader = (side: string) => (
             <div className="w-full flex items-center gap-1 mb-1">
               <div className="shrink-0" style={{ width: '28px' }} />
-              <div className="flex-1 flex items-center justify-between">
+              <div className="flex-1 flex items-center">
                 <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
-                <span className="text-[10px] font-bold text-muted-foreground select-none">Month</span>
+                <div className="flex-1 mx-0.5 flex items-center">
+                  <div className="flex-1 h-[1px] bg-muted-foreground/30" />
+                  <svg width="6" height="8" viewBox="0 0 6 8" className="text-muted-foreground/50 shrink-0">
+                    <path d="M0 0 L6 4 L0 8" fill="currentColor" />
+                  </svg>
+                </div>
+                <span className="text-[10px] font-bold text-muted-foreground select-none px-0.5">Month</span>
+                <div className="flex-1 mx-0.5 flex items-center">
+                  <div className="flex-1 h-[1px] bg-muted-foreground/30" />
+                  <svg width="6" height="8" viewBox="0 0 6 8" className="text-muted-foreground/50 shrink-0">
+                    <path d="M0 0 L6 4 L0 8" fill="currentColor" />
+                  </svg>
+                </div>
                 <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-12mo-${side}`}>12</span>
               </div>
             </div>
@@ -145,7 +157,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                   className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-bold text-muted-foreground select-none text-right shrink-0`}
                   style={{ width: '28px' }}
                 >
-                  {yearIndex === 0 ? 'Born' : yearIndex}
+                  {yearIndex === 0 ? 'B' : yearIndex}
                 </div>
 
                 <div className="flex-1 flex items-center justify-between">
@@ -225,6 +237,15 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
 
           return (
             <div className="w-full flex">
+              <div className="flex flex-col items-center mr-1" style={{ width: '14px', marginTop: '22px' }}>
+                <span className="text-[9px] font-bold text-muted-foreground select-none" style={{ writingMode: 'vertical-lr', transform: 'rotate(180deg)' }} data-testid="label-years">Year</span>
+                <div className="flex-1 mt-0.5 flex flex-col items-center" style={{ maxHeight: '80px' }}>
+                  <div className="flex-1 w-[1px] bg-muted-foreground/30" />
+                  <svg width="8" height="6" viewBox="0 0 8 6" className="text-muted-foreground/50 shrink-0">
+                    <path d="M0 0 L4 6 L8 0" fill="currentColor" />
+                  </svg>
+                </div>
+              </div>
               <div className="flex-1 min-w-0">
                 {renderColumnHeader('left')}
                 <div className="w-full space-y-[2px]">
