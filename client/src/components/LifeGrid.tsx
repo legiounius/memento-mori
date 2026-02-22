@@ -16,6 +16,7 @@ interface LifeGridProps {
 }
 
 const MONTHS_PER_YEAR = 12;
+const MONTH_ABBREVS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
 interface YearEvent {
   monthInYear: number;
@@ -119,6 +120,10 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           const rightYears = Array.from({ length: targetAge - halfAge }, (_, i) => halfAge + i);
           const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
 
+          const birthMonthIndex = birthdate ? birthdate.getMonth() : 0;
+          const firstMonthLabel = MONTH_ABBREVS[birthMonthIndex];
+          const lastMonthLabel = MONTH_ABBREVS[(birthMonthIndex + 11) % 12];
+
           const renderColumnHeader = (side: string) => (
             <div className="w-full flex flex-col mb-1">
               <div className="flex items-center gap-1">
@@ -130,7 +135,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                 <div className="shrink-0" style={{ width: '28px' }} />
                 <div className="shrink-0 w-[1px]" />
                 <div className="flex-1 flex items-center">
-                  <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>1</span>
+                  <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-1mo-${side}`}>{firstMonthLabel}</span>
                   <div className="flex-1 mx-0.5 flex items-center">
                     <div className="flex-1 h-[1px] bg-muted-foreground/30" />
                     <svg width="6" height="8" viewBox="0 0 6 8" className="text-muted-foreground/50 shrink-0">
@@ -144,7 +149,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                       <path d="M0 0 L6 4 L0 8" fill="currentColor" />
                     </svg>
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-12mo-${side}`}>12</span>
+                  <span className="text-[10px] font-bold text-muted-foreground select-none" data-testid={`label-12mo-${side}`}>{lastMonthLabel}</span>
                 </div>
               </div>
             </div>
