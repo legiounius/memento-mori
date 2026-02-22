@@ -90,38 +90,37 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
         <div className="mb-4 text-muted-foreground border-b border-border pb-2 w-full space-y-0.5">
           {birthdate ? (
             <>
-              <div className="flex items-start text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
+              <div className="flex text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
-                <div className="w-1/3 flex flex-col items-center" data-testid="birthdate-display">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-bold text-foreground normal-case tracking-normal">Born: {bornLabel}</span>
-                    {onChangeBirthdate && (
-                      <button
-                        onClick={onChangeBirthdate}
-                        className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
-                        data-testid="button-change-birthdate"
-                      >
-                        change
-                      </button>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
+                <span className="w-1/3" />
+                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
+              </div>
+              <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
+                <span className="font-bold w-1/3">{weeksLived.toLocaleString()} Weeks ({percentLived}%)</span>
+                <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="birthdate-display">
+                  <span className="font-bold text-foreground normal-case tracking-normal">Born: {bornLabel}</span>
+                  {onChangeBirthdate && (
+                    <button
+                      onClick={onChangeBirthdate}
+                      className="text-[9px] text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40 normal-case tracking-normal"
+                      data-testid="button-change-birthdate"
+                    >
+                      change
+                    </button>
+                  )}
+                </div>
+                <span className="font-bold w-1/3 text-right">{weeksRemaining.toLocaleString()} Weeks ({percentRemaining}%)</span>
+              </div>
+              {hoursLived !== null && hoursLeft !== null && (
+                <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-hours-stats">
+                  <span className="font-bold w-1/3">{hoursLived.toLocaleString()} Hours</span>
+                  <div className="w-1/3 flex items-center justify-center gap-1.5">
+                    <span className="font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
                     {onChangeBirthdate && (
                       <span className="text-[9px] invisible" aria-hidden="true">change</span>
                     )}
                   </div>
-                </div>
-                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
-              </div>
-              <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
-                <span className="font-bold">{weeksLived.toLocaleString()} Weeks ({percentLived}%)</span>
-                <span className="font-bold">{weeksRemaining.toLocaleString()} Weeks ({percentRemaining}%)</span>
-              </div>
-              {hoursLived !== null && hoursLeft !== null && (
-                <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-hours-stats">
-                  <span className="font-bold">{hoursLived.toLocaleString()} Hours</span>
-                  <span className="font-bold">{hoursLeft.toLocaleString()} Hours</span>
+                  <span className="font-bold w-1/3 text-right">{hoursLeft.toLocaleString()} Hours</span>
                 </div>
               )}
             </>
