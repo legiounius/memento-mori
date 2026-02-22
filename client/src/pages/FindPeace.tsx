@@ -77,6 +77,10 @@ export default function FindPeace() {
   const [passageKey, setPassageKey] = useState(0);
   const [seenMap, setSeenMap] = useState<Record<string, number[]>>({});
   const [lastType, setLastType] = useState<string | null>(null);
+  const [autoLoadType, setAutoLoadType] = useState<string | null>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('type');
+  });
   const [favorites, setFavorites] = useState<number[]>(() => {
     try {
       const stored = localStorage.getItem('peace_favorites');
@@ -103,6 +107,13 @@ export default function FindPeace() {
     entries.forEach(e => { counts[e.type] = (counts[e.type] || 0) + 1; });
     return counts;
   }, [entries]);
+
+  useEffect(() => {
+    if (autoLoadType && entries.length > 0) {
+      handleFindPeace(autoLoadType);
+      setAutoLoadType(null);
+    }
+  }, [entries, autoLoadType]);
 
   const uniqueAuthors = useMemo(() => {
     const seen = new Set<string>();

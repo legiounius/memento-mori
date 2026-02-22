@@ -6,7 +6,7 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import { Button } from "@/components/ui/button";
-import { Trash2, Share2, Heart, HandHeart, Sparkles } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { differenceInWeeks, differenceInMonths } from "date-fns";
@@ -65,6 +65,10 @@ export default function Home() {
   const [editingBirthdate, setEditingBirthdate] = useState(false);
   const [editingTargetAge, setEditingTargetAge] = useState(false);
   const [splashBirthdate, setSplashBirthdate] = useState<Date | undefined>(undefined);
+  const [wisdomOpen, setWisdomOpen] = useState(false);
+  const [messageOpen, setMessageOpen] = useState(false);
+  const wisdomRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLDivElement>(null);
 
   const [targetAge, setTargetAge] = useState<number>(() => {
     const saved = localStorage.getItem(AGE_STORAGE_KEY);
@@ -78,6 +82,15 @@ export default function Home() {
     }
     return [];
   });
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (wisdomRef.current && !wisdomRef.current.contains(e.target as Node)) setWisdomOpen(false);
+      if (messageRef.current && !messageRef.current.contains(e.target as Node)) setMessageOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (birthdate) {
@@ -409,9 +422,48 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight mt-0.5">
             Memento Mori
           </h1>
-          <Link href="/peace" className="mt-2 text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase underline underline-offset-2 decoration-foreground/30 hover:decoration-foreground/60" data-testid="link-find-peace">
-            Find Peace
-          </Link>
+          <div className="mt-2 flex items-center gap-4">
+            <div className="relative" ref={wisdomRef}>
+              <button
+                onClick={() => { setWisdomOpen(!wisdomOpen); setMessageOpen(false); }}
+                className="text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase flex items-center gap-1"
+                data-testid="dropdown-get-wisdom"
+              >
+                Get Wisdom
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" className={`transition-transform ${wisdomOpen ? 'rotate-180' : ''}`}>
+                  <path d="M2 4 L5 7 L8 4" />
+                </svg>
+              </button>
+              {wisdomOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-background border border-foreground/20 rounded shadow-lg py-1 z-50 min-w-[160px]" data-testid="dropdown-wisdom-menu">
+                  <button onClick={() => { window.location.href = '/peace?type=Stoic Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-stoic">Stoic</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Religious Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-religious">Religious</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Existentialist Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-existentialist">Existentialist</button>
+                  <button onClick={() => { window.location.href = '/peace?type=Literary Peace'; }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="wisdom-literary">Literary</button>
+                </div>
+              )}
+            </div>
+            <div className="relative" ref={messageRef}>
+              <button
+                onClick={() => { setMessageOpen(!messageOpen); setWisdomOpen(false); }}
+                className="text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase flex items-center gap-1"
+                data-testid="dropdown-send-message"
+              >
+                Send A Message
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" className={`transition-transform ${messageOpen ? 'rotate-180' : ''}`}>
+                  <path d="M2 4 L5 7 L8 4" />
+                </svg>
+              </button>
+              {messageOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-background border border-foreground/20 rounded shadow-lg py-1 z-50 min-w-[180px]" data-testid="dropdown-message-menu">
+                  <button onClick={() => { handleShareLife(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-share-life">Share My Life</button>
+                  <button onClick={() => { handleBeKind(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-be-kind">Be Kind To Me</button>
+                  <button onClick={() => { handleLetsNotFight(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-lets-not-fight">Lets Not Fight</button>
+                  <button onClick={() => { handleThinkPositive(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-think-positive">Think Positive</button>
+                </div>
+              )}
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
@@ -547,49 +599,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8">
-          <h3 className="text-center text-xs uppercase tracking-[0.25em] mb-4" style={{ fontFamily: 'Cinzel, serif' }} data-testid="text-send-message-header">Send A Message:</h3>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Button
-              variant="outline"
-              data-testid="button-share-life"
-              onClick={handleShareLife}
-              disabled={isGeneratingPdf}
-              className="text-xs uppercase tracking-widest"
-            >
-              <Share2 className="w-3.5 h-3.5 mr-2" />
-              {isGeneratingPdf ? 'Generating...' : 'Share My Life'}
-            </Button>
-            <Button
-              variant="outline"
-              data-testid="button-be-kind"
-              onClick={handleBeKind}
-              className="text-xs uppercase tracking-widest"
-            >
-              <Heart className="w-3.5 h-3.5 mr-2" />
-              Be Kind To Me
-            </Button>
-            <Button
-              variant="outline"
-              data-testid="button-lets-not-fight"
-              onClick={handleLetsNotFight}
-              className="text-xs uppercase tracking-widest"
-            >
-              <HandHeart className="w-3.5 h-3.5 mr-2" />
-              Lets Not Fight
-            </Button>
-            <Button
-              variant="outline"
-              data-testid="button-think-positive"
-              onClick={handleThinkPositive}
-              className="text-xs uppercase tracking-widest"
-            >
-              <Sparkles className="w-3.5 h-3.5 mr-2" />
-              Think Positive
-            </Button>
-          </div>
-        </div>
-        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-4 flex justify-center gap-6">
+        <div className="w-full max-w-[960px] mx-auto px-4 md:px-8 mt-8 flex justify-center gap-6">
           <button
             onClick={() => setEditingBirthdate(true)}
             className="text-xs text-muted-foreground underline underline-offset-2 decoration-muted-foreground/40"
