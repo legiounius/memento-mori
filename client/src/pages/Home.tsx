@@ -283,7 +283,7 @@ export default function Home() {
             )}
             {editingTargetAge && (
               <div className="flex items-center gap-2">
-                <span className="text-[11px] text-foreground">Your life in weeks to age</span>
+                <span className="text-[11px] text-foreground">Months to age</span>
                 <Select
                   value={String(targetAge)}
                   onValueChange={(v) => {

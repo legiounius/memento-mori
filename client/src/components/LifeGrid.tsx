@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { differenceInWeeks } from 'date-fns';
+import { differenceInMonths, differenceInWeeks } from 'date-fns';
 import { Star } from 'lucide-react';
 import {
   Tooltip,
@@ -18,39 +18,38 @@ interface LifeGridProps {
   onChangeTargetAge?: () => void;
 }
 
-const WEEKS_PER_YEAR = 52;
+const MONTHS_PER_YEAR = 12;
 
 interface YearEvent {
-  weekInYear: number;
+  monthInYear: number;
   labels: string[];
 }
 
 export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, onChangeBirthdate, onChangeTargetAge }: LifeGridProps) {
-  const totalWeeks = targetAge * WEEKS_PER_YEAR;
+  const totalMonths = targetAge * MONTHS_PER_YEAR;
 
-  const weeksLived = useMemo(() => {
+  const monthsLived = useMemo(() => {
     if (!birthdate) return 0;
     const today = new Date();
-    return Math.min(totalWeeks, Math.max(0, differenceInWeeks(today, birthdate)));
-  }, [birthdate, totalWeeks]);
+    return Math.min(totalMonths, Math.max(0, differenceInMonths(today, birthdate)));
+  }, [birthdate, totalMonths]);
 
-  const currentYearIndex = birthdate ? Math.floor((weeksLived - 1) / WEEKS_PER_YEAR) : -1;
-  const currentWeekInYear = birthdate ? ((weeksLived - 1) % WEEKS_PER_YEAR) : -1;
+  const currentYearIndex = birthdate ? Math.floor((monthsLived - 1) / MONTHS_PER_YEAR) : -1;
+  const currentMonthInYear = birthdate ? ((monthsLived - 1) % MONTHS_PER_YEAR) : -1;
 
   const eventsByYear = useMemo(() => {
     if (!birthdate) return new Map<number, YearEvent[]>();
     const map = new Map<number, YearEvent[]>();
     for (const event of events) {
       const eventDate = new Date(event.date);
-      const diffMs = eventDate.getTime() - birthdate.getTime();
-      const weekIndex = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000));
-      if (weekIndex >= 0 && weekIndex < totalWeeks) {
-        const yearIdx = Math.floor(weekIndex / WEEKS_PER_YEAR);
-        const weekInYear = weekIndex % WEEKS_PER_YEAR;
+      const monthIndex = differenceInMonths(eventDate, birthdate);
+      if (monthIndex >= 0 && monthIndex < totalMonths) {
+        const yearIdx = Math.floor(monthIndex / MONTHS_PER_YEAR);
+        const monthInYear = monthIndex % MONTHS_PER_YEAR;
         const existing = map.get(yearIdx);
-        const yearEvent: YearEvent = { weekInYear, labels: [event.label] };
+        const yearEvent: YearEvent = { monthInYear, labels: [event.label] };
         if (existing) {
-          const found = existing.find(e => e.weekInYear === weekInYear);
+          const found = existing.find(e => e.monthInYear === monthInYear);
           if (found) {
             found.labels.push(event.label);
           } else {
@@ -62,26 +61,26 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
       }
     }
     return map;
-  }, [birthdate, events, totalWeeks]);
+  }, [birthdate, events, totalMonths]);
 
-  const weeksRemaining = totalWeeks - weeksLived;
+  const monthsRemaining = totalMonths - monthsLived;
   const percentLived = birthdate
-    ? ((weeksLived / totalWeeks) * 100).toFixed(1)
+    ? ((monthsLived / totalMonths) * 100).toFixed(1)
     : null;
   const percentRemaining = birthdate
-    ? ((weeksRemaining / totalWeeks) * 100).toFixed(1)
+    ? ((monthsRemaining / totalMonths) * 100).toFixed(1)
     : null;
 
-  const { hoursLived, hoursLeft } = useMemo(() => {
-    if (!birthdate) return { hoursLived: null, hoursLeft: null };
+  const { weeksLived, weeksLeft } = useMemo(() => {
+    if (!birthdate) return { weeksLived: null, weeksLeft: null };
     const now = new Date();
     const targetDate = new Date(birthdate);
     targetDate.setFullYear(targetDate.getFullYear() + targetAge);
-    const livedMs = now.getTime() - birthdate.getTime();
-    const leftMs = targetDate.getTime() - now.getTime();
+    const lived = differenceInWeeks(now, birthdate);
+    const left = differenceInWeeks(targetDate, now);
     return {
-      hoursLived: Math.max(0, Math.floor(livedMs / (1000 * 60 * 60))),
-      hoursLeft: Math.max(0, Math.floor(leftMs / (1000 * 60 * 60))),
+      weeksLived: Math.max(0, lived),
+      weeksLeft: Math.max(0, left),
     };
   }, [birthdate, targetAge]);
 
@@ -94,7 +93,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
               <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3">Lived</span>
                 <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="target-age-display">
-                  <span className="font-bold text-foreground normal-case tracking-normal">Weeks to age {targetAge}</span>
+                  <span className="font-bold text-foreground normal-case tracking-normal">Months to age {targetAge}</span>
                   {onChangeTargetAge && (
                     <button
                       onClick={onChangeTargetAge}
@@ -107,8 +106,8 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                 </div>
                 <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40 w-1/3 text-right">Left</span>
               </div>
-              <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
-                <span className="font-bold w-1/3">{weeksLived.toLocaleString()} Weeks ({percentLived}%)</span>
+              <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-months-stats">
+                <span className="font-bold w-1/3">{monthsLived.toLocaleString()} Months ({percentLived}%)</span>
                 <div className="w-1/3 flex items-center justify-center gap-1.5" data-testid="birthdate-display">
                   <span className="font-bold text-foreground normal-case tracking-normal">Born: {bornLabel}</span>
                   {onChangeBirthdate && (
@@ -121,18 +120,18 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                     </button>
                   )}
                 </div>
-                <span className="font-bold w-1/3 text-right">{weeksRemaining.toLocaleString()} Weeks ({percentRemaining}%)</span>
+                <span className="font-bold w-1/3 text-right">{monthsRemaining.toLocaleString()} Months ({percentRemaining}%)</span>
               </div>
-              {hoursLived !== null && hoursLeft !== null && (
-                <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-hours-stats">
-                  <span className="font-bold w-1/3">{hoursLived.toLocaleString()} Hours</span>
+              {weeksLived !== null && weeksLeft !== null && (
+                <div className="flex items-center text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
+                  <span className="font-bold w-1/3">{weeksLived.toLocaleString()} Weeks</span>
                   <div className="w-1/3 flex items-center justify-center gap-1.5">
                     <span className="font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
                     {onChangeBirthdate && (
                       <span className="text-[9px] invisible" aria-hidden="true">change</span>
                     )}
                   </div>
-                  <span className="font-bold w-1/3 text-right">{hoursLeft.toLocaleString()} Hours</span>
+                  <span className="font-bold w-1/3 text-right">{weeksLeft.toLocaleString()} Weeks</span>
                 </div>
               )}
             </>
@@ -156,37 +155,37 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
             <div className="w-full flex items-center gap-2 mb-1">
               <div className="shrink-0" style={{ width: '32px' }} />
               <div className="flex-1 flex items-center">
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0wks">Week 1</span>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-0mo">Month 1</span>
                 <div className="flex-1 mx-1.5 flex items-center">
                   <div className="flex-1 h-[1px] bg-muted-foreground/30" />
                   <svg width="8" height="10" viewBox="0 0 8 10" className="text-muted-foreground/50 shrink-0">
                     <path d="M0 0 L8 5 L0 10" fill="currentColor" />
                   </svg>
                 </div>
-                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-52wks">Week 52</span>
+                <span className="text-xs font-bold text-muted-foreground select-none" data-testid="label-12mo">Month 12</span>
               </div>
             </div>
 
             <div className="w-full space-y-[2px]">
               {Array.from({ length: targetAge }).map((_, yearIndex) => {
-            const yearStartWeek = yearIndex * WEEKS_PER_YEAR;
-            const yearEndWeek = yearStartWeek + WEEKS_PER_YEAR;
+            const yearStartMonth = yearIndex * MONTHS_PER_YEAR;
+            const yearEndMonth = yearStartMonth + MONTHS_PER_YEAR;
 
             let fillPercent: number;
             if (!birthdate) {
               fillPercent = 0;
-            } else if (weeksLived >= yearEndWeek) {
+            } else if (monthsLived >= yearEndMonth) {
               fillPercent = 100;
-            } else if (weeksLived <= yearStartWeek) {
+            } else if (monthsLived <= yearStartMonth) {
               fillPercent = 0;
             } else {
-              fillPercent = ((weeksLived - yearStartWeek) / WEEKS_PER_YEAR) * 100;
+              fillPercent = ((monthsLived - yearStartMonth) / MONTHS_PER_YEAR) * 100;
             }
 
             const isCurrentYear = yearIndex === currentYearIndex;
             const yearEvents = eventsByYear.get(yearIndex) || [];
 
-            const nowPercent = isCurrentYear ? (currentWeekInYear / WEEKS_PER_YEAR) * 100 : 0;
+            const nowPercent = isCurrentYear ? (currentMonthInYear / MONTHS_PER_YEAR) * 100 : 0;
             const barFillPercent = isCurrentYear ? nowPercent : fillPercent;
 
             return (
@@ -204,7 +203,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
 
                 <div className="relative flex-1 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 bg-transparent">
                   {barFillPercent > 0 && (() => {
-                    const lastFilledYear = Math.floor((weeksLived - 1) / WEEKS_PER_YEAR);
+                    const lastFilledYear = Math.floor((monthsLived - 1) / MONTHS_PER_YEAR);
                     const progress = lastFilledYear > 0 ? yearIndex / lastFilledYear : 1;
                     const lightness = Math.round(75 - (75 * progress));
                     const fillColor = `hsl(0, 0%, ${lightness}%)`;
@@ -238,7 +237,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs">
                         <p className="font-medium">You are here</p>
-                        <p className="text-muted-foreground">Age {yearIndex}, Week {currentWeekInYear + 1}</p>
+                        <p className="text-muted-foreground">Age {yearIndex}, Month {currentMonthInYear + 1}</p>
                       </TooltipContent>
                     </Tooltip>
                   )}
@@ -249,21 +248,21 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                         <div
                           className="absolute flex items-center justify-center"
                           style={{
-                            left: `${(evt.weekInYear / WEEKS_PER_YEAR) * 100}%`,
+                            left: `${(evt.monthInYear / MONTHS_PER_YEAR) * 100}%`,
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
                             width: '18px',
                             height: '18px',
                             zIndex: 10,
                           }}
-                          data-testid={`marker-event-${yearIndex}-${evt.weekInYear}`}
+                          data-testid={`marker-event-${yearIndex}-${evt.monthInYear}`}
                         >
                           <Star className="w-full h-full" style={{ color: '#dc2626', fill: '#dc2626' }} />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="top" className="text-xs max-w-[200px]">
                         <p className="font-medium">{evt.labels.join(", ")}</p>
-                        <p className="text-muted-foreground">Age {yearIndex}, Week {evt.weekInYear + 1}</p>
+                        <p className="text-muted-foreground">Age {yearIndex}, Month {evt.monthInYear + 1}</p>
                       </TooltipContent>
                     </Tooltip>
                   ))}
@@ -276,7 +275,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
         </div>
 
         <div className="mt-6 text-center text-sm text-muted-foreground space-y-1">
-          <p>1 row = 1 year · bar fills by weeks lived</p>
+          <p>1 row = 1 year · bar fills by months lived</p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <span className="flex items-center gap-1.5">
               <span className="inline-block w-8 h-[8px] rounded-sm border border-zinc-300 dark:border-zinc-600 overflow-hidden flex">
