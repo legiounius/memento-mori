@@ -1,0 +1,50 @@
+field,Author,Source,Quote
+Movie Peace,Mufasa,The Lion King (1994),"When we die, our bodies become the grass, and the antelope eat the grass. And so we are all connected in the great circle of life."
+Movie Peace,Mr. Incredible,Bob Parr,The Incredibles (2004),"We're all gonna die, all of us!"
+Movie Peace,Wil Andersen (John Wayne),The Cowboys (1972),"Death can come for you anyplace, anytime. It's never welcome, but if you've done all you can do... you're ready for him."
+Movie Peace,Obi-Wan Kenobi (Alec Guinness),Star Wars: A New Hope (1977),"If you strike me down, I shall become more powerful than you can possibly imagine."
+Movie Peace,Boromir (Sean Bean),The Lord of the Rings: The Fellowship of the Ring (2001),"I would have followed you, my brother... my captain... my king."
+Movie Peace,Inigo Montoya (Mandy Patinkin),The Princess Bride (1987),"Hello. My name is Inigo Montoya. You killed my father. Prepare to die." (repeated as mantra of mortality and vengeance)
+Movie Peace,Jack Dawson (Leonardo DiCaprio),Titanic (1997),"You must do me this honor. Promise me you'll survive. That you won't give up, no matter what happens, no matter how hopeless."
+Movie Peace,Hazel Grace Lancaster,The Fault in Our Stars (2014),"Some infinities are bigger than other infinities... You gave me a forever within the numbered days, and I'm grateful."
+Movie Peace,Lester Burnham (Kevin Spacey),American Beauty (1999),"I had always heard your entire life flashes in front of your eyes the second before you die. First of all, that one second isn't a second at all—it stretches on forever, like an ocean of time."
+Movie Peace,William Wallace (Mel Gibson),Braveheart (1995),"Every man dies. Not every man really lives."
+Movie Peace,Dracula (Bela Lugosi),Dracula (1931),"To die, to be really dead, that must be glorious."
+Movie Peace,The Joker (Heath Ledger),The Dark Knight (2008),"Introduce a little anarchy... and everything becomes chaos." (embracing inevitable destruction)
+Movie Peace,Doc Holliday (Val Kilmer),Tombstone (1993),"I'm your huckleberry." (in the face of death)
+Movie Peace,Dr. King Schultz (Christoph Waltz),Django Unchained (2012),"I'm sorry, I couldn't resist." (as last words)
+Movie Peace,Bing Bong (Richard Kind),Inside Out (2015),"Take her to the moon for me, okay?"
+Movie Peace,Carl Fredricksen (Ed Asner),Up (2009),"Thanks for the adventure — now go have a new one!"
+Movie Peace,Theoden (Bernard Hill),The Lord of the Rings: The Return of the King (2003),"Death! Death!"
+Movie Peace,Andy Dufresne (Tim Robbins),The Shawshank Redemption (1994),"Get busy living, or get busy dying."
+Movie Peace,Ellis "Red" Redding (Morgan Freeman),The Shawshank Redemption (1994),"I hope the Pacific is as blue as it has been in my dreams."
+Movie Peace,Vito Corleone (Marlon Brando),The Godfather (1972),"A man who doesn't spend time with his family can never be a real man." (amid mortality's shadow)
+Movie Peace,Forrest Gump (Tom Hanks),Forrest Gump (1994),"I don't know if we each have a destiny, or if we're all just floatin' around accidental-like on a breeze."
+Movie Peace,Captain Miller (Tom Hanks),Saving Private Ryan (1998),"Earn this."
+Movie Peace,E.T. (voice effects),E.T. the Extra-Terrestrial (1982),"I'll be right here." (heart gesture as farewell)
+Movie Peace,John Coffey (Michael Clarke Duncan),The Green Mile (1999),"I'm tired, boss. Tired of bein' on the road, lonely as a sparrow in the rain. Tired of not ever having me a buddy to be with."
+Movie Peace,Inigo Montoya (Mandy Patinkin),The Princess Bride (1987),"You seem a decent fellow. I hate to kill you."
+Movie Peace,Roy Batty (Rutger Hauer),Blade Runner (1982),"I've seen things you people wouldn't believe... All those moments will be lost in time, like tears in rain. Time to die."
+Movie Peace,Maximus (Russell Crowe),Gladiator (2000),"What we do in life echoes in eternity."
+Movie Peace,Gandalf (Ian McKellen),The Lord of the Rings: The Fellowship of the Ring (2001),"End? No, the journey doesn't end here. Death is just another path, one that we all must take."
+Movie Peace,Yoda (Frank Oz),Star Wars: The Empire Strikes Back (1980),"Luminous beings are we, not this crude matter." (on transcending physical death)
+Movie Peace,Professor Albus Dumbledore (Richard Harris),Harry Potter and the Sorcerer's Stone (2001),"To the well-organized mind, death is but the next great adventure."
+Movie Peace,Atticus Finch (Gregory Peck),To Kill a Mockingbird (1962),"The one thing that doesn't abide by majority rule is a person's conscience."
+Movie Peace,Indiana Jones (Harrison Ford),Indiana Jones and the Last Crusade (1989),"Only the penitent man will pass." (facing mortality's test)
+Movie Peace,The Dude (Jeff Bridges),The Big Lebowski (1998),"The Dude abides." (acceptance amid chaos and loss)
+Movie Peace,Travis Bickle (Robert De Niro),Taxi Driver (1976),"Someday a real rain will come and wash all this scum off the streets." (apocalyptic view of cleansing/death)
+Movie Peace,Randle McMurphy (Jack Nicholson),One Flew Over the Cuckoo's Nest (1975),"What do you think you are, for Chrissake, crazy or somethin'?"
+Movie Peace,Joe Black (Brad Pitt),Meet Joe Black (1998),"I'm not afraid of dying. I'm afraid I haven't been alive enough."
+Movie Peace,Landon Carter (Shane West),A Walk to Remember (2002),"Love is like the wind, you can't see it but you can feel it."
+Movie Peace,Frank (Steve Carell),Little Miss Sunshine (2006),"Those were the best years of his life, ’cause they made him who he was."
+Movie Peace,Gimli (John Rhys-Davies),The Lord of the Rings: The Two Towers (2002),"Certainty of death. Small chance of success. What are we waiting for?"
+Movie Peace,The Narrator (Edward Norton),Fight Club (1999),"It's only after we've lost everything that we're free to do anything."
+Movie Peace,Tyler Durden (Brad Pitt),Fight Club (1999),"You are not your job, you're not how much money you have in the bank."
+Movie Peace,Andrew Largeman (Zach Braff),Garden State (2004),"You know that point in your life when you realize the house you grew up in isn't really your home anymore?"
+Movie Peace,Simba,The Lion King (1994),"Remember who you are."
+Movie Peace,Obi-Wan Kenobi (Ewan McGregor),Star Wars: Revenge of the Sith (2005),"You were my brother, Anakin! I loved you!"
+Movie Peace,Logan (Hugh Jackman),Logan (2017),"So we finish it. There's no living with it. I know what I've done."
+Movie Peace,Thanos (Josh Brolin),Avengers: Infinity War (2018),"I am... inevitable."
+Movie Peace,Deckard (Harrison Ford),Blade Runner (1982),"Quite an experience to live in fear, isn't it? That's what it is to be a slave."
+Movie Peace,Colonel Kurtz (Marlon Brando),Apocalypse Now (1979),"The horror... the horror."
+Movie Peace,Antonius Block (Max von Sydow),The Seventh Seal (1957),"Who are you?" Death: "I am Death."

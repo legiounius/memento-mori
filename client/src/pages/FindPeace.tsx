@@ -355,6 +355,12 @@ export default function FindPeace() {
             )}
           </div>
 
+          {entries.length > 0 && (
+            <p className="text-[10px] text-muted-foreground/50 mt-3 font-bold tracking-wide" data-testid="text-total-quotes">
+              {entries.length} wise thoughts and counting
+            </p>
+          )}
+
           <AnimatePresence mode="wait">
             {currentEntry && (
               <motion.div
