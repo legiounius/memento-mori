@@ -128,7 +128,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel, o
                   <div className="w-1/3 flex items-center justify-center gap-1.5">
                     <span className="font-bold text-foreground normal-case tracking-normal" data-testid="text-death-date">Dead: {deadLabel}</span>
                     {onChangeBirthdate && (
-                      <span className="text-[9px] invisible" aria-hidden="true">change</span>
+                      <span className="text-[9px] invisible" aria-hidden="true">chang</span>
                     )}
                   </div>
                   <span className="font-bold w-1/3 text-right">{weeksLeft.toLocaleString()} Weeks</span>
