@@ -105,9 +105,16 @@ export default function FindPeace() {
   }, []);
 
   const [entries, setEntries] = useState<PeaceEntry[]>([]);
-  const [currentEntry, setCurrentEntry] = useState<PeaceEntry | null>(null);
+  const [currentEntry, setCurrentEntry] = useState<(PeaceEntry & { idx: number }) | null>(null);
   const [passageKey, setPassageKey] = useState(0);
   const [seenMap, setSeenMap] = useState<Record<string, number[]>>({});
+  const [lastType, setLastType] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    try {
+      const stored = localStorage.getItem('peace_favorites');
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  });
 
   useEffect(() => {
     fetch('/peace_archive.csv')
@@ -135,7 +142,33 @@ export default function FindPeace() {
     return Array.from(seen).sort();
   }, [entries]);
 
+  const isFavorited = currentEntry ? favorites.includes(currentEntry.idx) : false;
+
+  const toggleFavorite = useCallback(() => {
+    if (!currentEntry) return;
+    const idx = currentEntry.idx;
+    let newFavs: number[];
+    if (favorites.includes(idx)) {
+      newFavs = favorites.filter(f => f !== idx);
+    } else {
+      newFavs = [...favorites, idx];
+    }
+    setFavorites(newFavs);
+    try { localStorage.setItem('peace_favorites', JSON.stringify(newFavs)); } catch {}
+  }, [currentEntry, favorites]);
+
   const handleFindPeace = useCallback((type: string) => {
+    if (type === 'My Favorites') {
+      if (favorites.length === 0 || entries.length === 0) return;
+      const pool = favorites.filter(idx => idx < entries.length && entries[idx]).map(idx => ({ ...entries[idx], idx })).filter(e => e.text);
+      if (pool.length === 0) return;
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      setCurrentEntry(pick);
+      setLastType(type);
+      setPassageKey(k => k + 1);
+      return;
+    }
+
     const filtered = entries.map((e, i) => ({ ...e, idx: i })).filter(e => e.type === type);
     if (filtered.length === 0) return;
 
@@ -152,8 +185,9 @@ export default function FindPeace() {
     try { localStorage.setItem('peace_seen', JSON.stringify(newMap)); } catch {}
 
     setCurrentEntry(pick);
+    setLastType(type);
     setPassageKey(k => k + 1);
-  }, [entries, seenMap]);
+  }, [entries, seenMap, favorites]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
@@ -286,6 +320,20 @@ export default function FindPeace() {
                 <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-existentialist-count">({typeCounts['Existentialist Peace']})</span>
               )}
             </button>
+
+            {favorites.length > 0 && entries.length > 0 && (
+              <button
+                onClick={() => handleFindPeace('My Favorites')}
+                className="flex flex-col items-center gap-2 group cursor-pointer"
+                data-testid="button-my-favorites"
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-red-400 transition-colors">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">My Favorites</span>
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-favorites-count">({favorites.length})</span>
+              </button>
+            )}
           </div>
 
           <AnimatePresence mode="wait">
@@ -305,6 +353,27 @@ export default function FindPeace() {
                 <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 mt-4" data-testid="text-passage-ref">
                   — {currentEntry.author}, {currentEntry.source} —
                 </p>
+                <div className="flex items-center justify-center gap-4 mt-5">
+                  <button
+                    onClick={toggleFavorite}
+                    className="group cursor-pointer flex items-center gap-1"
+                    title={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                    data-testid="button-toggle-favorite"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill={isFavorited ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" className={isFavorited ? "text-red-500" : "text-muted-foreground/40 group-hover:text-red-400 transition-colors"}>
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  </button>
+                  {lastType && (
+                    <button
+                      onClick={() => handleFindPeace(lastType)}
+                      className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/40 hover:text-foreground transition-colors cursor-pointer"
+                      data-testid="button-give-me-another"
+                    >
+                      Give Me Another
+                    </button>
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
