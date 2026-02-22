@@ -115,12 +115,13 @@ export default function FindPeace() {
       .catch(() => {});
   }, []);
 
-  const handleFindPeace = useCallback(() => {
-    if (entries.length === 0) return;
+  const handleFindPeace = useCallback((type: string) => {
+    const filtered = entries.filter(e => e.type === type);
+    if (filtered.length === 0) return;
     let entry;
     do {
-      entry = entries[Math.floor(Math.random() * entries.length)];
-    } while (entry.source === currentEntry?.source && entry.text === currentEntry?.text && entries.length > 1);
+      entry = filtered[Math.floor(Math.random() * filtered.length)];
+    } while (entry.source === currentEntry?.source && entry.text === currentEntry?.text && filtered.length > 1);
     setCurrentEntry(entry);
     setPassageKey(k => k + 1);
   }, [entries, currentEntry]);
@@ -203,14 +204,38 @@ export default function FindPeace() {
         className="w-full max-w-[600px] mx-auto px-4 md:px-8 flex-1 flex flex-col items-center"
       >
         <div className="text-center w-full pt-6">
-          <Button
-            variant="outline"
-            onClick={handleFindPeace}
-            className="px-8 py-4 h-auto text-sm font-bold tracking-widest uppercase rounded-none"
-            data-testid="button-find-peace"
-          >
-            Find Stoic Peace
-          </Button>
+          <div className="flex items-center justify-center gap-6">
+            <button
+              onClick={() => handleFindPeace('Stoic Peace')}
+              className="flex flex-col items-center gap-2 group cursor-pointer"
+              data-testid="button-stoic-peace"
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Stoic Peace</span>
+            </button>
+
+            <button
+              onClick={() => handleFindPeace('Religious Peace')}
+              className="flex flex-col items-center gap-2 group cursor-pointer"
+              data-testid="button-religious-peace"
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
+                <line x1="12" y1="2" x2="12" y2="22" />
+                <line x1="6" y1="8" x2="18" y2="8" />
+              </svg>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Religious Peace</span>
+            </button>
+          </div>
 
           <AnimatePresence mode="wait">
             {currentEntry && (
