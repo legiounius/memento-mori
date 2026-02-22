@@ -155,7 +155,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                 data-testid={`year-row-${yearIndex}`}
               >
                 <div
-                  className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-bold text-muted-foreground select-none text-right shrink-0`}
+                  className={`${yearIndex === 0 ? 'text-[9px]' : 'text-[10px]'} font-extrabold text-foreground select-none text-right shrink-0`}
                   style={{ width: '28px' }}
                 >
                   {yearIndex === 0 ? 'B' : yearIndex}
@@ -202,9 +202,11 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                         <Tooltip key={`dot-${yearIndex}-${monthIndex}`}>
                           <TooltipTrigger asChild>
                             <div
+                              className="rounded-full"
                               style={{
                                 width: '8px',
                                 height: '8px',
+                                border: '2.5px solid #dc2626',
                                 backgroundColor: 'black',
                               }}
                               data-testid="marker-current-month"
@@ -281,7 +283,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
               <span className="text-xs">Remaining</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block w-[8px] h-[8px]" style={{ backgroundColor: 'black' }} />
+              <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ border: '2.5px solid #dc2626', backgroundColor: 'black' }} />
               <span className="text-xs">Now</span>
             </span>
           </div>
