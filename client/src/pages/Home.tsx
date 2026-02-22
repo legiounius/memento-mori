@@ -65,7 +65,7 @@ function formatDate(iso: string) {
 }
 
 function formatDateFull(date: Date) {
-  return `${MONTHS_FULL[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  return `${MONTHS_SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 }
 
 export default function Home() {
@@ -283,7 +283,7 @@ export default function Home() {
             )}
             {editingTargetAge ? (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-foreground">Visualizing to age</span>
+                <span className="text-sm text-foreground">Your life in weeks to age</span>
                 <Select
                   value={String(targetAge)}
                   onValueChange={(v) => {
@@ -309,7 +309,7 @@ export default function Home() {
             ) : (
               <div className="flex items-center gap-2" data-testid="target-age-display">
                 <span className="text-sm font-bold text-foreground">
-                  Visualizing your life in weeks to age {targetAge}
+                  Your life in weeks to age {targetAge}
                 </span>
                 <button
                   onClick={() => setEditingTargetAge(true)}
