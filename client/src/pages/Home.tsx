@@ -138,6 +138,13 @@ export default function Home() {
     return Math.max(0, differenceInMonths(targetDate, new Date()));
   }, [birthdate, targetAge]);
 
+  const weeksLived = useMemo(() => {
+    if (!birthdate) return 0;
+    return Math.max(0, differenceInWeeks(new Date(), birthdate));
+  }, [birthdate]);
+
+  const brandingFooter = `\nCreated With\nMemento Mori App — todieisto.live\nLive Aware`;
+
   const handleShareLife = async () => {
     if (!chartRef.current || !birthdate) return;
     setIsGeneratingPdf(true);
@@ -182,7 +189,7 @@ export default function Home() {
         try {
           await navigator.share({
             title: 'My Life Chart — Memento Mori',
-            text: 'My life visualized. Remember you must die. Live accordingly.\n\ntodieisto.live',
+            text: 'My life visualized.\n\nCreated With\nMemento Mori App — todieisto.live\nLive Aware',
             files: [file],
           });
         } catch (e: any) {
@@ -199,7 +206,7 @@ export default function Home() {
   };
 
   const handleBeKind = () => {
-    const message = `Be kind to me, I only have ${weeksRemaining.toLocaleString()} weeks to live.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    const message = `Be kind to me, I only have ${weeksRemaining.toLocaleString()} weeks to live.${brandingFooter}`;
     shareTextMessage('Be Kind To Me — Memento Mori', message);
   };
 
@@ -218,13 +225,18 @@ export default function Home() {
   };
 
   const handleLetsNotFight = () => {
-    const message = `Let's not fight. I only have ${weeksRemaining.toLocaleString()} weeks left to live.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    const message = `Let's not fight. I only have ${weeksRemaining.toLocaleString()} weeks left to live.${brandingFooter}`;
     shareTextMessage("Let's Not Fight — Memento Mori", message);
   };
 
   const handleThinkPositive = () => {
-    const message = `Think positive. We only have about ${monthsRemaining.toLocaleString()} months left to deal with this shit.\n\nCreated using the Memento Mori app — todieisto.live\nRemember you must die. Live accordingly.`;
+    const message = `Think positive. We only have about ${monthsRemaining.toLocaleString()} months left to deal with this shit.${brandingFooter}`;
     shareTextMessage('Think Positive — Memento Mori', message);
+  };
+
+  const handleBePatient = () => {
+    const message = `Be patient. I've been dealing with this shit for over ${weeksLived.toLocaleString()} weeks of my life.${brandingFooter}`;
+    shareTextMessage('Be Patient — Memento Mori', message);
   };
 
   const downloadFile = (file: File) => {
@@ -460,6 +472,7 @@ export default function Home() {
                   <button onClick={() => { handleBeKind(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-be-kind">Be Kind To Me</button>
                   <button onClick={() => { handleLetsNotFight(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-lets-not-fight">Lets Not Fight</button>
                   <button onClick={() => { handleThinkPositive(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-think-positive">Think Positive</button>
+                  <button onClick={() => { handleBePatient(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-be-patient">Be Patient...</button>
                 </div>
               )}
             </div>
