@@ -361,7 +361,7 @@ export default function Home() {
                     <div className="flex items-center gap-3 min-w-0">
                       {(() => {
                         const evtColor = EVENT_TYPES.find(t => t.value === event.type)?.color || '#2563eb';
-                        return <span className="inline-block w-[12px] h-[12px] rounded-full shrink-0" style={{ border: `2.5px solid ${evtColor}`, backgroundColor: 'black' }} />;
+                        return <span className="inline-block w-[12px] h-[12px] rounded-full shrink-0" style={{ backgroundColor: evtColor }} />;
                       })()}
                       <span className="text-sm font-medium truncate" data-testid={`event-label-${event.id}`}>
                         {event.label}

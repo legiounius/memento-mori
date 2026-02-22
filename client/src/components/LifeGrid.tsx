@@ -168,10 +168,9 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
                             <div
                               className="rounded-full"
                               style={{
-                                width: '8px',
-                                height: '8px',
-                                border: `2.5px solid ${evtColor}`,
-                                backgroundColor: isLived ? (dotColor || 'black') : 'transparent',
+                                width: '12px',
+                                height: '12px',
+                                backgroundColor: evtColor,
                               }}
                               data-testid={`marker-event-${yearIndex}-${monthIndex}`}
                             />
@@ -267,7 +266,7 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           <div className="flex items-center justify-center gap-4 flex-wrap">
             {EVENT_TYPES.map((t) => (
               <span key={t.value} className="flex items-center gap-1">
-                <span className="inline-block w-[10px] h-[10px] rounded-full" style={{ border: `2.5px solid ${t.color}`, backgroundColor: 'transparent' }} />
+                <span className="inline-block w-[12px] h-[12px] rounded-full" style={{ backgroundColor: t.color }} />
                 <span className="text-xs">{t.label}</span>
               </span>
             ))}
