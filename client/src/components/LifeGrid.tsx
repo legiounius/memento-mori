@@ -87,14 +87,18 @@ export function LifeGrid({ birthdate, targetAge, events }: LifeGridProps) {
         <div className="mb-4 text-sm text-muted-foreground uppercase tracking-widest border-b border-border pb-2 w-full space-y-0.5">
           {birthdate ? (
             <>
-              <div className="flex justify-between" data-testid="text-weeks-stats">
-                <span className="font-bold">{weeksLived.toLocaleString()} Weeks Lived ({percentLived}%)</span>
-                <span className="font-bold">{weeksRemaining.toLocaleString()} Weeks Left ({percentRemaining}%)</span>
+              <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-column-headers">
+                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40">Lived</span>
+                <span className="font-bold underline underline-offset-4 decoration-muted-foreground/40">Left</span>
+              </div>
+              <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-weeks-stats">
+                <span className="font-bold">{weeksLived.toLocaleString()} Weeks ({percentLived}%)</span>
+                <span className="font-bold">{weeksRemaining.toLocaleString()} Weeks ({percentRemaining}%)</span>
               </div>
               {hoursLived !== null && hoursLeft !== null && (
-                <div className="flex justify-between" data-testid="text-hours-stats">
-                  <span className="font-bold">{hoursLived.toLocaleString()} Hours Lived</span>
-                  <span className="font-bold">{hoursLeft.toLocaleString()} Hours Left</span>
+                <div className="flex justify-between text-[11px] tracking-widest uppercase" data-testid="text-hours-stats">
+                  <span className="font-bold">{hoursLived.toLocaleString()} Hours</span>
+                  <span className="font-bold">{hoursLeft.toLocaleString()} Hours</span>
                 </div>
               )}
             </>

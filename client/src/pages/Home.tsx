@@ -249,7 +249,7 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
             Memento Mori
           </h1>
-          <div className="flex items-center gap-1.5 mt-0.5">
+          <div className="flex items-center gap-1.5 mt-0.5" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
               src={skullImage}
@@ -297,7 +297,7 @@ export default function Home() {
                   </button>
                 </div>
                 <span className="text-sm font-bold text-foreground" data-testid="text-death-date">
-                  Dead: {(() => {
+                  Dead:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(() => {
                     const d = new Date(birthdate);
                     d.setFullYear(d.getFullYear() + targetAge);
                     return formatDateFull(d);
