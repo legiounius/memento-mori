@@ -314,7 +314,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
-            className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
+            className="w-full pt-6 flex flex-col items-center space-y-6"
           >
             <div className="flex flex-col items-center space-y-4">
               <p className="text-sm text-foreground/70 text-center">
