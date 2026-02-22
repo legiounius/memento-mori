@@ -125,6 +125,19 @@ export default function FindPeace() {
     try { localStorage.setItem('peace_favorites', JSON.stringify(newFavs)); } catch {}
   }, [currentEntry, favorites]);
 
+  const handleShare = useCallback(() => {
+    if (!currentEntry) return;
+    const text = `"${currentEntry.text}"\n\n— ${currentEntry.author}, ${currentEntry.source}`;
+    const shareData = { title: 'Memento Mori', text };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {});
+    } else {
+      const subject = encodeURIComponent('A quote worth sharing — Memento Mori');
+      const body = encodeURIComponent(text);
+      window.open(`mailto:?subject=${subject}&body=${body}`, '_self');
+    }
+  }, [currentEntry]);
+
   const handleFindPeace = useCallback((type: string) => {
     if (type === 'My Favorites') {
       if (favorites.length === 0 || entries.length === 0) return;
@@ -339,6 +352,20 @@ export default function FindPeace() {
                     <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">
                       {isFavorited ? "Saved" : "I Love This"}
                     </span>
+                  </button>
+                  <button
+                    onClick={handleShare}
+                    className="group cursor-pointer border border-muted-foreground/20 hover:border-foreground/30 rounded px-4 py-2 flex items-center gap-2 transition-all"
+                    data-testid="button-share-quote"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/50 group-hover:text-foreground transition-colors">
+                      <circle cx="18" cy="5" r="3" />
+                      <circle cx="6" cy="12" r="3" />
+                      <circle cx="18" cy="19" r="3" />
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                    </svg>
+                    <span className="text-[8px] font-bold tracking-widest uppercase text-muted-foreground/50 group-hover:text-foreground transition-colors">Share This Quote</span>
                   </button>
                   {lastType && (
                     <button

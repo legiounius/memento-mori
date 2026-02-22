@@ -54,7 +54,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isReturningUser && showSplash) {
-      const timer = setTimeout(() => setShowSplash(false), 4000);
+      const timer = setTimeout(() => setShowSplash(false), 2000);
       return () => clearTimeout(timer);
     }
   }, [isReturningUser, showSplash]);
@@ -117,13 +117,13 @@ export default function Home() {
           data-testid="img-skull-returning"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.06, scale: 1 }}
-          transition={{ duration: 2.5, ease: "easeOut" }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
         />
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-foreground tracking-tight text-center relative z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
+          transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
         >
           Memento<br />Mori
         </motion.h1>
@@ -142,7 +142,7 @@ export default function Home() {
           data-testid="img-skull-splash"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 0.06, scale: 1 }}
-          transition={{ duration: 5, ease: "easeOut" }}
+          transition={{ duration: 2.5, ease: "easeOut" }}
         />
 
         <div className="flex flex-col items-center space-y-6 max-w-md w-full relative z-10">
@@ -150,7 +150,7 @@ export default function Home() {
             className="text-4xl md:text-5xl font-bold text-foreground tracking-tight text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 2, ease: "easeOut" }}
+            transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
           >
             Memento<br />Mori
           </motion.h1>
@@ -158,7 +158,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.8, duration: 1.5, ease: "easeOut" }}
+            transition={{ delay: 1.4, duration: 0.8, ease: "easeOut" }}
             className="w-full border-t border-border pt-6 flex flex-col items-center space-y-6"
           >
             <div className="flex flex-col items-center space-y-4">
