@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+
 import skullImage from "@assets/skull_minimal.png";
 
 interface PeaceEntry {
@@ -107,24 +107,47 @@ export default function FindPeace() {
   const [entries, setEntries] = useState<PeaceEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState<PeaceEntry | null>(null);
   const [passageKey, setPassageKey] = useState(0);
+  const [seenMap, setSeenMap] = useState<Record<string, number[]>>({});
 
   useEffect(() => {
     fetch('/peace_archive.csv')
       .then(r => r.text())
-      .then(csv => setEntries(parseCSV(csv)))
+      .then(csv => {
+        const parsed = parseCSV(csv);
+        setEntries(parsed);
+        try {
+          const stored = localStorage.getItem('peace_seen');
+          if (stored) setSeenMap(JSON.parse(stored));
+        } catch {}
+      })
       .catch(() => {});
   }, []);
 
+  const typeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    entries.forEach(e => { counts[e.type] = (counts[e.type] || 0) + 1; });
+    return counts;
+  }, [entries]);
+
   const handleFindPeace = useCallback((type: string) => {
-    const filtered = entries.filter(e => e.type === type);
+    const filtered = entries.map((e, i) => ({ ...e, idx: i })).filter(e => e.type === type);
     if (filtered.length === 0) return;
-    let entry;
-    do {
-      entry = filtered[Math.floor(Math.random() * filtered.length)];
-    } while (entry.source === currentEntry?.source && entry.text === currentEntry?.text && filtered.length > 1);
-    setCurrentEntry(entry);
+
+    let seen = seenMap[type] || [];
+    if (seen.length >= filtered.length) seen = [];
+
+    const unseen = filtered.filter(e => !seen.includes(e.idx));
+    const pool = unseen.length > 0 ? unseen : filtered;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+
+    const newSeen = [...seen, pick.idx];
+    const newMap = { ...seenMap, [type]: newSeen };
+    setSeenMap(newMap);
+    try { localStorage.setItem('peace_seen', JSON.stringify(newMap)); } catch {}
+
+    setCurrentEntry(pick);
     setPassageKey(k => k + 1);
-  }, [entries, currentEntry]);
+  }, [entries, seenMap]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center relative">
@@ -222,6 +245,9 @@ export default function FindPeace() {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
               </svg>
               <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Stoic Peace</span>
+              {typeCounts['Stoic Peace'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-stoic-count">({typeCounts['Stoic Peace']})</span>
+              )}
             </button>
 
             <button
@@ -234,6 +260,9 @@ export default function FindPeace() {
                 <line x1="6" y1="8" x2="18" y2="8" />
               </svg>
               <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Religious Peace</span>
+              {typeCounts['Religious Peace'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-religious-count">({typeCounts['Religious Peace']})</span>
+              )}
             </button>
           </div>
 
