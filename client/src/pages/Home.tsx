@@ -230,13 +230,27 @@ export default function Home() {
   };
 
   const handleThinkPositive = () => {
-    const message = `Think positive. We only have about ${monthsRemaining.toLocaleString()} months left to deal with this shit.${brandingFooter}`;
+    const message = `Think positive. We only have about ${monthsRemaining.toLocaleString()} months left to deal with this sh*t.${brandingFooter}`;
     shareTextMessage('Think Positive — Memento Mori', message);
   };
 
   const handleBePatient = () => {
-    const message = `Be patient. I've been dealing with this shit for over ${weeksLived.toLocaleString()} weeks of my life.${brandingFooter}`;
+    const message = `Be patient. I've been dealing with this sh*t for over ${weeksLived.toLocaleString()} weeks of my life.${brandingFooter}`;
     shareTextMessage('Be Patient — Memento Mori', message);
+  };
+
+  const weekendsRemaining = useMemo(() => {
+    return Math.floor(weeksRemaining);
+  }, [weeksRemaining]);
+
+  const handleHappyHour = () => {
+    const message = `Lets have happy hour - I only have about ${weekendsRemaining.toLocaleString()} more weekends until I die.${brandingFooter}`;
+    shareTextMessage('Happy Hour — Memento Mori', message);
+  };
+
+  const handleNoTime = () => {
+    const message = `Sorry, I dont have time for this - I only have about ${monthsRemaining.toLocaleString()} months left in my life.${brandingFooter}`;
+    shareTextMessage('No Time For This — Memento Mori', message);
   };
 
   const downloadFile = (file: File) => {
@@ -473,6 +487,8 @@ export default function Home() {
                   <button onClick={() => { handleLetsNotFight(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-lets-not-fight">Lets Not Fight...</button>
                   <button onClick={() => { handleThinkPositive(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-think-positive">Think Positive...</button>
                   <button onClick={() => { handleBePatient(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-be-patient">Be Patient...</button>
+                  <button onClick={() => { handleHappyHour(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-happy-hour">Happy Hour...</button>
+                  <button onClick={() => { handleNoTime(); setMessageOpen(false); }} className="w-full text-left px-4 py-1.5 text-[10px] tracking-widest uppercase hover:bg-foreground/5 transition-colors" data-testid="message-no-time">No Time For This...</button>
                 </div>
               )}
             </div>
@@ -481,7 +497,7 @@ export default function Home() {
               className="text-[11px] font-bold text-foreground/70 hover:text-foreground transition-colors tracking-widest uppercase"
               data-testid="link-share-my-life"
             >
-              Share My Life
+              Share My Dot Plot
             </button>
           </div>
         </motion.div>
