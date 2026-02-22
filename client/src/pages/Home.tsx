@@ -135,7 +135,7 @@ export default function Home() {
     setBirthdate(date);
   };
 
-  const ages = Array.from({ length: 41 }, (_, i) => 60 + i);
+  const ages = Array.from({ length: 120 }, (_, i) => i + 1);
 
   if (isReturningUser && showSplash) {
     return (

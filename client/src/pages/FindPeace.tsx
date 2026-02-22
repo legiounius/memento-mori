@@ -129,6 +129,12 @@ export default function FindPeace() {
     return counts;
   }, [entries]);
 
+  const uniqueAuthors = useMemo(() => {
+    const seen = new Set<string>();
+    entries.forEach(e => { if (e.author) seen.add(e.author); });
+    return Array.from(seen).sort();
+  }, [entries]);
+
   const handleFindPeace = useCallback((type: string) => {
     const filtered = entries.map((e, i) => ({ ...e, idx: i })).filter(e => e.type === type);
     if (filtered.length === 0) return;
@@ -264,6 +270,22 @@ export default function FindPeace() {
                 <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-religious-count">({typeCounts['Religious Peace']})</span>
               )}
             </button>
+
+            <button
+              onClick={() => handleFindPeace('Existentialist Peace')}
+              className="flex flex-col items-center gap-2 group cursor-pointer"
+              data-testid="button-existentialist-peace"
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-muted-foreground/60 group-hover:text-foreground transition-colors">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M12 12v6" />
+                <path d="M9 22h6" />
+              </svg>
+              <span className="text-[9px] font-bold tracking-widest uppercase text-muted-foreground/60 group-hover:text-foreground transition-colors">Existentialist Peace</span>
+              {typeCounts['Existentialist Peace'] > 0 && (
+                <span className="text-[8px] tracking-wider text-muted-foreground/40 -mt-1" data-testid="text-existentialist-count">({typeCounts['Existentialist Peace']})</span>
+              )}
+            </button>
           </div>
 
           <AnimatePresence mode="wait">
@@ -287,6 +309,28 @@ export default function FindPeace() {
             )}
           </AnimatePresence>
         </div>
+
+        {uniqueAuthors.length > 0 && (
+          <div className="w-full mt-12 mb-8">
+            <div className="w-full border-t border-border/30 mb-6" />
+            <div className="w-full overflow-hidden" data-testid="text-authors-banner">
+              <div className="inline-flex animate-scroll-authors whitespace-nowrap">
+                {[0, 1].map(copy => (
+                  <span key={copy} className="text-[9px] text-muted-foreground/40 leading-relaxed px-4">
+                    {uniqueAuthors.map((author, i) => (
+                      <span key={`${copy}-${author}`}>
+                        {author}{i < uniqueAuthors.length - 1 && <span className="mx-1.5">&middot;</span>}
+                      </span>
+                    ))}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="text-[8px] text-muted-foreground/30 text-center mt-4 italic" data-testid="text-disclaimer">
+              All sources of wisdom are in the public domain and do not infringe copyright laws
+            </p>
+          </div>
+        )}
       </motion.main>
 
       <div className="fixed bottom-2 left-3 text-[9px] text-muted-foreground/50 select-none" data-testid="text-copyright">
