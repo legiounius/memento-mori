@@ -247,19 +247,17 @@ export function LifeGrid({ birthdate, targetAge, events, bornLabel, deadLabel }:
           };
 
           return (
-            <div className="flex justify-center w-full">
-              <div className="inline-flex gap-2">
-                <div className="min-w-0">
-                  {renderColumnHeader('left')}
-                  <div className="space-y-[2px]">
-                    {leftYears.map(renderYearRow)}
-                  </div>
+            <div className="w-full flex gap-2">
+              <div className="flex-1 min-w-0">
+                {renderColumnHeader('left')}
+                <div className="w-full space-y-[2px]">
+                  {leftYears.map(renderYearRow)}
                 </div>
-                <div className="min-w-0">
-                  {renderColumnHeader('right')}
-                  <div className="space-y-[2px]">
-                    {rightYears.map(renderYearRow)}
-                  </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                {renderColumnHeader('right')}
+                <div className="w-full space-y-[2px]">
+                  {rightYears.map(renderYearRow)}
                 </div>
               </div>
             </div>
