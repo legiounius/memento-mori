@@ -151,33 +151,54 @@ export default function Home() {
     if (!chartRef.current || !birthdate) return;
     setIsGeneratingPdf(true);
     try {
-      const canvas = await html2canvas(chartRef.current, {
+      const el = chartRef.current;
+      const origWidth = el.style.width;
+      const origMinWidth = el.style.minWidth;
+      el.style.width = '900px';
+      el.style.minWidth = '900px';
+
+      const canvas = await html2canvas(el, {
         backgroundColor: '#ffffff',
-        scale: 2,
+        scale: 3,
         useCORS: true,
         logging: false,
+        width: 900,
+        windowWidth: 900,
       });
+
+      el.style.width = origWidth;
+      el.style.minWidth = origMinWidth;
 
       const imgData = canvas.toDataURL('image/png');
       const chartAspect = canvas.width / canvas.height;
 
-      const pdfWidth = 11;
-      const pdfHeight = 8.5;
-      const margin = 0.3;
+      const isWide = chartAspect >= 1;
+      const orientation = isWide ? 'landscape' as const : 'portrait' as const;
+      const pdfWidth = isWide ? 11 : 8.5;
+      const pdfHeight = isWide ? 8.5 : 11;
+      const margin = 0.5;
+      const titleSpace = 0.6;
       const footerSpace = 0.5;
       const availW = pdfWidth - margin * 2;
-      const availH = pdfHeight - margin * 2 - footerSpace;
+      const availH = pdfHeight - margin - titleSpace - footerSpace;
 
       const imgW = Math.min(availW, availH * chartAspect);
       const imgH = imgW / chartAspect;
       const offsetX = margin + (availW - imgW) / 2;
-      const offsetY = margin + (availH - imgH) / 2;
+      const offsetY = titleSpace + (availH - imgH) / 2;
 
-      const doc = new jsPDF({ orientation: 'landscape', unit: 'in', format: 'letter' });
+      const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(16);
+      doc.text('Memento Mori', pdfWidth / 2, margin + 0.15, { align: 'center' });
+      doc.setFontSize(8);
+      doc.setTextColor(120, 120, 120);
+      doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.35, { align: 'center' });
 
       doc.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
 
-      const footerY = pdfHeight - footerSpace + 0.15;
+      const footerY = pdfHeight - footerSpace + 0.2;
       doc.setTextColor(161, 161, 170);
       doc.setFontSize(7);
       doc.text('Memento Mori  •  todieisto.live  •  Remember You Must Die', pdfWidth / 2, footerY, { align: 'center' });
