@@ -16,8 +16,7 @@ import EventForm from '../components/EventForm';
 import GravestoneBanner from '../components/GravestoneBanner';
 import { RootStackParamList } from '../navigation';
 
-const skullBg = require('../../assets/images/skull_bg.jpg');
-const skullIcon = require('../../assets/images/skull_bg.jpg');
+const skullImg = require('../../assets/images/skull_minimal.png');
 
 type NavProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -126,10 +125,9 @@ export default function HomeScreen() {
   if (birthdate && showSplash) {
     return (
       <View style={styles.splashContainer}>
-        <Animated.Image
-          source={skullBg}
-          style={[styles.splashBg, { opacity: splashOpacity, transform: [{ scale: splashScale }] }]}
-        />
+        <Animated.View style={{ alignItems: 'center', opacity: splashOpacity, transform: [{ scale: splashScale }] }}>
+          <Image source={skullImg} style={styles.splashSkull} />
+        </Animated.View>
         <Animated.Text style={[typography.h1, styles.splashTitle, { opacity: titleOpacity }]}>
           Memento{'\n'}Mori
         </Animated.Text>
@@ -139,55 +137,51 @@ export default function HomeScreen() {
 
   if (!birthdate) {
     return (
-      <View style={styles.splashContainer}>
-        <Animated.Image
-          source={skullBg}
-          style={[styles.splashBg, { opacity: splashOpacity, transform: [{ scale: splashScale }] }]}
-        />
-        <SafeAreaView style={styles.splashContent}>
-          <ScrollView contentContainerStyle={styles.splashScroll} showsVerticalScrollIndicator={false}>
-            <Animated.Text style={[typography.h1, styles.splashTitle, { opacity: titleOpacity }]}>
-              Memento{'\n'}Mori
-            </Animated.Text>
+      <SafeAreaView style={styles.splashContainer}>
+        <ScrollView contentContainerStyle={styles.splashScroll} showsVerticalScrollIndicator={false}>
+          <Image source={skullImg} style={styles.splashSkull} />
 
-            <TouchableOpacity onPress={() => navigation.navigate('Philosophy')}>
-              <Text style={[typography.caption, styles.underlineLink]}>Click To Understand</Text>
-            </TouchableOpacity>
+          <Text style={[typography.h1, styles.splashTitle]}>
+            Memento{'\n'}Mori
+          </Text>
 
-            <View style={styles.splashForm}>
-              <Text style={[typography.caption, { marginBottom: 12 }]}>When Were You Born?</Text>
-              <DatePicker date={splashBirthdate} setDate={setSplashBirthdate} />
+          <TouchableOpacity onPress={() => navigation.navigate('Philosophy')}>
+            <Text style={[typography.caption, styles.underlineLink]}>Click To Understand</Text>
+          </TouchableOpacity>
 
-              <Text style={[typography.caption, { marginTop: 20, marginBottom: 8 }]}>How Long Do You Expect To Live?</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ageScroller}>
-                {Array.from({ length: 41 }, (_, i) => 60 + i).map(a => (
-                  <TouchableOpacity
-                    key={a}
-                    onPress={() => setSplashTargetAge(a)}
-                    style={[styles.ageChip, splashTargetAge === a && styles.ageChipActive]}
-                  >
-                    <Text style={[styles.ageChipText, splashTargetAge === a && styles.ageChipTextActive]}>
-                      {a}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
+          <View style={styles.splashForm}>
+            <Text style={[typography.caption, { marginBottom: 12 }]}>When Were You Born?</Text>
+            <DatePicker date={splashBirthdate} setDate={setSplashBirthdate} />
 
-              {splashBirthdate && (
+            <Text style={[typography.caption, { marginTop: 20, marginBottom: 8 }]}>How Long Do You Expect To Live?</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ageScroller}>
+              {Array.from({ length: 41 }, (_, i) => 60 + i).map(a => (
                 <TouchableOpacity
-                  style={styles.startButton}
-                  onPress={() => {
-                    handleTargetAgeChange(splashTargetAge);
-                    handleBirthdateSet(splashBirthdate);
-                  }}
+                  key={a}
+                  onPress={() => setSplashTargetAge(a)}
+                  style={[styles.ageChip, splashTargetAge === a && styles.ageChipActive]}
                 >
-                  <Text style={styles.startButtonText}>Start To Live</Text>
+                  <Text style={[styles.ageChipText, splashTargetAge === a && styles.ageChipTextActive]}>
+                    {a}
+                  </Text>
                 </TouchableOpacity>
-              )}
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-      </View>
+              ))}
+            </ScrollView>
+
+            {splashBirthdate && (
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={() => {
+                  handleTargetAgeChange(splashTargetAge);
+                  handleBirthdateSet(splashBirthdate);
+                }}
+              >
+                <Text style={styles.startButtonText}>Start To Live</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 
@@ -200,7 +194,7 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View style={styles.headerRow}>
             <Text style={typography.caption}>Live</Text>
-            <Image source={skullIcon} style={styles.headerIcon} />
+            <Image source={skullImg} style={styles.headerIcon} />
             <Text style={typography.caption}>Aware</Text>
           </View>
           <Text style={typography.h2}>Memento Mori</Text>
@@ -335,13 +329,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  splashBg: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
+  splashSkull: {
+    width: 180,
+    height: 180,
+    resizeMode: 'contain',
+    marginBottom: 16,
   },
-  splashContent: { flex: 1, width: '100%' },
   splashScroll: {
     flexGrow: 1,
     justifyContent: 'center',
