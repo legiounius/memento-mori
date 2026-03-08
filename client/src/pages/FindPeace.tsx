@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GravestoneBanner } from '@/components/GravestoneBanner';
 
 import skullImage from "@assets/skull_minimal.png";
+import splashSkullImage from "@assets/skull_with_background_1772999424526.jpg";
 
 interface WisdomEntry {
   type: string;
@@ -196,9 +197,9 @@ export default function FindPeace() {
           <div className="flex items-center gap-1.5 justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
-              src={skullImage}
+              src={splashSkullImage}
               alt="Memento Mori"
-              className="w-[30px] h-[30px] object-contain"
+              className="w-[30px] h-[30px] object-cover rounded-full"
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>

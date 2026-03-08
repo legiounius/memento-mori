@@ -399,9 +399,9 @@ export default function Home() {
           <div className="flex items-center gap-1.5 justify-center" style={{ paddingLeft: '0.35em' }}>
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Live</span>
             <img
-              src={skullImage}
+              src={splashSkullImage}
               alt="Memento Mori"
-              className="w-[30px] h-[30px] object-contain"
+              className="w-[30px] h-[30px] object-cover rounded-full"
               data-testid="img-skull-header"
             />
             <span className="text-muted-foreground text-xs font-bold tracking-widest uppercase">Aware</span>
