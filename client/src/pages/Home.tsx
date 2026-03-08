@@ -189,22 +189,26 @@ export default function Home() {
 
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
+      const skullCanvas = document.createElement('canvas');
+      const skullCtx = skullCanvas.getContext('2d');
       const skullImg = new Image();
       skullImg.crossOrigin = 'anonymous';
-      await new Promise<void>((resolve) => {
-        skullImg.onload = () => resolve();
-        skullImg.onerror = () => resolve();
+      const skullLoaded = await new Promise<boolean>((resolve) => {
+        skullImg.onload = () => resolve(true);
+        skullImg.onerror = () => resolve(false);
         skullImg.src = splashSkullImage;
       });
 
-      if (skullImg.complete && skullImg.naturalWidth > 0) {
-        const skullSize = Math.min(pdfWidth, pdfHeight) * 0.6;
+      if (skullLoaded && skullCtx) {
+        skullCanvas.width = skullImg.naturalWidth;
+        skullCanvas.height = skullImg.naturalHeight;
+        skullCtx.globalAlpha = 0.07;
+        skullCtx.drawImage(skullImg, 0, 0);
+        const skullData = skullCanvas.toDataURL('image/png');
+        const skullSize = Math.min(pdfWidth, pdfHeight) * 0.65;
         const skullX = (pdfWidth - skullSize) / 2;
-        const skullY = (pdfHeight - skullSize) / 2;
-        doc.saveGraphicsState();
-        doc.setGState(new doc.GState({ opacity: 0.06 }));
-        doc.addImage(skullImg, 'JPEG', skullX, skullY, skullSize, skullSize);
-        doc.restoreGraphicsState();
+        const skullY = (pdfHeight - skullSize) / 2 - 0.2;
+        doc.addImage(skullData, 'PNG', skullX, skullY, skullSize, skullSize);
       }
 
       doc.setTextColor(0, 0, 0);
@@ -217,11 +221,9 @@ export default function Home() {
       doc.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
 
       const footerY = pdfHeight - footerSpace + 0.2;
-      doc.setTextColor(161, 161, 170);
-      doc.setFontSize(7);
-      doc.text('Memento Mori  •  todieisto.live  •  Remember You Must Die', pdfWidth / 2, footerY, { align: 'center' });
-      doc.setFontSize(6);
-      doc.text('The Philosophy  •  Privacy Policy  •  Terms of Use  •  Contact: eric@legiounius.com', pdfWidth / 2, footerY + 0.15, { align: 'center' });
+      doc.setTextColor(140, 140, 140);
+      doc.setFontSize(8);
+      doc.text('Made Free With The ToDieIsTo.Live App', pdfWidth / 2, footerY, { align: 'center' });
 
       const pdfBlob = doc.output('blob');
       const file = new File([pdfBlob], 'memento-mori-life-chart.pdf', { type: 'application/pdf' });
