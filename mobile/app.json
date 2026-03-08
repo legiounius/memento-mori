@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Memento Mori",
+    "slug": "memento-mori",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/skull_minimal.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "splash": {
+      "image": "./assets/images/skull_minimal.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.legiounius.mementomori",
+      "buildNumber": "1"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/skull_minimal.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.legiounius.mementomori"
+    },
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
+  }
+}

@@ -2,9 +2,11 @@
 
 ## Overview
 
-Memento Mori is a "life in weeks" visualization app. First-time visitors see a splash page with a large skull & crossbones, "Memento Mori" title, and a birthdate picker. Returning visitors (birthdate saved in localStorage) skip directly to the main visualization. Users enter their birthdate and a target age (60-100), and the app renders horizontal year bars showing their life progress — black fill for weeks lived, gray for remaining. Users can mark life events (red stars) and see their current week (red dot marker). The app's theme is stark black-and-white with red accents (#dc2626), inspired by the Stoic concept of remembering mortality.
+Memento Mori is a "life in weeks" visualization app with two deployment targets:
+1. **Web app** (todieisto.live) — React/Vite frontend + Express backend, serves as landing page
+2. **Mobile app** (App Store) — React Native/Expo app in `mobile/` directory
 
-The project follows a full-stack TypeScript architecture with a React frontend (Vite) and Express backend, using PostgreSQL via Drizzle ORM. Most of the app logic is client-side — the grid calculations and event management use localStorage. The backend handles a user tracker that counts how many people have saved their birthdate.
+First-time visitors see a splash page with a large skull & crossbones, "Memento Mori" title, and a birthdate picker. Returning visitors skip directly to the main visualization. Users enter their birthdate and a target age (60-100), and the app renders a two-column dot grid (12 dots/year for months) with progressive darkening for lived months and color-coded life events. Users can mark life events and see their current month (red border dot). The app's theme is stark black-and-white with red accents (#dc2626), inspired by the Stoic concept of remembering mortality.
 
 ## User Preferences
 
@@ -12,53 +14,64 @@ Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
-### Frontend
+### Web Frontend (client/)
 - **Framework**: React 18 with TypeScript, bundled by Vite
 - **Routing**: Wouter (lightweight client-side router)
-- **State Management**: React Query (`@tanstack/react-query`) for server state; React `useState` + `localStorage` for local persistence of birthdate, target age, and life events
-- **UI Components**: shadcn/ui (new-york style) built on Radix UI primitives, styled with Tailwind CSS and CSS variables for theming
+- **State Management**: React Query (`@tanstack/react-query`) for server state; React `useState` + `localStorage` for local persistence
+- **UI Components**: shadcn/ui (new-york style) built on Radix UI primitives, styled with Tailwind CSS
 - **Animations**: Framer Motion
-- **Date Calculations**: `date-fns` (specifically `differenceInWeeks`)
+- **Date Calculations**: `date-fns`
 - **Path aliases**: `@/` maps to `client/src/`, `@shared/` maps to `shared/`, `@assets/` maps to `attached_assets/`
-- **Key pages**: Home (main life grid view), FindPeace (wisdom quotes with 5 categories), SuggestQuote (quote suggestion form), NotFound (404)
-- **Key components**: `LifeGrid` (horizontal year bars visualization with black fill for lived, red dot/star markers), `DatePicker` (custom month/day/year dropdowns), `EventForm` (add life events)
-- **Birthdate UX**: First-time visitors see a splash page with large skull, title, and birthdate picker. Once set, birthdate shows as bold text "Born: Jan 15, 1990" with a subtle "change" link. Returning visitors skip the splash entirely.
-- **Quotes**: ~850 quotes in CSV (`peace_archive.csv`) across 5 categories: Stoic Wisdom, Religious Wisdom, Existentialist Wisdom, Literary Wisdom, Movie Wisdom. FindPeace page with random selection, favorites, sharing. SuggestQuote page for user submissions via email.
-- **Fonts**: Cinzel used site-wide (body and headings) — loaded via Google Fonts with CSS custom property `--font-display`
-- **Colors**: Lived bars = black, event stars = red (#dc2626), current week dot = red (#dc2626), remaining = gray
+- **Key pages**: Home (main life grid view), FindPeace (wisdom quotes), SuggestQuote (quote suggestion form), NotFound (404)
+- **Fonts**: Cinzel used site-wide — loaded via Google Fonts
+- **Colors**: Lived = progressive darkening (black), events = color-coded, current = red border (#dc2626), remaining = gray
 
-### Backend
+### Mobile App (mobile/)
+- **Framework**: React Native with Expo SDK 52
+- **Navigation**: React Navigation v6 (bottom tabs + native stack)
+- **State**: AsyncStorage for persistence (birthdate, targetAge, events, favorites, seenMap)
+- **Visualization**: react-native-svg for dot grid (two-column layout, 12 dots/year)
+- **CSV Parsing**: Custom parser in `mobile/src/csv.ts`, loads `peace_archive.csv` via expo-asset + expo-file-system
+- **Font**: Cinzel-Regular.ttf loaded via expo-font from `mobile/assets/fonts/`
+- **Key screens**: HomeScreen (splash + grid + events), WisdomScreen (quotes), PhilosophyScreen, PrivacyScreen, TermsScreen, SuggestQuoteScreen
+- **Key components**: LifeGrid (dot grid), DatePicker (custom dropdowns), EventForm, GravestoneBanner
+- **Sharing**: React Native Share API for messages, expo-print for PDF export
+- **Config**: `mobile/app.json` — bundleIdentifier: com.legiounius.mementomori
+- **Metro config**: `mobile/metro.config.js` resolves from both mobile/ and root node_modules, includes CSV as asset extension
+- **Assets**: skull_bg.jpg, skull_minimal.png in mobile/assets/images/, Cinzel-Regular.ttf in mobile/assets/fonts/, peace_archive.csv in mobile/assets/
+
+### Backend (server/)
 - **Framework**: Express 5 on Node.js, using TypeScript compiled via `tsx`
-- **API Pattern**: Typed route definitions in `shared/routes.ts` — input/output schemas defined with Zod, shared between client and server
+- **API Pattern**: Typed route definitions in `shared/routes.ts`
 - **Current endpoints**:
   - `POST /api/users` — creates a user record with a birthdate
-  - `POST /api/tracker/increment` — atomically increments the user counter (called once per browser via localStorage flag)
-  - `GET /api/tracker/count` — returns the total count of users who saved their birthdate
-- **Storage layer**: `server/storage.ts` uses a `DatabaseStorage` class implementing `IStorage` interface (dependency inversion pattern)
-- **Dev server**: Vite dev middleware served through Express with HMR support
-- **Production build**: Vite builds the client to `dist/public`, esbuild bundles the server to `dist/index.cjs`
+  - `POST /api/tracker/increment` — atomically increments the user counter
+  - `GET /api/tracker/count` — returns the total count of users
+- **Storage layer**: `server/storage.ts` uses `DatabaseStorage` class implementing `IStorage` interface
 
 ### Database
 - **ORM**: Drizzle ORM with PostgreSQL dialect (`drizzle-orm/node-postgres`)
 - **Connection**: `pg.Pool` using `DATABASE_URL` environment variable
 - **Schema location**: `shared/schema.ts`
-- **Current schema**: `users` table with `id` (serial PK), `birthdate` (timestamp, required), `createdAt` (timestamp, auto-set); `tracker` table with `id` (serial PK), `count` (integer) — singleton row for atomic user counting
-- **Schema management**: `drizzle-kit push` via `npm run db:push`; migrations output to `./migrations`
-- **Validation**: `drizzle-zod` generates Zod schemas from Drizzle table definitions
-
-### Shared Code
-- `shared/schema.ts` — Database schema and Zod validation types, shared between client and server
-- `shared/routes.ts` — API route definitions with method, path, input schema, and response schemas. Acts as a typed contract.
+- **Current schema**: `users` table (id, birthdate, createdAt); `tracker` table (id, count)
+- **Schema management**: `drizzle-kit push` via `npm run db:push`
 
 ### Build & Scripts
-- `npm run dev` — Runs dev server with Vite HMR via tsx
+- `npm run dev` — Runs web dev server with Vite HMR via tsx (port 5000)
 - `npm run build` — Builds client (Vite) and server (esbuild) to `dist/`
 - `npm run start` — Runs production build from `dist/index.cjs`
 - `npm run db:push` — Pushes Drizzle schema to PostgreSQL
-- `npm run check` — TypeScript type checking
+- Expo Mobile workflow: `cd mobile && npx expo start --tunnel --port 8081`
 
 ## External Dependencies
 
-- **PostgreSQL** — Primary database, connected via `DATABASE_URL` environment variable. Required for the app to start.
-- **Google Fonts** — Cinzel, Inter, Space Mono fonts loaded from `fonts.googleapis.com`
-- **Replit plugins** (dev only) — `@replit/vite-plugin-runtime-error-modal`, `@replit/vite-plugin-cartographer`, `@replit/vite-plugin-dev-banner` for development experience on Replit
+- **PostgreSQL** — Primary database for web app
+- **Google Fonts** — Cinzel, Inter, Space Mono fonts for web
+- **Expo SDK 52** — Mobile app framework (packages installed at root level, resolved via metro.config.js)
+- **React Navigation v6** — Mobile navigation
+- **Replit plugins** (dev only) — vite-plugin-runtime-error-modal, vite-plugin-cartographer, vite-plugin-dev-banner
+
+## Contact
+- **Email**: eric@legiounius.com
+- **Domain**: todieisto.live
+- **Bundle ID**: com.legiounius.mementomori
