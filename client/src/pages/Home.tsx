@@ -189,36 +189,31 @@ export default function Home() {
 
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
-      const loadImage = (src: string): Promise<HTMLImageElement | null> => {
-        return new Promise((resolve) => {
+      try {
+        const resp = await fetch(splashSkullImage);
+        const blob = await resp.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const skullImg = await new Promise<HTMLImageElement>((resolve, reject) => {
           const img = new Image();
-          img.crossOrigin = 'anonymous';
           img.onload = () => resolve(img);
-          img.onerror = () => resolve(null);
-          if (typeof src === 'string' && src.startsWith('data:')) {
-            img.src = src;
-          } else {
-            img.src = src;
-          }
+          img.onerror = reject;
+          img.src = blobUrl;
         });
-      };
-
-      const skullImg = await loadImage(splashSkullImage);
-      if (skullImg) {
         const fadeCanvas = document.createElement('canvas');
-        fadeCanvas.width = 400;
-        fadeCanvas.height = 400;
+        fadeCanvas.width = 500;
+        fadeCanvas.height = 500;
         const ctx = fadeCanvas.getContext('2d')!;
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 400, 400);
+        ctx.fillRect(0, 0, 500, 500);
         ctx.globalAlpha = 0.08;
-        ctx.drawImage(skullImg, 0, 0, 400, 400);
+        ctx.drawImage(skullImg, 0, 0, 500, 500);
+        URL.revokeObjectURL(blobUrl);
         const fadedData = fadeCanvas.toDataURL('image/jpeg', 0.9);
         const skullSize = Math.min(pdfWidth, pdfHeight) * 0.65;
         const skullX = (pdfWidth - skullSize) / 2;
         const skullY = (pdfHeight - skullSize) / 2 - 0.2;
         doc.addImage(fadedData, 'JPEG', skullX, skullY, skullSize, skullSize);
-      }
+      } catch (_) {}
 
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(18);
