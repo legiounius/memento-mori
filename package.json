@@ -57,6 +57,7 @@
     "expo": "~54.0.0",
     "expo-print": "^55.0.8",
     "expo-splash-screen": "^55.0.10",
+    "expo-status-bar": "^55.0.4",
     "express": "^5.0.1",
     "express-session": "^1.18.1",
     "framer-motion": "^11.13.1",
