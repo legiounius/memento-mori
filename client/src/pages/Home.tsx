@@ -7,7 +7,7 @@ import { GravestoneBanner } from "@/components/GravestoneBanner";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import splashSkullImage from "@assets/skull_with_background_1772999424526.jpg";
-import { SKULL_BASE64 } from "@/lib/skullData";
+import { CINZEL_BASE64 } from "@/lib/cinzelFont";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -190,34 +190,16 @@ export default function Home() {
 
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
-      try {
-        const skullImg = await new Promise<HTMLImageElement>((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-          img.src = SKULL_BASE64;
-        });
-        const fadeCanvas = document.createElement('canvas');
-        fadeCanvas.width = 500;
-        fadeCanvas.height = 500;
-        const ctx = fadeCanvas.getContext('2d')!;
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 500, 500);
-        ctx.globalAlpha = 0.08;
-        ctx.drawImage(skullImg, 0, 0, 500, 500);
-        const fadedData = fadeCanvas.toDataURL('image/jpeg', 0.9);
-        const skullSize = Math.min(pdfWidth, pdfHeight) * 0.65;
-        const skullX = (pdfWidth - skullSize) / 2;
-        const skullY = (pdfHeight - skullSize) / 2 - 0.2;
-        doc.addImage(fadedData, 'JPEG', skullX, skullY, skullSize, skullSize);
-      } catch (_) {}
+      doc.addFileToVFS('Cinzel-Regular.ttf', CINZEL_BASE64);
+      doc.addFont('Cinzel-Regular.ttf', 'Cinzel', 'normal');
+      doc.setFont('Cinzel');
 
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(18);
-      doc.text('Memento Mori', pdfWidth / 2, margin + 0.25, { align: 'center' });
-      doc.setFontSize(9);
+      doc.setFontSize(20);
+      doc.text('Memento Mori', pdfWidth / 2, margin + 0.3, { align: 'center' });
+      doc.setFontSize(10);
       doc.setTextColor(120, 120, 120);
-      doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.5, { align: 'center' });
+      doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.55, { align: 'center' });
 
       doc.addImage(imgData, 'JPEG', offsetX, offsetY, imgW, imgH);
 
