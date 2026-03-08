@@ -45,6 +45,7 @@ export default function HomeScreen() {
       const bd = await getBirthdate();
       const ta = await getTargetAge();
       const ev = await getEvents();
+      console.log('[HomeScreen] loaded birthdate:', bd, 'targetAge:', ta, 'events:', ev.length);
       setBirthdate(bd);
       setTargetAge(ta);
       setEvents(ev);
@@ -136,9 +137,13 @@ export default function HomeScreen() {
   }
 
   if (!birthdate) {
+    console.log('[HomeScreen] rendering first-time splash with form');
     return (
-      <SafeAreaView style={styles.splashContainer}>
-        <ScrollView contentContainerStyle={styles.splashScroll} showsVerticalScrollIndicator={false}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+        <ScrollView
+          contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 24, paddingTop: 40, paddingBottom: 60 }}
+          showsVerticalScrollIndicator={false}
+        >
           <Image source={skullImg} style={styles.splashSkull} />
 
           <Text style={[typography.h1, styles.splashTitle]}>
