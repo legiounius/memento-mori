@@ -27,7 +27,7 @@ Preferred communication style: Simple, everyday language.
 - **Colors**: Lived = progressive darkening (black), events = color-coded, current = red border (#dc2626), remaining = gray
 
 ### Mobile App (mobile/)
-- **Framework**: React Native with Expo SDK 52
+- **Framework**: React Native with Expo SDK 54
 - **Navigation**: React Navigation v6 (bottom tabs + native stack)
 - **State**: AsyncStorage for persistence (birthdate, targetAge, events, favorites, seenMap)
 - **Visualization**: react-native-svg for dot grid (two-column layout, 12 dots/year)
@@ -67,7 +67,7 @@ Preferred communication style: Simple, everyday language.
 
 - **PostgreSQL** — Primary database for web app
 - **Google Fonts** — Cinzel, Inter, Space Mono fonts for web
-- **Expo SDK 52** — Mobile app framework (packages installed at root level, resolved via metro.config.js)
+- **Expo SDK 54** — Mobile app framework (packages installed at root level, resolved via metro.config.js)
 - **React Navigation v6** — Mobile navigation
 - **Replit plugins** (dev only) — vite-plugin-runtime-error-modal, vite-plugin-cartographer, vite-plugin-dev-banner
 
