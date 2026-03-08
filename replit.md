@@ -27,7 +27,7 @@ Preferred communication style: Simple, everyday language.
 - **Colors**: Lived = progressive darkening (black), events = color-coded, current = red border (#dc2626), remaining = gray
 
 ### Mobile App (mobile/)
-- **Framework**: React Native with Expo SDK 54
+- **Framework**: React Native 0.84 with Expo SDK 54
 - **Navigation**: React Navigation v6 (bottom tabs + native stack)
 - **State**: AsyncStorage for persistence (birthdate, targetAge, events, favorites, seenMap)
 - **Visualization**: react-native-svg for dot grid (two-column layout, 12 dots/year)
