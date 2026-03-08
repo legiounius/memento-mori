@@ -159,7 +159,7 @@ export default function Home() {
 
       const canvas = await html2canvas(el, {
         backgroundColor: '#ffffff',
-        scale: 3,
+        scale: 2,
         useCORS: true,
         logging: false,
         width: 900,
@@ -169,7 +169,7 @@ export default function Home() {
       el.style.width = origWidth;
       el.style.minWidth = origMinWidth;
 
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.85);
       const chartAspect = canvas.width / canvas.height;
 
       const isWide = chartAspect >= 1;
@@ -189,26 +189,35 @@ export default function Home() {
 
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
-      const skullCanvas = document.createElement('canvas');
-      const skullCtx = skullCanvas.getContext('2d');
-      const skullImg = new Image();
-      skullImg.crossOrigin = 'anonymous';
-      const skullLoaded = await new Promise<boolean>((resolve) => {
-        skullImg.onload = () => resolve(true);
-        skullImg.onerror = () => resolve(false);
-        skullImg.src = splashSkullImage;
-      });
+      const loadImage = (src: string): Promise<HTMLImageElement | null> => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+          if (typeof src === 'string' && src.startsWith('data:')) {
+            img.src = src;
+          } else {
+            img.src = src;
+          }
+        });
+      };
 
-      if (skullLoaded && skullCtx) {
-        skullCanvas.width = skullImg.naturalWidth;
-        skullCanvas.height = skullImg.naturalHeight;
-        skullCtx.globalAlpha = 0.07;
-        skullCtx.drawImage(skullImg, 0, 0);
-        const skullData = skullCanvas.toDataURL('image/png');
+      const skullImg = await loadImage(splashSkullImage);
+      if (skullImg) {
+        const fadeCanvas = document.createElement('canvas');
+        fadeCanvas.width = 400;
+        fadeCanvas.height = 400;
+        const ctx = fadeCanvas.getContext('2d')!;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 400, 400);
+        ctx.globalAlpha = 0.08;
+        ctx.drawImage(skullImg, 0, 0, 400, 400);
+        const fadedData = fadeCanvas.toDataURL('image/jpeg', 0.9);
         const skullSize = Math.min(pdfWidth, pdfHeight) * 0.65;
         const skullX = (pdfWidth - skullSize) / 2;
         const skullY = (pdfHeight - skullSize) / 2 - 0.2;
-        doc.addImage(skullData, 'PNG', skullX, skullY, skullSize, skullSize);
+        doc.addImage(fadedData, 'JPEG', skullX, skullY, skullSize, skullSize);
       }
 
       doc.setTextColor(0, 0, 0);
@@ -218,7 +227,7 @@ export default function Home() {
       doc.setTextColor(120, 120, 120);
       doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.5, { align: 'center' });
 
-      doc.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
+      doc.addImage(imgData, 'JPEG', offsetX, offsetY, imgW, imgH);
 
       const footerY = pdfHeight - footerSpace + 0.2;
       doc.setTextColor(140, 140, 140);
