@@ -177,7 +177,7 @@ export default function Home() {
       const pdfWidth = isWide ? 11 : 8.5;
       const pdfHeight = isWide ? 8.5 : 11;
       const margin = 0.5;
-      const titleSpace = 0.6;
+      const titleSpace = 0.9;
       const footerSpace = 0.5;
       const availW = pdfWidth - margin * 2;
       const availH = pdfHeight - margin - titleSpace - footerSpace;
@@ -189,12 +189,30 @@ export default function Home() {
 
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
+      const skullImg = new Image();
+      skullImg.crossOrigin = 'anonymous';
+      await new Promise<void>((resolve) => {
+        skullImg.onload = () => resolve();
+        skullImg.onerror = () => resolve();
+        skullImg.src = splashSkullImage;
+      });
+
+      if (skullImg.complete && skullImg.naturalWidth > 0) {
+        const skullSize = Math.min(pdfWidth, pdfHeight) * 0.6;
+        const skullX = (pdfWidth - skullSize) / 2;
+        const skullY = (pdfHeight - skullSize) / 2;
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({ opacity: 0.06 }));
+        doc.addImage(skullImg, 'JPEG', skullX, skullY, skullSize, skullSize);
+        doc.restoreGraphicsState();
+      }
+
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(16);
-      doc.text('Memento Mori', pdfWidth / 2, margin + 0.15, { align: 'center' });
-      doc.setFontSize(8);
+      doc.setFontSize(18);
+      doc.text('Memento Mori', pdfWidth / 2, margin + 0.25, { align: 'center' });
+      doc.setFontSize(9);
       doc.setTextColor(120, 120, 120);
-      doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.35, { align: 'center' });
+      doc.text('Remember You Must Die', pdfWidth / 2, margin + 0.5, { align: 'center' });
 
       doc.addImage(imgData, 'PNG', offsetX, offsetY, imgW, imgH);
 
