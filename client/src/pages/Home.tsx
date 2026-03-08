@@ -6,6 +6,7 @@ import { EventForm, type LifeEvent, EVENT_TYPES } from "@/components/EventForm";
 import { GravestoneBanner } from "@/components/GravestoneBanner";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
+import splashSkullImage from "@assets/skull_with_background_1772999424526.jpg";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -269,13 +270,13 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center relative overflow-hidden">
         <motion.img
-          src={skullImage}
+          src={splashSkullImage}
           alt=""
-          className="absolute pointer-events-none select-none object-contain"
-          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px' }}
+          className="absolute pointer-events-none select-none object-cover"
+          style={{ width: '100%', height: '100%' }}
           data-testid="img-skull-returning"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.06, scale: 1 }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 0.25, scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
         />
         <motion.h1
@@ -294,13 +295,13 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 relative overflow-hidden">
         <motion.img
-          src={skullImage}
+          src={splashSkullImage}
           alt=""
-          className="absolute pointer-events-none select-none object-contain"
-          style={{ width: '70vmin', height: '70vmin', maxWidth: '500px', maxHeight: '500px' }}
+          className="absolute pointer-events-none select-none object-cover"
+          style={{ width: '100%', height: '100%' }}
           data-testid="img-skull-splash"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 0.06, scale: 1 }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 0.25, scale: 1 }}
           transition={{ duration: 2.5, ease: "easeOut" }}
         />
 
