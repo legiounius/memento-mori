@@ -7,6 +7,7 @@ import { GravestoneBanner } from "@/components/GravestoneBanner";
 import { motion } from "framer-motion";
 import skullImage from "@assets/skull_minimal.png";
 import splashSkullImage from "@assets/skull_with_background_1772999424526.jpg";
+import { SKULL_BASE64 } from "@/lib/skullData";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import html2canvas from "html2canvas";
@@ -190,14 +191,11 @@ export default function Home() {
       const doc = new jsPDF({ orientation, unit: 'in', format: 'letter' });
 
       try {
-        const resp = await fetch(splashSkullImage);
-        const blob = await resp.blob();
-        const blobUrl = URL.createObjectURL(blob);
         const skullImg = await new Promise<HTMLImageElement>((resolve, reject) => {
           const img = new Image();
           img.onload = () => resolve(img);
           img.onerror = reject;
-          img.src = blobUrl;
+          img.src = SKULL_BASE64;
         });
         const fadeCanvas = document.createElement('canvas');
         fadeCanvas.width = 500;
@@ -207,7 +205,6 @@ export default function Home() {
         ctx.fillRect(0, 0, 500, 500);
         ctx.globalAlpha = 0.08;
         ctx.drawImage(skullImg, 0, 0, 500, 500);
-        URL.revokeObjectURL(blobUrl);
         const fadedData = fadeCanvas.toDataURL('image/jpeg', 0.9);
         const skullSize = Math.min(pdfWidth, pdfHeight) * 0.65;
         const skullX = (pdfWidth - skullSize) / 2;
