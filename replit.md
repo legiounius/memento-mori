@@ -15,7 +15,7 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Web Frontend (client/)
-- **Framework**: React 18 with TypeScript, bundled by Vite
+- **Framework**: React 19 with TypeScript, bundled by Vite
 - **Routing**: Wouter (lightweight client-side router)
 - **State Management**: React Query (`@tanstack/react-query`) for server state; React `useState` + `localStorage` for local persistence
 - **UI Components**: shadcn/ui (new-york style) built on Radix UI primitives, styled with Tailwind CSS
@@ -27,7 +27,7 @@ Preferred communication style: Simple, everyday language.
 - **Colors**: Lived = progressive darkening (black), events = color-coded, current = red border (#dc2626), remaining = gray
 
 ### Mobile App (mobile/)
-- **Framework**: React Native 0.84 with Expo SDK 54
+- **Framework**: React Native 0.81.4 with Expo SDK 53
 - **Navigation**: React Navigation v6 (bottom tabs + native stack)
 - **State**: AsyncStorage for persistence (birthdate, targetAge, events, favorites, seenMap)
 - **Visualization**: react-native-svg for dot grid (two-column layout, 12 dots/year)
@@ -37,8 +37,9 @@ Preferred communication style: Simple, everyday language.
 - **Key components**: LifeGrid (dot grid), DatePicker (custom dropdowns), EventForm, GravestoneBanner
 - **Sharing**: React Native Share API for messages, expo-print for PDF export
 - **Config**: `mobile/app.json` — bundleIdentifier: com.legiounius.mementomori
-- **Metro config**: `mobile/metro.config.js` resolves from both mobile/ and root node_modules, includes CSV as asset extension
+- **Metro config**: `mobile/metro.config.js` resolves from both mobile/ and root node_modules, includes CSV as asset extension; metro pinned to 0.81.5 for compatibility
 - **Assets**: skull_bg.jpg, skull_minimal.png in mobile/assets/images/, Cinzel-Regular.ttf in mobile/assets/fonts/, peace_archive.csv in mobile/assets/
+- **Testing note**: Expo Go on iOS had SDK version and Hermes compatibility issues; recommend testing via iOS Simulator on Mac (M5) once available
 
 ### Backend (server/)
 - **Framework**: Express 5 on Node.js, using TypeScript compiled via `tsx`
@@ -61,14 +62,17 @@ Preferred communication style: Simple, everyday language.
 - `npm run build` — Builds client (Vite) and server (esbuild) to `dist/`
 - `npm run start` — Runs production build from `dist/index.cjs`
 - `npm run db:push` — Pushes Drizzle schema to PostgreSQL
-- Expo Mobile workflow: `cd mobile && npx expo start --tunnel --port 8081`
+- Expo Mobile workflow: `cd mobile && npx expo start --tunnel --port 8081 --clear`
 
 ## External Dependencies
 
 - **PostgreSQL** — Primary database for web app
 - **Google Fonts** — Cinzel, Inter, Space Mono fonts for web
-- **Expo SDK 54** — Mobile app framework (packages installed at root level, resolved via metro.config.js)
+- **Expo SDK 53** — Mobile app framework (packages installed at root level, resolved via metro.config.js)
+- **Metro 0.81.5** — Pinned version for compatibility with @expo/metro-config
 - **React Navigation v6** — Mobile navigation
+- **react-native-reanimated** — Animation library (babel plugin configured in mobile/babel.config.js with absolute path)
+- **`.npmrc`** — `legacy-peer-deps=true` to handle React 19 peer dependency conflicts
 - **Replit plugins** (dev only) — vite-plugin-runtime-error-modal, vite-plugin-cartographer, vite-plugin-dev-banner
 
 ## Contact

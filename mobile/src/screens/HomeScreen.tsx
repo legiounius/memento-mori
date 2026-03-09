@@ -45,7 +45,6 @@ export default function HomeScreen() {
       const bd = await getBirthdate();
       const ta = await getTargetAge();
       const ev = await getEvents();
-      console.log('[HomeScreen] loaded birthdate:', bd, 'targetAge:', ta, 'events:', ev.length);
       setBirthdate(bd);
       setTargetAge(ta);
       setEvents(ev);
@@ -121,51 +120,73 @@ export default function HomeScreen() {
     } catch {}
   }, [weeksRemaining, monthsRemaining]);
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#ff0000' }}>
-      <ScrollView contentContainerStyle={{ alignItems: 'center', paddingTop: 60, paddingBottom: 60, paddingHorizontal: 24 }}>
-        <Image source={skullImg} style={styles.splashSkull} />
-        <Text style={{ fontSize: 28, fontWeight: '700', color: '#ffffff', textAlign: 'center', marginBottom: 20 }}>
-          Memento Mori
-        </Text>
-        <Text style={{ fontSize: 18, color: '#ffffff', textAlign: 'center', marginBottom: 30 }}>
-          TEST: If you see red background, code changes are working!
-        </Text>
-        <Text style={{ fontSize: 14, color: '#ffffff', marginBottom: 10 }}>
-          Loading: {String(loading)} | Birthdate: {String(birthdate)} | ShowSplash: {String(showSplash)}
-        </Text>
-        <View style={{ width: '100%', marginTop: 20 }}>
-          <Text style={{ fontSize: 16, color: '#ffffff', textAlign: 'center', marginBottom: 12 }}>When Were You Born?</Text>
-          <DatePicker date={splashBirthdate} setDate={setSplashBirthdate} />
-          <Text style={{ fontSize: 16, color: '#ffffff', textAlign: 'center', marginTop: 20, marginBottom: 8 }}>How Long Do You Expect To Live?</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ageScroller}>
-            {Array.from({ length: 41 }, (_, i) => 60 + i).map(a => (
+  if (loading) return <View style={styles.container} />;
+
+  if (birthdate && showSplash) {
+    return (
+      <View style={styles.splashContainer}>
+        <Animated.View style={{ alignItems: 'center', opacity: splashOpacity, transform: [{ scale: splashScale }] }}>
+          <Image source={skullImg} style={styles.splashSkull} />
+        </Animated.View>
+        <Animated.Text style={[typography.h1, styles.splashTitle, { opacity: titleOpacity }]}>
+          Memento{'\n'}Mori
+        </Animated.Text>
+      </View>
+    );
+  }
+
+  if (!birthdate) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+        <ScrollView
+          contentContainerStyle={{ alignItems: 'center', paddingHorizontal: 24, paddingTop: 40, paddingBottom: 60 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Image source={skullImg} style={styles.splashSkull} />
+
+          <Text style={[typography.h1, styles.splashTitle]}>
+            Memento{'\n'}Mori
+          </Text>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Philosophy')}>
+            <Text style={[typography.caption, styles.underlineLink]}>Click To Understand</Text>
+          </TouchableOpacity>
+
+          <View style={styles.splashForm}>
+            <Text style={[typography.caption, { marginBottom: 12 }]}>When Were You Born?</Text>
+            <DatePicker date={splashBirthdate} setDate={setSplashBirthdate} />
+
+            <Text style={[typography.caption, { marginTop: 20, marginBottom: 8 }]}>How Long Do You Expect To Live?</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.ageScroller}>
+              {Array.from({ length: 41 }, (_, i) => 60 + i).map(a => (
+                <TouchableOpacity
+                  key={a}
+                  onPress={() => setSplashTargetAge(a)}
+                  style={[styles.ageChip, splashTargetAge === a && styles.ageChipActive]}
+                >
+                  <Text style={[styles.ageChipText, splashTargetAge === a && styles.ageChipTextActive]}>
+                    {a}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            {splashBirthdate && (
               <TouchableOpacity
-                key={a}
-                onPress={() => setSplashTargetAge(a)}
-                style={[styles.ageChip, splashTargetAge === a && { backgroundColor: '#ffffff', borderColor: '#ffffff' }]}
+                style={styles.startButton}
+                onPress={() => {
+                  handleTargetAgeChange(splashTargetAge);
+                  handleBirthdateSet(splashBirthdate);
+                }}
               >
-                <Text style={[styles.ageChipText, { color: splashTargetAge === a ? '#ff0000' : '#ffffff' }]}>
-                  {a}
-                </Text>
+                <Text style={styles.startButtonText}>Start To Live</Text>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
-          {splashBirthdate && (
-            <TouchableOpacity
-              style={[styles.startButton, { backgroundColor: '#ffffff', marginTop: 24 }]}
-              onPress={() => {
-                handleTargetAgeChange(splashTargetAge);
-                handleBirthdateSet(splashBirthdate);
-              }}
-            >
-              <Text style={[styles.startButtonText, { color: '#ff0000' }]}>Start To Live</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   const deadDate = new Date(birthdate);
   deadDate.setFullYear(deadDate.getFullYear() + targetAge);
