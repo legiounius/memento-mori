@@ -1,36 +1,37 @@
-import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Navigation from './src/navigation';
-
-SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
     async function loadFonts() {
-      await Font.loadAsync({
-        'Cinzel-Regular': require('./assets/fonts/Cinzel-Regular.ttf'),
-      });
+      try {
+        await Font.loadAsync({
+          'Cinzel-Regular': require('./assets/fonts/Cinzel-Regular.ttf'),
+        });
+      } catch (e) {
+        console.warn('Font load failed:', e);
+      }
       setFontsLoaded(true);
     }
     loadFonts();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#ff0000', justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: '#ffffff', fontSize: 24 }}>Loading fonts...</Text>
+      </View>
+    );
+  }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="dark" />
       <Navigation />
     </GestureHandlerRootView>
