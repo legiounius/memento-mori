@@ -1,3 +1,4 @@
+import 'react-native-url-polyfill/auto';
 import { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import * as Font from 'expo-font';
@@ -24,8 +25,8 @@ export default function App() {
 
   if (!fontsLoaded) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#ff0000', justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: '#ffffff', fontSize: 24 }}>Loading fonts...</Text>
+      <View style={{ flex: 1, backgroundColor: '#000000', justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: '#ffffff', fontSize: 20 }}>Loading...</Text>
       </View>
     );
   }
