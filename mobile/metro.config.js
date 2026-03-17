@@ -57,11 +57,10 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   }
 
   // Redirect react-native-screens TypeScript fabric NativeComponent specs
-  // to their pre-compiled lib/commonjs/fabric/*.js equivalents
-  if (
-    moduleName.endsWith('NativeComponent') &&
-    (context.originModulePath || '').includes('react-native-screens')
-  ) {
+  // to their pre-compiled lib/commonjs/fabric/*.js equivalents.
+  // We use the lookup table as the guard (not originModulePath) so it only
+  // matches react-native-screens components regardless of who imports them.
+  if (moduleName.endsWith('NativeComponent')) {
     const componentName = moduleName.split('/').pop();
     if (rnScreensNativeComponents[componentName]) {
       return {
