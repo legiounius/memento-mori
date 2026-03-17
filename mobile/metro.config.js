@@ -29,6 +29,12 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
       filePath: path.resolve(projectRoot, 'patches/VirtualView.js'),
     };
   }
+  if (moduleName.endsWith('ViewConfigIgnore')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/ViewConfigIgnore.js'),
+    };
+  }
   if (originalResolveRequest) {
     return originalResolveRequest(context, moduleName, platform);
   }
