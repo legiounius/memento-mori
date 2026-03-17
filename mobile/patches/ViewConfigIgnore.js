@@ -1,34 +1,37 @@
+'use strict';
+
 /**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * Patched: removed `const` from type parameter (hermes-parser 0.25.1 compat)
- *
- * @flow strict
- * @format
+ * Patched: removed const from type parameter and all relative imports.
+ * Original: react-native/Libraries/NativeComponent/ViewConfigIgnore.js
  */
 
-import {Platform} from 'react-native';
+const ignoredViewConfigProps = new WeakSet();
 
-const ignoredViewConfigProps = new WeakSet<{...}>();
-
-export function DynamicallyInjectedByGestureHandler<T: {...}>(object: T): T {
+export function DynamicallyInjectedByGestureHandler(object) {
   ignoredViewConfigProps.add(object);
   return object;
 }
 
-export function ConditionallyIgnoredEventHandlers<
-  T: {+[name: string]: true},
->(value: T): T | void {
-  if (Platform.OS === 'ios') {
+export function ConditionallyIgnoredEventHandlers(value) {
+  if (
+    typeof global !== 'undefined' &&
+    global.__reactNativePlatformOS === 'ios'
+  ) {
+    return value;
+  }
+  // Use require to avoid module-level import resolution issues
+  try {
+    const Platform = require('react-native').Platform;
+    if (Platform.OS === 'ios') {
+      return value;
+    }
+  } catch (_) {
     return value;
   }
   return undefined;
 }
 
-export function isIgnored(value: mixed): boolean {
+export function isIgnored(value) {
   if (typeof value === 'object' && value != null) {
     return ignoredViewConfigProps.has(value);
   }
