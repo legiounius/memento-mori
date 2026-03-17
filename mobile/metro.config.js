@@ -15,6 +15,11 @@ config.resolver.nodeModulesPaths = [
 
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'csv'];
 
+// Force all nested hermes-parser@0.25.1 instances to use 0.34.0 via require.cache
+// patching. RN 0.81.4 source uses newer Hermes syntax (const type params, component
+// declarations) that 0.25.1 cannot parse.
+config.transformer.babelTransformerPath = require.resolve('./customBabelTransformer');
+
 // Redirect Hermes-syntax files to patched standard-JS versions
 const originalResolveRequest = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
