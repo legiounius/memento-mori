@@ -1,5 +1,6 @@
 const { getDefaultConfig } = require('expo/metro-config');
 const path = require('path');
+const fs = require('fs');
 
 const projectRoot = __dirname;
 const workspaceRoot = path.resolve(projectRoot, '..');
@@ -16,11 +17,30 @@ config.resolver.nodeModulesPaths = [
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'csv'];
 
 // Force all nested hermes-parser@0.25.1 instances to use 0.34.0 via require.cache
-// patching. RN 0.81.4 source uses newer Hermes syntax (const type params, component
-// declarations) that 0.25.1 cannot parse.
 config.transformer.babelTransformerPath = require.resolve('./customBabelTransformer');
 
-// Redirect Hermes-syntax files to patched standard-JS versions
+// Build a lookup: componentName -> compiled JS path for react-native-screens fabric components.
+// These TypeScript spec files use CodegenTypes which is undefined in RN 0.81.4, causing
+// "Unknown prop type" errors. The pre-compiled lib/commonjs/fabric/*.js files are plain JS
+// with no TypeScript types and work fine.
+const fabricRoot = path.resolve(workspaceRoot, 'node_modules/react-native-screens/lib/commonjs/fabric');
+const rnScreensNativeComponents = {};
+function indexFabricDir(dir, prefix) {
+  try {
+    fs.readdirSync(dir).forEach(f => {
+      const full = path.join(dir, f);
+      if (fs.statSync(full).isDirectory()) {
+        indexFabricDir(full, prefix + f + '/');
+      } else if (f.endsWith('NativeComponent.js') && !f.endsWith('.map')) {
+        const name = f.replace('.js', '');
+        rnScreensNativeComponents[name] = full;
+      }
+    });
+  } catch (_) {}
+}
+indexFabricDir(fabricRoot, '');
+
+// Redirect Hermes-syntax files and react-native-screens fabric TypeScript specs
 const originalResolveRequest = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   if (moduleName.endsWith('virtualview/VirtualView')) {
@@ -35,6 +55,22 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
       filePath: path.resolve(projectRoot, 'patches/ViewConfigIgnore.js'),
     };
   }
+
+  // Redirect react-native-screens TypeScript fabric NativeComponent specs
+  // to their pre-compiled lib/commonjs/fabric/*.js equivalents
+  if (
+    moduleName.endsWith('NativeComponent') &&
+    (context.originModulePath || '').includes('react-native-screens')
+  ) {
+    const componentName = moduleName.split('/').pop();
+    if (rnScreensNativeComponents[componentName]) {
+      return {
+        type: 'sourceFile',
+        filePath: rnScreensNativeComponents[componentName],
+      };
+    }
+  }
+
   if (originalResolveRequest) {
     return originalResolveRequest(context, moduleName, platform);
   }
