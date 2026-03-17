@@ -10,7 +10,7 @@
  * @format
  */
 
-import Platform from '../Utilities/Platform';
+import {Platform} from 'react-native';
 
 const ignoredViewConfigProps = new WeakSet<{...}>();
 
