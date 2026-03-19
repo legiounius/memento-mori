@@ -56,6 +56,16 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
     };
   }
 
+  // Patch setUpPerformance.js — Hermes (new arch) defines global.performance as
+  // non-writable, but the original file does `global.performance = ...` unconditionally,
+  // throwing "TypeError: property is not writable" at startup.
+  if (moduleName.endsWith('setUpPerformance')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/setUpPerformance.js'),
+    };
+  }
+
   // Redirect react-native-gesture-handler TypeScript/native-enforcing specs to JS patches.
   // NativeRNGestureHandlerModule uses getEnforcing() which throws when the native binary
   // doesn't have the module. Our patch uses get() + a no-op shim so the app can launch.
