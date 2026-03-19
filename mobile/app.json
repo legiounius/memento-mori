@@ -28,6 +28,9 @@
       "eas": {
         "projectId": ""
       }
+    },
+    "autolinking": {
+      "searchPaths": ["../node_modules"]
     }
   }
 }
