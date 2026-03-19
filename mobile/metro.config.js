@@ -56,6 +56,31 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
     };
   }
 
+  // Redirect react-native-gesture-handler TypeScript/native-enforcing specs to JS patches.
+  // NativeRNGestureHandlerModule uses getEnforcing() which throws when the native binary
+  // doesn't have the module. Our patch uses get() so the app gracefully handles it.
+  if (moduleName.includes('react-native-gesture-handler') &&
+      moduleName.endsWith('NativeRNGestureHandlerModule')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/NativeRNGestureHandlerModule.js'),
+    };
+  }
+  if (moduleName.includes('react-native-gesture-handler') &&
+      moduleName.endsWith('RNGestureHandlerButtonNativeComponent')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/RNGestureHandlerButtonNativeComponent.js'),
+    };
+  }
+  if (moduleName.includes('react-native-gesture-handler') &&
+      moduleName.endsWith('RNGestureHandlerRootViewNativeComponent')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/RNGestureHandlerRootViewNativeComponent.js'),
+    };
+  }
+
   // Redirect react-native-screens TypeScript fabric NativeComponent specs
   // to their pre-compiled lib/commonjs/fabric/*.js equivalents.
   // We use the lookup table as the guard (not originModulePath) so it only
