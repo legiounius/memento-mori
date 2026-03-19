@@ -58,23 +58,26 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
 
   // Redirect react-native-gesture-handler TypeScript/native-enforcing specs to JS patches.
   // NativeRNGestureHandlerModule uses getEnforcing() which throws when the native binary
-  // doesn't have the module. Our patch uses get() so the app gracefully handles it.
-  if (moduleName.includes('react-native-gesture-handler') &&
-      moduleName.endsWith('NativeRNGestureHandlerModule')) {
+  // doesn't have the module. Our patch uses get() + a no-op shim so the app can launch.
+  // We match on moduleName alone (not the package prefix) because internal imports use
+  // relative paths like "./specs/NativeRNGestureHandlerModule" which don't contain the
+  // package name.
+  const ghOrigin = context.originModulePath || '';
+  const isFromGH = ghOrigin.includes('react-native-gesture-handler') ||
+                   moduleName.includes('react-native-gesture-handler');
+  if (moduleName.endsWith('NativeRNGestureHandlerModule')) {
     return {
       type: 'sourceFile',
       filePath: path.resolve(projectRoot, 'patches/NativeRNGestureHandlerModule.js'),
     };
   }
-  if (moduleName.includes('react-native-gesture-handler') &&
-      moduleName.endsWith('RNGestureHandlerButtonNativeComponent')) {
+  if (isFromGH && moduleName.endsWith('RNGestureHandlerButtonNativeComponent')) {
     return {
       type: 'sourceFile',
       filePath: path.resolve(projectRoot, 'patches/RNGestureHandlerButtonNativeComponent.js'),
     };
   }
-  if (moduleName.includes('react-native-gesture-handler') &&
-      moduleName.endsWith('RNGestureHandlerRootViewNativeComponent')) {
+  if (isFromGH && moduleName.endsWith('RNGestureHandlerRootViewNativeComponent')) {
     return {
       type: 'sourceFile',
       filePath: path.resolve(projectRoot, 'patches/RNGestureHandlerRootViewNativeComponent.js'),
