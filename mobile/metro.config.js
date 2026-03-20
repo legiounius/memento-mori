@@ -16,6 +16,20 @@ config.resolver.nodeModulesPaths = [
 
 config.resolver.assetExts = [...(config.resolver.assetExts || []), 'csv'];
 
+// Inject globalWriteShim as the first polyfill so it runs before RN's setUp*
+// chain. It makes known Hermes non-writable globals writable+configurable
+// before any setUp* file attempts to assign to them.
+const originalGetPolyfills = config.serializer.getPolyfills
+  ? config.serializer.getPolyfills.bind(config.serializer)
+  : () => [];
+config.serializer.getPolyfills = (ctx) => {
+  const existing = originalGetPolyfills(ctx) || [];
+  return [
+    path.resolve(projectRoot, 'patches/globalWriteShim.js'),
+    ...existing,
+  ];
+};
+
 // Force all nested hermes-parser@0.25.1 instances to use 0.34.0 via require.cache
 config.transformer.babelTransformerPath = require.resolve('./customBabelTransformer');
 
