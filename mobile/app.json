@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/images/skull_minimal.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/images/skull_minimal.png",
       "resizeMode": "contain",
