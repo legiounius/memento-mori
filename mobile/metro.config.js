@@ -56,13 +56,21 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
     };
   }
 
-  // Patch setUpPerformance.js — Hermes (new arch) defines global.performance as
-  // non-writable, but the original file does `global.performance = ...` unconditionally,
-  // throwing "TypeError: property is not writable" at startup.
+  // Patch setUpPerformance.js — guards `global.performance = ...` which is
+  // non-writable in Hermes.
   if (moduleName.endsWith('setUpPerformance')) {
     return {
       type: 'sourceFile',
       filePath: path.resolve(projectRoot, 'patches/setUpPerformance.js'),
+    };
+  }
+
+  // Patch setUpTimers.js — guards `global.RN$enableMicrotasksInReact = true`
+  // which is non-writable in Hermes bridgeless mode.
+  if (moduleName.endsWith('setUpTimers')) {
+    return {
+      type: 'sourceFile',
+      filePath: path.resolve(projectRoot, 'patches/setUpTimers.js'),
     };
   }
 
