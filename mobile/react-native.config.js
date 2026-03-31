@@ -2,23 +2,10 @@ const path = require('path');
 
 const rootNodeModules = path.resolve(__dirname, '../node_modules');
 
+// Only link the packages our minimal app actually uses natively.
+// Keeping this list small prevents version-mismatch pod install failures.
 const nativePackages = [
-  'react-native-gesture-handler',
-  'react-native-reanimated',
-  'react-native-screens',
-  'react-native-safe-area-context',
-  'react-native-svg',
-  '@react-navigation/native',
-  '@react-navigation/bottom-tabs',
-  '@react-navigation/native-stack',
-  'expo-asset',
-  'expo-file-system',
-  'expo-font',
-  'expo-keep-awake',
   'expo-modules-core',
-  'expo-print',
-  'expo-splash-screen',
-  'expo-status-bar',
 ];
 
 const dependencies = {};
